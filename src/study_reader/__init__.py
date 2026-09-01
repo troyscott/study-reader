@@ -1,0 +1,1 @@
+"""Study Reader application package."""
