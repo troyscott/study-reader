@@ -11,10 +11,12 @@ reproducing Microsoft Learn pages.
 
 ## Project status
 
-The project is in its first foundation milestone. The repository currently
-provides separate public reader and private administration application
-factories, environment-validated settings, automated boundary tests, and CI.
-Reader features and DP-700 content will be added through the public roadmap.
+The project is in its first reader milestone. The repository provides separate
+public reader and private administration application factories, a validated
+exam-agnostic book contract, the current DP-700 outline, sanitized Markdown
+rendering, a responsive reader shell, automated boundary tests, and CI. Reader
+preferences, local progress, annotations, and offline support remain roadmap
+work.
 
 ## Architecture boundary
 
@@ -61,6 +63,10 @@ trademarks of the Microsoft group of companies. This independent open-source
 project is not affiliated with or endorsed by Microsoft. Microsoft owns its
 learning material; this project links to authoritative sources and publishes
 original study-oriented writing under the repository license.
+
+The DP-700 manifest records the official skills blueprint effective July 21,
+2026. See [`docs/content-model.md`](docs/content-model.md) for stable identifier,
+ordering, and source-mapping rules.
 
 ## Contributing and security
 

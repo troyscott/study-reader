@@ -1,0 +1,137 @@
+id: dp700
+exam_code: DP-700
+title: Implementing Data Engineering Solutions Using Microsoft Fabric
+blueprint_effective_date: 2026-07-21
+blueprint_url: https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/dp-700
+sources:
+  - id: dp700-study-guide
+    title: Official DP-700 study guide
+    url: https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/dp-700
+domains:
+  - id: implement-manage
+    title: Implement and manage an analytics solution
+    weight: "30–35%"
+    chapters:
+      - id: workspace-settings
+        slug: workspace-settings
+        title: Configure Microsoft Fabric workspace settings
+        content_path: workspace-settings.md
+        status: draft
+        source_ids: [dp700-study-guide]
+        objectives:
+          - {id: implement.workspace.spark, title: Configure Spark workspace settings}
+          - {id: implement.workspace.domain, title: Configure domain workspace settings}
+          - {id: implement.workspace.onelake, title: Configure OneLake workspace settings}
+          - {id: implement.workspace.airflow, title: Configure Apache Airflow workspace settings}
+      - id: lifecycle-management
+        slug: lifecycle-management
+        title: Implement lifecycle management in Fabric
+        content_path: lifecycle-management.md
+        source_ids: [dp700-study-guide]
+        objectives:
+          - {id: implement.lifecycle.version-control, title: Configure version control}
+          - {id: implement.lifecycle.database-projects, title: Implement database projects}
+          - {id: implement.lifecycle.deployment-pipelines, title: Create and configure deployment pipelines}
+      - id: security-governance
+        slug: security-governance
+        title: Configure security and governance
+        content_path: security-governance.md
+        source_ids: [dp700-study-guide]
+        objectives:
+          - {id: implement.security.workspace-access, title: Implement workspace-level access controls}
+          - {id: implement.security.item-access, title: Implement item-level access controls}
+          - {id: implement.security.data-access, title: "Implement row-level, column-level, object-level, and folder/file-level access controls"}
+          - {id: implement.security.masking, title: Implement dynamic data masking}
+          - {id: implement.security.sensitivity, title: Apply sensitivity labels to items}
+          - {id: implement.security.endorsement, title: Endorse items}
+          - {id: implement.security.audit, title: Implement and use Microsoft Fabric audit logs}
+          - {id: implement.security.onelake, title: Configure and implement OneLake security}
+      - id: orchestration
+        slug: orchestration
+        title: Orchestrate processes
+        content_path: orchestration.md
+        source_ids: [dp700-study-guide]
+        objectives:
+          - {id: implement.orchestration.choose-tool, title: "Choose between Dataflow Gen2, a pipeline, and a notebook"}
+          - {id: implement.orchestration.triggers, title: Design and implement schedules and event-based triggers}
+          - {id: implement.orchestration.patterns, title: "Implement orchestration patterns with notebooks and pipelines, including parameters and dynamic expressions"}
+  - id: ingest-transform
+    title: Ingest and transform data
+    weight: "30–35%"
+    chapters:
+      - id: loading-patterns
+        slug: loading-patterns
+        title: Design and implement loading patterns
+        content_path: loading-patterns.md
+        source_ids: [dp700-study-guide]
+        objectives:
+          - {id: ingest.loading.full-incremental, title: Design and implement full and incremental data loads}
+          - {id: ingest.loading.dimensional, title: Prepare data for loading into a dimensional model}
+          - {id: ingest.loading.streaming, title: Design and implement a loading pattern for streaming data}
+      - id: batch-data
+        slug: batch-data
+        title: Ingest and transform batch data
+        content_path: batch-data.md
+        source_ids: [dp700-study-guide]
+        objectives:
+          - {id: ingest.batch.store, title: Choose an appropriate data store}
+          - {id: ingest.batch.transform-tool, title: "Choose between Dataflows Gen2, notebooks, KQL, and T-SQL for data transformation"}
+          - {id: ingest.batch.shortcuts, title: Create and manage OneLake shortcuts}
+          - {id: ingest.batch.mirroring, title: Implement mirroring}
+          - {id: ingest.batch.pipelines, title: Ingest data by using pipelines}
+          - {id: ingest.batch.languages, title: "Transform data by using PySpark, SQL, and KQL"}
+          - {id: ingest.batch.denormalize, title: Denormalize data}
+          - {id: ingest.batch.aggregate, title: Group and aggregate data}
+          - {id: ingest.batch.data-quality, title: "Handle duplicate, missing, and late-arriving data"}
+      - id: streaming-data
+        slug: streaming-data
+        title: Ingest and transform streaming data
+        content_path: streaming-data.md
+        source_ids: [dp700-study-guide]
+        objectives:
+          - {id: ingest.streaming.engine, title: Choose an appropriate streaming engine}
+          - {id: ingest.streaming.native-shortcut, title: Choose between native tables and OneLake shortcuts in Real-Time Intelligence}
+          - {id: ingest.streaming.acceleration, title: Choose between Query acceleration for OneLake shortcuts and standard OneLake shortcuts in Real-Time Intelligence}
+          - {id: ingest.streaming.eventstreams, title: Process data by using Eventstreams}
+          - {id: ingest.streaming.spark, title: Process data by using Spark structured streaming}
+          - {id: ingest.streaming.kql, title: Process data by using KQL}
+          - {id: ingest.streaming.windows, title: Create windowing functions}
+  - id: monitor-optimize
+    title: Monitor and optimize an analytics solution
+    weight: "30–35%"
+    chapters:
+      - id: monitor-items
+        slug: monitor-items
+        title: Monitor Fabric items
+        content_path: monitor-items.md
+        source_ids: [dp700-study-guide]
+        objectives:
+          - {id: monitor.items.ingestion, title: Monitor data ingestion}
+          - {id: monitor.items.transformation, title: Monitor data transformation}
+          - {id: monitor.items.semantic-refresh, title: Monitor semantic model refresh}
+          - {id: monitor.items.alerts, title: Configure alerts}
+      - id: resolve-errors
+        slug: resolve-errors
+        title: Identify and resolve errors
+        content_path: resolve-errors.md
+        source_ids: [dp700-study-guide]
+        objectives:
+          - {id: monitor.errors.pipeline, title: Identify and resolve pipeline errors}
+          - {id: monitor.errors.dataflow, title: Identify and resolve Dataflow Gen2 errors}
+          - {id: monitor.errors.notebook, title: Identify and resolve notebook errors}
+          - {id: monitor.errors.eventhouse, title: Identify and resolve Eventhouse errors}
+          - {id: monitor.errors.eventstream, title: Identify and resolve Eventstream errors}
+          - {id: monitor.errors.tsql, title: Identify and resolve T-SQL errors}
+          - {id: monitor.errors.shortcut, title: Identify and resolve OneLake shortcut errors}
+      - id: optimize-performance
+        slug: optimize-performance
+        title: Optimize performance
+        content_path: optimize-performance.md
+        source_ids: [dp700-study-guide]
+        objectives:
+          - {id: monitor.optimize.lakehouse, title: Optimize a Lakehouse table}
+          - {id: monitor.optimize.pipeline, title: Optimize a pipeline}
+          - {id: monitor.optimize.warehouse, title: Optimize a data warehouse}
+          - {id: monitor.optimize.realtime, title: Optimize Eventstreams and Eventhouses}
+          - {id: monitor.optimize.spark, title: Optimize Spark performance}
+          - {id: monitor.optimize.query, title: Optimize query performance}

@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f0e6">
+    <title>{{ chapter.title }} · {{ book.exam_code }} Study Reader</title>
+    <link rel="icon" href="{{ url_for('static', path='/favicon.svg') }}" type="image/svg+xml">
+    <link rel="stylesheet" href="{{ url_for('static', path='/reader.css') }}">
+    <script src="{{ url_for('static', path='/reader.js') }}" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#chapter-content">Skip to chapter</a>
+    <div class="reading-progress" aria-hidden="true">
+      <span style="--chapter-progress: {{ (chapter_number / book.chapter_count * 100) | round }}%"></span>
+    </div>
+
+    <header class="site-header">
+      <a class="brand" href="/books/{{ book.id }}" aria-label="{{ book.exam_code }} book home">
+        <span class="brand-mark">SR</span>
+        <span>
+          <strong>Study Reader</strong>
+          <small>{{ book.exam_code }} · Fabric Data Engineer</small>
+        </span>
+      </a>
+      <span class="chapter-count">Chapter {{ chapter_number }} of {{ book.chapter_count }}</span>
+    </header>
+
+    <div class="reader-layout">
+      <aside class="toc-shell">
+        <details class="toc-details" open>
+          <summary>Contents <span>{{ chapter_number }}/{{ book.chapter_count }}</span></summary>
+          <nav aria-label="{{ book.exam_code }} table of contents">
+            {% for toc_domain in book.domains %}
+              <section class="toc-domain">
+                <div class="toc-domain-heading">
+                  <span>{{ loop.index }}</span>
+                  <div>
+                    <strong>{{ toc_domain.title }}</strong>
+                    <small>{{ toc_domain.weight }}</small>
+                  </div>
+                </div>
+                <ol>
+                  {% for toc_chapter in toc_domain.chapters %}
+                    <li>
+                      <a
+                        href="/books/{{ book.id }}/chapters/{{ toc_chapter.slug }}"
+                        {% if toc_chapter.id == chapter.id %}aria-current="page"{% endif %}
+                      >
+                        {{ toc_chapter.title }}
+                        {% if toc_chapter.status == 'placeholder' %}<span class="status-dot" title="Outline placeholder"></span>{% endif %}
+                      </a>
+                    </li>
+                  {% endfor %}
+                </ol>
+              </section>
+            {% endfor %}
+          </nav>
+        </details>
+      </aside>
+
+      <main id="chapter-content" class="reading-pane">
+        <header class="chapter-header">
+          <p class="eyebrow">Domain {{ book.domains.index(domain) + 1 }} · {{ domain.weight }}</p>
+          <h1>{{ chapter.title }}</h1>
+          <p class="chapter-deck">{{ domain.title }}</p>
+          <div class="objective-strip">
+            <span>{{ chapter.objectives | length }} measured skills</span>
+            <span>Blueprint {{ book.blueprint_effective_date.strftime('%b %Y') }}</span>
+          </div>
+        </header>
+
+        <article class="chapter-prose">
+          {{ chapter_html }}
+        </article>
+
+        <section class="source-card" aria-labelledby="source-heading">
+          <div>
+            <p class="eyebrow">Authoritative source</p>
+            <h2 id="source-heading">Grounded in Microsoft Learn</h2>
+            <p>This reader summarizes and teaches. Microsoft Learn remains the source of truth.</p>
+          </div>
+          {% for source in sources %}
+            <a href="{{ source.url }}" target="_blank" rel="noopener noreferrer">
+              Open official DP-700 study guide <span aria-hidden="true">↗</span>
+            </a>
+          {% endfor %}
+        </section>
+
+        <nav class="chapter-navigation" aria-label="Chapter navigation">
+          {% if previous_chapter %}
+            <a class="previous" href="/books/{{ book.id }}/chapters/{{ previous_chapter.slug }}">
+              <small>Previous</small>
+              <span>{{ previous_chapter.title }}</span>
+            </a>
+          {% else %}<span></span>{% endif %}
+          {% if next_chapter %}
+            <a class="next" href="/books/{{ book.id }}/chapters/{{ next_chapter.slug }}">
+              <small>Next</small>
+              <span>{{ next_chapter.title }}</span>
+            </a>
+          {% endif %}
+        </nav>
+      </main>
+    </div>
+  </body>
+</html>
