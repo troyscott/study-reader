@@ -1,0 +1,921 @@
+book_id: dp700
+blueprint_effective_date: 2026-07-21
+objectives:
+  - objective_id: implement.workspace.spark
+    chapter_id: workspace-settings
+    status: complete
+    subtopics: [Workspace defaults, Environment overrides, Runtimes, Pools, Driver and executor sizing, Session configuration]
+    source_ids: [dp700-study-guide, spark-compute-settings]
+    gaps: []
+    evidence:
+      conceptual_model: spark-settings
+      prerequisites: spark-layers
+      procedure: spark-settings
+      decision_guidance: spark-decisions
+      worked_example: spark-troubleshooting-lab
+      limitations: spark-layers
+      troubleshooting: spark-troubleshooting-lab
+      exam_distinctions: exam-distinctions
+      recall_questions: active-recall
+      scenario_lab: spark-troubleshooting-lab
+  - objective_id: implement.workspace.domain
+    chapter_id: workspace-settings
+    status: complete
+    subtopics: [Domain hierarchy, Workspace assignment, Domain roles, Default domains, Delegated governance, Catalog discovery]
+    source_ids: [dp700-study-guide, fabric-domains]
+    gaps: []
+    evidence:
+      conceptual_model: domain-settings
+      prerequisites: domain-roles
+      procedure: domain-roles
+      decision_guidance: domain-defaults
+      worked_example: domain-troubleshooting-lab
+      limitations: domain-defaults
+      troubleshooting: domain-troubleshooting-lab
+      exam_distinctions: exam-distinctions
+      recall_questions: active-recall
+      scenario_lab: domain-troubleshooting-lab
+  - objective_id: implement.workspace.onelake
+    chapter_id: workspace-settings
+    status: complete
+    subtopics: [Diagnostics, Immutability, Storage tiers, Lifecycle rules, REST API, Permissions and placement]
+    source_ids: [dp700-study-guide, onelake-overview, onelake-diagnostics, onelake-storage-tiers, onelake-lifecycle, onelake-settings-api]
+    gaps: []
+    evidence:
+      conceptual_model: terminology
+      prerequisites: responsibility-boundaries
+      procedure: lifecycle-rules
+      decision_guidance: tier-decision
+      worked_example: lifecycle-rules
+      limitations: settings-map
+      troubleshooting: onelake-troubleshooting-lab
+      exam_distinctions: exam-distinctions
+      recall_questions: active-recall
+      scenario_lab: onelake-troubleshooting-lab
+  - objective_id: implement.workspace.airflow
+    chapter_id: workspace-settings
+    status: complete
+    subtopics: [Workspace runtime, Starter pools, Custom pools, Sizing, Autoscaling, Concurrency and limitations]
+    source_ids: [dp700-study-guide, airflow-workspace-settings]
+    gaps: []
+    evidence:
+      conceptual_model: airflow-settings
+      prerequisites: airflow-settings
+      procedure: airflow-settings
+      decision_guidance: airflow-decisions
+      worked_example: airflow-troubleshooting-lab
+      limitations: airflow-decisions
+      troubleshooting: airflow-troubleshooting-lab
+      exam_distinctions: exam-distinctions
+      recall_questions: active-recall
+      scenario_lab: airflow-troubleshooting-lab
+  - objective_id: implement.lifecycle.version-control
+    chapter_id: lifecycle-management
+    status: complete
+    subtopics: [Git providers, Workspace connection, Branches, Commit and update direction, Conflicts, Supported items, Secrets]
+    source_ids: [dp700-study-guide, fabric-cicd-overview, fabric-cicd-workflows]
+    gaps: []
+    evidence:
+      conceptual_model: version-control-model
+      prerequisites: version-control-operations
+      procedure: version-control-operations
+      decision_guidance: version-control-decisions
+      worked_example: version-control-example
+      limitations: version-control-decisions
+      troubleshooting: version-control-diagnostics
+      exam_distinctions: lifecycle-exam-distinctions
+      recall_questions: lifecycle-recall-lab
+      scenario_lab: version-control-diagnostics
+  - objective_id: implement.lifecycle.database-projects
+    chapter_id: lifecycle-management
+    status: complete
+    subtopics: [Declarative schema, Project structure, Build validation, DACPAC, Publish plan, State versus migration, Data-loss safeguards]
+    source_ids: [dp700-study-guide, fabric-cicd-overview, fabric-cicd-workflows]
+    gaps: []
+    evidence:
+      conceptual_model: database-projects-model
+      prerequisites: database-projects-operations
+      procedure: database-projects-operations
+      decision_guidance: database-projects-decisions
+      worked_example: database-projects-example
+      limitations: database-projects-decisions
+      troubleshooting: database-projects-diagnostics
+      exam_distinctions: lifecycle-exam-distinctions
+      recall_questions: lifecycle-recall-lab
+      scenario_lab: database-projects-example
+  - objective_id: implement.lifecycle.deployment-pipelines
+    chapter_id: lifecycle-management
+    status: complete
+    subtopics: [Stages, Workspace assignment, Item pairing, Comparison, Deployment rules, Dependency binding, Post-deployment checks]
+    source_ids: [dp700-study-guide, fabric-cicd-overview, fabric-cicd-workflows]
+    gaps: []
+    evidence:
+      conceptual_model: deployment-pipelines-model
+      prerequisites: deployment-pipelines-operations
+      procedure: deployment-pipelines-operations
+      decision_guidance: deployment-pipelines-decisions
+      worked_example: deployment-pipelines-example
+      limitations: deployment-pipelines-decisions
+      troubleshooting: deployment-pipelines-diagnostics
+      exam_distinctions: lifecycle-exam-distinctions
+      recall_questions: lifecycle-recall-lab
+      scenario_lab: deployment-pipelines-example
+  - objective_id: implement.security.workspace-access
+    chapter_id: security-governance
+    status: complete
+    subtopics: [Admin, Member, Contributor, Viewer, Group assignment, Least privilege, Workspace scope]
+    source_ids: [dp700-study-guide, fabric-permission-model]
+    gaps: []
+    evidence:
+      conceptual_model: workspace-access-model
+      prerequisites: workspace-access-operations
+      procedure: workspace-access-operations
+      decision_guidance: workspace-access-decisions
+      worked_example: workspace-access-example
+      limitations: workspace-access-decisions
+      troubleshooting: workspace-access-diagnostics
+      exam_distinctions: security-exam-distinctions
+      recall_questions: security-recall-lab
+      scenario_lab: workspace-access-example
+  - objective_id: implement.security.item-access
+    chapter_id: security-governance
+    status: complete
+    subtopics: [Item sharing, Direct permissions, Read and reshare, Ownership, Group-based grants, Revocation]
+    source_ids: [dp700-study-guide, fabric-permission-model]
+    gaps: []
+    evidence:
+      conceptual_model: item-access-model
+      prerequisites: item-access-operations
+      procedure: item-access-operations
+      decision_guidance: item-access-decisions
+      worked_example: item-access-example
+      limitations: item-access-decisions
+      troubleshooting: item-access-diagnostics
+      exam_distinctions: security-exam-distinctions
+      recall_questions: security-recall-lab
+      scenario_lab: item-access-diagnostics
+  - objective_id: implement.security.data-access
+    chapter_id: security-governance
+    status: complete
+    subtopics: [Row-level security, Column-level security, Object-level security, Folder and file access, Engine enforcement paths, Bypass testing]
+    source_ids: [dp700-study-guide, fabric-permission-model, onelake-data-access-control]
+    gaps: []
+    evidence:
+      conceptual_model: data-access-model
+      prerequisites: data-access-operations
+      procedure: data-access-operations
+      decision_guidance: data-access-decisions
+      worked_example: data-access-example
+      limitations: data-access-decisions
+      troubleshooting: data-access-diagnostics
+      exam_distinctions: security-exam-distinctions
+      recall_questions: security-recall-lab
+      scenario_lab: data-access-example
+  - objective_id: implement.security.masking
+    chapter_id: security-governance
+    status: complete
+    subtopics: [Mask functions, UNMASK permission, Stored versus returned values, Inference risk, Combining DDM with RLS and CLS]
+    source_ids: [dp700-study-guide, warehouse-dynamic-masking]
+    gaps: []
+    evidence:
+      conceptual_model: masking-comprehensive
+      prerequisites: masking-comprehensive
+      procedure: masking-comprehensive
+      decision_guidance: masking-comprehensive
+      worked_example: masking-comprehensive
+      limitations: masking-comprehensive
+      troubleshooting: masking-comprehensive
+      exam_distinctions: security-exam-distinctions
+      recall_questions: security-recall-lab
+      scenario_lab: security-recall-lab
+  - objective_id: implement.security.sensitivity
+    chapter_id: security-governance
+    status: complete
+    subtopics: [Purview labels, Tenant enablement, Label publishing, Defaults, Mandatory labels, Inheritance, Export behavior]
+    source_ids: [dp700-study-guide, fabric-information-protection]
+    gaps: []
+    evidence:
+      conceptual_model: sensitivity-comprehensive
+      prerequisites: sensitivity-comprehensive
+      procedure: sensitivity-comprehensive
+      decision_guidance: sensitivity-comprehensive
+      worked_example: sensitivity-comprehensive
+      limitations: sensitivity-comprehensive
+      troubleshooting: sensitivity-comprehensive
+      exam_distinctions: security-exam-distinctions
+      recall_questions: security-recall-lab
+      scenario_lab: security-recall-lab
+  - objective_id: implement.security.endorsement
+    chapter_id: security-governance
+    status: complete
+    subtopics: [Promoted, Certified, Master data, Authorized reviewers, Discovery, Trust versus authorization]
+    source_ids: [dp700-study-guide, fabric-endorsement]
+    gaps: []
+    evidence:
+      conceptual_model: endorsement-comprehensive
+      prerequisites: endorsement-comprehensive
+      procedure: endorsement-comprehensive
+      decision_guidance: endorsement-comprehensive
+      worked_example: endorsement-comprehensive
+      limitations: endorsement-comprehensive
+      troubleshooting: endorsement-comprehensive
+      exam_distinctions: security-exam-distinctions
+      recall_questions: security-recall-lab
+      scenario_lab: security-recall-lab
+  - objective_id: implement.security.audit
+    chapter_id: security-governance
+    status: complete
+    subtopics: [Purview Audit, Search filters, Operations, Retention, Export, Investigation procedure, Audit versus diagnostic logs]
+    source_ids: [dp700-study-guide, fabric-audit-activities]
+    gaps: []
+    evidence:
+      conceptual_model: audit-comprehensive
+      prerequisites: audit-comprehensive
+      procedure: audit-comprehensive
+      decision_guidance: audit-comprehensive
+      worked_example: audit-comprehensive
+      limitations: audit-comprehensive
+      troubleshooting: audit-comprehensive
+      exam_distinctions: security-exam-distinctions
+      recall_questions: security-recall-lab
+      scenario_lab: audit-comprehensive
+  - objective_id: implement.security.onelake
+    chapter_id: security-governance
+    status: complete
+    subtopics: [OneLake roles, Tables and folders, Read and write grants, Role membership, Shortcut security, Cross-engine access paths]
+    source_ids: [dp700-study-guide, onelake-data-access-control]
+    gaps: []
+    evidence:
+      conceptual_model: onelake-security-comprehensive
+      prerequisites: onelake-security-comprehensive
+      procedure: onelake-security-comprehensive
+      decision_guidance: onelake-security-comprehensive
+      worked_example: data-access-example
+      limitations: onelake-security-comprehensive
+      troubleshooting: data-access-diagnostics
+      exam_distinctions: security-exam-distinctions
+      recall_questions: security-recall-lab
+      scenario_lab: data-access-example
+  - objective_id: implement.orchestration.choose-tool
+    chapter_id: orchestration
+    status: complete
+    subtopics: [Dataflow Gen2, Pipeline, Notebook, Transformation versus orchestration, Personas, Scale and maintainability]
+    source_ids: [dp700-study-guide, pipeline-overview, data-factory-overview]
+    gaps: []
+    evidence:
+      conceptual_model: choose-tool-model
+      prerequisites: choose-tool-operations
+      procedure: choose-tool-operations
+      decision_guidance: choose-tool-decisions
+      worked_example: choose-tool-example
+      limitations: choose-tool-decisions
+      troubleshooting: choose-tool-diagnostics
+      exam_distinctions: orchestration-exam-distinctions
+      recall_questions: orchestration-recall-lab
+      scenario_lab: choose-tool-diagnostics
+  - objective_id: implement.orchestration.triggers
+    chapter_id: orchestration
+    status: complete
+    subtopics: [Schedules, Time zones, Event triggers, File events, Filtering, Concurrency, Idempotency, Reconciliation]
+    source_ids: [dp700-study-guide, pipeline-overview]
+    gaps: []
+    evidence:
+      conceptual_model: triggers-model
+      prerequisites: triggers-operations
+      procedure: triggers-operations
+      decision_guidance: triggers-decisions
+      worked_example: triggers-example
+      limitations: triggers-decisions
+      troubleshooting: triggers-diagnostics
+      exam_distinctions: orchestration-exam-distinctions
+      recall_questions: orchestration-recall-lab
+      scenario_lab: triggers-diagnostics
+  - objective_id: implement.orchestration.patterns
+    chapter_id: orchestration
+    status: complete
+    subtopics: [Parameters, Variables, Dynamic expressions, Parent-child pipelines, Metadata-driven loops, Dependencies, Retry and failure paths]
+    source_ids: [dp700-study-guide, pipeline-overview, pipeline-parameters]
+    gaps: []
+    evidence:
+      conceptual_model: patterns-model
+      prerequisites: patterns-operations
+      procedure: patterns-operations
+      decision_guidance: patterns-decisions
+      worked_example: patterns-example
+      limitations: patterns-decisions
+      troubleshooting: patterns-diagnostics
+      exam_distinctions: orchestration-exam-distinctions
+      recall_questions: orchestration-recall-lab
+      scenario_lab: patterns-diagnostics
+  - objective_id: ingest.loading.full-incremental
+    chapter_id: loading-patterns
+    status: complete
+    subtopics: [Full refresh, Watermarks, CDC, Overlap windows, Upserts, Deletes, Idempotency, Reconciliation]
+    source_ids: [dp700-study-guide, data-movement-decision-guide]
+    gaps: []
+    evidence:
+      conceptual_model: full-incremental-model
+      prerequisites: full-incremental-operations
+      procedure: full-incremental-operations
+      decision_guidance: full-incremental-decisions
+      worked_example: full-incremental-example
+      limitations: full-incremental-decisions
+      troubleshooting: full-incremental-diagnostics
+      exam_distinctions: loading-exam-distinctions
+      recall_questions: loading-recall-lab
+      scenario_lab: full-incremental-diagnostics
+  - objective_id: ingest.loading.dimensional
+    chapter_id: loading-patterns
+    status: complete
+    subtopics: [Grain, Surrogate keys, Dimension-first loading, Facts, SCD Type 1, SCD Type 2, Inferred members, Referential checks]
+    source_ids: [dp700-study-guide, dimensional-model-loading]
+    gaps: []
+    evidence:
+      conceptual_model: dimensional-model
+      prerequisites: dimensional-operations
+      procedure: dimensional-operations
+      decision_guidance: dimensional-decisions
+      worked_example: dimensional-example
+      limitations: dimensional-decisions
+      troubleshooting: dimensional-diagnostics
+      exam_distinctions: loading-exam-distinctions
+      recall_questions: loading-recall-lab
+      scenario_lab: dimensional-diagnostics
+  - objective_id: ingest.loading.streaming
+    chapter_id: loading-patterns
+    status: complete
+    subtopics: [Raw retention, Schema validation, Deduplication, Event time, Watermarks, Checkpoints, Idempotent sinks, Reconciliation]
+    source_ids: [dp700-study-guide, structured-streaming-state]
+    gaps: []
+    evidence:
+      conceptual_model: streaming-load-model
+      prerequisites: streaming-load-operations
+      procedure: streaming-load-operations
+      decision_guidance: streaming-load-decisions
+      worked_example: streaming-load-example
+      limitations: streaming-load-decisions
+      troubleshooting: streaming-load-diagnostics
+      exam_distinctions: loading-exam-distinctions
+      recall_questions: loading-recall-lab
+      scenario_lab: streaming-load-diagnostics
+  - objective_id: ingest.batch.store
+    chapter_id: batch-data
+    status: complete
+    subtopics: [Lakehouse, Warehouse, Eventhouse, Operational database, Open formats, Transactions, Concurrency, Serving patterns]
+    source_ids: [dp700-study-guide, data-movement-decision-guide]
+    gaps: []
+    evidence:
+      conceptual_model: batch-store-comprehensive
+      prerequisites: batch-store-comprehensive
+      procedure: batch-store-comprehensive
+      decision_guidance: batch-store-comprehensive
+      worked_example: batch-store-comprehensive
+      limitations: batch-store-comprehensive
+      troubleshooting: batch-store-comprehensive
+      exam_distinctions: batch-exam-distinctions
+      recall_questions: batch-recall-lab
+      scenario_lab: batch-store-comprehensive
+  - objective_id: ingest.batch.transform-tool
+    chapter_id: batch-data
+    status: complete
+    subtopics: [Dataflow Gen2, Notebooks, T-SQL, KQL, Personas, Engine locality, Scale, Testing and maintainability]
+    source_ids: [dp700-study-guide, dataflows-gen2-overview]
+    gaps: []
+    evidence:
+      conceptual_model: transform-tool-model
+      prerequisites: transform-tool-operations
+      procedure: transform-tool-operations
+      decision_guidance: transform-tool-decisions
+      worked_example: transform-tool-example
+      limitations: transform-tool-decisions
+      troubleshooting: transform-tool-diagnostics
+      exam_distinctions: batch-exam-distinctions
+      recall_questions: batch-recall-lab
+      scenario_lab: transform-tool-diagnostics
+  - objective_id: ingest.batch.shortcuts
+    chapter_id: batch-data
+    status: complete
+    subtopics: [Internal shortcuts, External shortcuts, Tables versus Files, Connections, Caching, Schema synchronization, Security, Deletion behavior]
+    source_ids: [dp700-study-guide, onelake-shortcuts]
+    gaps: []
+    evidence:
+      conceptual_model: shortcuts-comprehensive
+      prerequisites: shortcuts-comprehensive
+      procedure: shortcuts-comprehensive
+      decision_guidance: shortcuts-comprehensive
+      worked_example: shortcuts-comprehensive
+      limitations: shortcuts-comprehensive
+      troubleshooting: shortcuts-comprehensive
+      exam_distinctions: batch-exam-distinctions
+      recall_questions: batch-recall-lab
+      scenario_lab: shortcuts-comprehensive
+  - objective_id: ingest.batch.mirroring
+    chapter_id: batch-data
+    status: complete
+    subtopics: [Database mirroring, Metadata mirroring, Open mirroring, Replication, Source support, Read-only targets, Monitoring]
+    source_ids: [dp700-study-guide, fabric-mirroring]
+    gaps: []
+    evidence:
+      conceptual_model: mirroring-comprehensive
+      prerequisites: mirroring-comprehensive
+      procedure: mirroring-comprehensive
+      decision_guidance: mirroring-comprehensive
+      worked_example: mirroring-comprehensive
+      limitations: mirroring-comprehensive
+      troubleshooting: mirroring-comprehensive
+      exam_distinctions: batch-exam-distinctions
+      recall_questions: batch-recall-lab
+      scenario_lab: mirroring-comprehensive
+  - objective_id: ingest.batch.pipelines
+    chapter_id: batch-data
+    status: complete
+    subtopics: [Copy Activity, Connectors, Mapping, Parameters, Parallelism, Staging, Retry, Metrics and rejects]
+    source_ids: [dp700-study-guide, data-movement-decision-guide]
+    gaps: []
+    evidence:
+      conceptual_model: pipelines-comprehensive
+      prerequisites: pipelines-comprehensive
+      procedure: pipelines-comprehensive
+      decision_guidance: pipelines-comprehensive
+      worked_example: pipelines-comprehensive
+      limitations: pipelines-comprehensive
+      troubleshooting: pipelines-comprehensive
+      exam_distinctions: batch-exam-distinctions
+      recall_questions: batch-recall-lab
+      scenario_lab: pipelines-comprehensive
+  - objective_id: ingest.batch.languages
+    chapter_id: batch-data
+    status: complete
+    subtopics: [PySpark DataFrames, Spark SQL, T-SQL, KQL pipelines, Types, Null behavior, Engine-specific optimization]
+    source_ids: [dp700-study-guide, dataflows-gen2-overview]
+    gaps: []
+    evidence:
+      conceptual_model: languages-comprehensive
+      prerequisites: languages-comprehensive
+      procedure: languages-comprehensive
+      decision_guidance: languages-comprehensive
+      worked_example: languages-comprehensive
+      limitations: languages-comprehensive
+      troubleshooting: languages-comprehensive
+      exam_distinctions: batch-exam-distinctions
+      recall_questions: batch-recall-lab
+      scenario_lab: languages-comprehensive
+  - objective_id: ingest.batch.denormalize
+    chapter_id: batch-data
+    status: complete
+    subtopics: [Output grain, Join cardinality, Flattening, Repeated attributes, Performance trade-offs, Validation]
+    source_ids: [dp700-study-guide, dimensional-model-loading]
+    gaps: []
+    evidence:
+      conceptual_model: denormalize-comprehensive
+      prerequisites: denormalize-comprehensive
+      procedure: denormalize-comprehensive
+      decision_guidance: denormalize-comprehensive
+      worked_example: denormalize-comprehensive
+      limitations: denormalize-comprehensive
+      troubleshooting: denormalize-comprehensive
+      exam_distinctions: batch-exam-distinctions
+      recall_questions: batch-recall-lab
+      scenario_lab: denormalize-comprehensive
+  - objective_id: ingest.batch.aggregate
+    chapter_id: batch-data
+    status: complete
+    subtopics: [Grouping keys, Grain changes, Additive measures, Semi-additive measures, Ratios, Nulls, Incremental aggregates]
+    source_ids: [dp700-study-guide, dataflows-gen2-overview]
+    gaps: []
+    evidence:
+      conceptual_model: aggregate-comprehensive
+      prerequisites: aggregate-comprehensive
+      procedure: aggregate-comprehensive
+      decision_guidance: aggregate-comprehensive
+      worked_example: aggregate-comprehensive
+      limitations: aggregate-comprehensive
+      troubleshooting: aggregate-comprehensive
+      exam_distinctions: batch-exam-distinctions
+      recall_questions: batch-recall-lab
+      scenario_lab: aggregate-comprehensive
+  - objective_id: ingest.batch.data-quality
+    chapter_id: batch-data
+    status: complete
+    subtopics: [Duplicate keys, Missing values, Invalid values, Late records, Quarantine, Imputation, Restatement, Quality metrics]
+    source_ids: [dp700-study-guide, dataflows-gen2-overview]
+    gaps: []
+    evidence:
+      conceptual_model: data-quality-comprehensive
+      prerequisites: data-quality-comprehensive
+      procedure: data-quality-comprehensive
+      decision_guidance: data-quality-comprehensive
+      worked_example: data-quality-comprehensive
+      limitations: data-quality-comprehensive
+      troubleshooting: data-quality-comprehensive
+      exam_distinctions: batch-exam-distinctions
+      recall_questions: batch-recall-lab
+      scenario_lab: data-quality-comprehensive
+  - objective_id: ingest.streaming.engine
+    chapter_id: streaming-data
+    status: complete
+    subtopics: [Eventstreams, Eventhouse, Spark Structured Streaming, Latency, Volume, State, Serving and operations]
+    source_ids: [dp700-study-guide, real-time-intelligence-overview, structured-streaming-state]
+    gaps: []
+    evidence:
+      conceptual_model: streaming-engine-comprehensive
+      prerequisites: streaming-engine-comprehensive
+      procedure: streaming-engine-comprehensive
+      decision_guidance: streaming-engine-comprehensive
+      worked_example: streaming-engine-comprehensive
+      limitations: streaming-engine-comprehensive
+      troubleshooting: streaming-engine-comprehensive
+      exam_distinctions: streaming-exam-distinctions
+      recall_questions: streaming-recall-lab
+      scenario_lab: streaming-engine-comprehensive
+  - objective_id: ingest.streaming.native-shortcut
+    chapter_id: streaming-data
+    status: complete
+    subtopics: [Native ingestion, Indexed storage, External Delta, Feature support, Latency, Cost, Source availability]
+    source_ids: [dp700-study-guide, real-time-intelligence-overview, rti-onelake-shortcuts]
+    gaps: []
+    evidence:
+      conceptual_model: native-shortcut-comprehensive
+      prerequisites: native-shortcut-comprehensive
+      procedure: native-shortcut-comprehensive
+      decision_guidance: native-shortcut-comprehensive
+      worked_example: native-shortcut-comprehensive
+      limitations: native-shortcut-comprehensive
+      troubleshooting: native-shortcut-comprehensive
+      exam_distinctions: streaming-exam-distinctions
+      recall_questions: streaming-recall-lab
+      scenario_lab: native-shortcut-comprehensive
+  - objective_id: ingest.streaming.acceleration
+    chapter_id: streaming-data
+    status: complete
+    subtopics: [Standard shortcut, Accelerated cache, Cache period, Performance, Billing, Schema changes, External-table limitations]
+    source_ids: [dp700-study-guide, query-acceleration-overview]
+    gaps: []
+    evidence:
+      conceptual_model: acceleration-comprehensive
+      prerequisites: acceleration-comprehensive
+      procedure: acceleration-comprehensive
+      decision_guidance: acceleration-comprehensive
+      worked_example: acceleration-comprehensive
+      limitations: acceleration-comprehensive
+      troubleshooting: acceleration-comprehensive
+      exam_distinctions: streaming-exam-distinctions
+      recall_questions: streaming-recall-lab
+      scenario_lab: acceleration-comprehensive
+  - objective_id: ingest.streaming.eventstreams
+    chapter_id: streaming-data
+    status: complete
+    subtopics: [Sources, Transformations, Filtering, Aggregation, Derived streams, Routing, Destinations, Monitoring]
+    source_ids: [dp700-study-guide, real-time-intelligence-overview]
+    gaps: []
+    evidence:
+      conceptual_model: eventstreams-comprehensive
+      prerequisites: eventstreams-comprehensive
+      procedure: eventstreams-comprehensive
+      decision_guidance: eventstreams-comprehensive
+      worked_example: eventstreams-comprehensive
+      limitations: eventstreams-comprehensive
+      troubleshooting: eventstreams-comprehensive
+      exam_distinctions: streaming-exam-distinctions
+      recall_questions: streaming-recall-lab
+      scenario_lab: eventstreams-comprehensive
+  - objective_id: ingest.streaming.spark
+    chapter_id: streaming-data
+    status: complete
+    subtopics: [Sources, Sinks, Checkpoints, Output modes, foreachBatch, Stateful operations, Recovery, Observability]
+    source_ids: [dp700-study-guide, structured-streaming-state]
+    gaps: []
+    evidence:
+      conceptual_model: spark-streaming-comprehensive
+      prerequisites: spark-streaming-comprehensive
+      procedure: spark-streaming-comprehensive
+      decision_guidance: spark-streaming-comprehensive
+      worked_example: spark-streaming-comprehensive
+      limitations: spark-streaming-comprehensive
+      troubleshooting: spark-streaming-comprehensive
+      exam_distinctions: streaming-exam-distinctions
+      recall_questions: streaming-recall-lab
+      scenario_lab: spark-streaming-comprehensive
+  - objective_id: ingest.streaming.kql
+    chapter_id: streaming-data
+    status: complete
+    subtopics: [Filtering, Projection, Dynamic parsing, Summarize, Joins, Time series, Materialization, Query optimization]
+    source_ids: [dp700-study-guide, real-time-intelligence-overview]
+    gaps: []
+    evidence:
+      conceptual_model: kql-comprehensive
+      prerequisites: kql-comprehensive
+      procedure: kql-comprehensive
+      decision_guidance: kql-comprehensive
+      worked_example: kql-comprehensive
+      limitations: kql-comprehensive
+      troubleshooting: kql-comprehensive
+      exam_distinctions: streaming-exam-distinctions
+      recall_questions: streaming-recall-lab
+      scenario_lab: kql-comprehensive
+  - objective_id: ingest.streaming.windows
+    chapter_id: streaming-data
+    status: complete
+    subtopics: [Event time, Tumbling windows, Hopping windows, Sliding windows, Session windows, Watermarks, Late events]
+    source_ids: [dp700-study-guide, structured-streaming-state]
+    gaps: []
+    evidence:
+      conceptual_model: windows-comprehensive
+      prerequisites: windows-comprehensive
+      procedure: windows-comprehensive
+      decision_guidance: windows-comprehensive
+      worked_example: windows-comprehensive
+      limitations: windows-comprehensive
+      troubleshooting: windows-comprehensive
+      exam_distinctions: streaming-exam-distinctions
+      recall_questions: streaming-recall-lab
+      scenario_lab: windows-comprehensive
+  - objective_id: monitor.items.ingestion
+    chapter_id: monitor-items
+    status: complete
+    subtopics: [Monitoring hub, Pipeline runs, Copy metrics, Streaming rate, Lag, Watermark, Rejected rows, Freshness]
+    source_ids: [dp700-study-guide, fabric-monitoring-hub]
+    gaps: []
+    evidence:
+      conceptual_model: monitoring-foundation
+      prerequisites: monitor-ingestion-comprehensive
+      procedure: monitor-ingestion-comprehensive
+      decision_guidance: monitor-ingestion-comprehensive
+      worked_example: monitor-ingestion-comprehensive
+      limitations: monitor-ingestion-comprehensive
+      troubleshooting: monitor-ingestion-comprehensive
+      exam_distinctions: monitoring-exam-distinctions
+      recall_questions: monitoring-recall-lab
+      scenario_lab: monitor-ingestion-comprehensive
+  - objective_id: monitor.items.transformation
+    chapter_id: monitor-items
+    status: complete
+    subtopics: [Dataflow refresh, Notebook and Spark jobs, Pipeline activities, SQL and KQL queries, Quality assertions, Capacity evidence]
+    source_ids: [dp700-study-guide, fabric-monitoring-hub, dataflow-monitoring]
+    gaps: []
+    evidence:
+      conceptual_model: monitoring-foundation
+      prerequisites: monitor-transformation-comprehensive
+      procedure: monitor-transformation-comprehensive
+      decision_guidance: monitor-transformation-comprehensive
+      worked_example: monitor-transformation-comprehensive
+      limitations: monitor-transformation-comprehensive
+      troubleshooting: monitor-transformation-comprehensive
+      exam_distinctions: monitoring-exam-distinctions
+      recall_questions: monitoring-recall-lab
+      scenario_lab: monitor-transformation-comprehensive
+  - objective_id: monitor.items.semantic-refresh
+    chapter_id: monitor-items
+    status: complete
+    subtopics: [Refresh history, Administrative summary, Types, Tables and partitions, Incremental refresh, Credentials, Gateway, Capacity]
+    source_ids: [dp700-study-guide, semantic-refresh-summaries]
+    gaps: []
+    evidence:
+      conceptual_model: monitor-semantic-comprehensive
+      prerequisites: monitor-semantic-comprehensive
+      procedure: monitor-semantic-comprehensive
+      decision_guidance: monitor-semantic-comprehensive
+      worked_example: monitor-semantic-comprehensive
+      limitations: monitor-semantic-comprehensive
+      troubleshooting: monitor-semantic-comprehensive
+      exam_distinctions: monitoring-exam-distinctions
+      recall_questions: monitoring-recall-lab
+      scenario_lab: monitor-semantic-comprehensive
+  - objective_id: monitor.items.alerts
+    chapter_id: monitor-items
+    status: complete
+    subtopics: [Activator, Signals, Thresholds, Windows, Recipients, Actions, Suppression, Recovery, Runbooks]
+    source_ids: [dp700-study-guide, fabric-activator]
+    gaps: []
+    evidence:
+      conceptual_model: alerts-comprehensive
+      prerequisites: alerts-comprehensive
+      procedure: alerts-comprehensive
+      decision_guidance: alerts-comprehensive
+      worked_example: alerts-comprehensive
+      limitations: alerts-comprehensive
+      troubleshooting: alerts-comprehensive
+      exam_distinctions: monitoring-exam-distinctions
+      recall_questions: monitoring-recall-lab
+      scenario_lab: alerts-comprehensive
+  - objective_id: monitor.errors.pipeline
+    chapter_id: resolve-errors
+    status: complete
+    subtopics: [Failed activity, Resolved inputs, Error codes, Connections, Expressions, Child runs, Retry classification, Idempotent reruns]
+    source_ids: [dp700-study-guide, pipeline-troubleshooting]
+    gaps: []
+    evidence:
+      conceptual_model: resolve-pipeline-comprehensive
+      prerequisites: resolve-pipeline-comprehensive
+      procedure: resolve-pipeline-comprehensive
+      decision_guidance: resolve-pipeline-comprehensive
+      worked_example: resolve-pipeline-comprehensive
+      limitations: resolve-pipeline-comprehensive
+      troubleshooting: resolve-pipeline-comprehensive
+      exam_distinctions: errors-exam-distinctions
+      recall_questions: errors-recall-lab
+      scenario_lab: resolve-pipeline-comprehensive
+  - objective_id: monitor.errors.dataflow
+    chapter_id: resolve-errors
+    status: complete
+    subtopics: [Refresh detail, Power Query step, Credentials, Gateway, Type errors, Schema drift, Folding, Destination errors]
+    source_ids: [dp700-study-guide, dataflow-monitoring]
+    gaps: []
+    evidence:
+      conceptual_model: resolve-dataflow-comprehensive
+      prerequisites: resolve-dataflow-comprehensive
+      procedure: resolve-dataflow-comprehensive
+      decision_guidance: resolve-dataflow-comprehensive
+      worked_example: resolve-dataflow-comprehensive
+      limitations: resolve-dataflow-comprehensive
+      troubleshooting: resolve-dataflow-comprehensive
+      exam_distinctions: errors-exam-distinctions
+      recall_questions: errors-recall-lab
+      scenario_lab: resolve-dataflow-comprehensive
+  - objective_id: monitor.errors.notebook
+    chapter_id: resolve-errors
+    status: complete
+    subtopics: [Driver errors, Executor failures, Spark UI, Runtime, Libraries, Lakehouse attachment, Memory, Skew and bad records]
+    source_ids: [dp700-study-guide, spark-troubleshooting]
+    gaps: []
+    evidence:
+      conceptual_model: resolve-notebook-comprehensive
+      prerequisites: resolve-notebook-comprehensive
+      procedure: resolve-notebook-comprehensive
+      decision_guidance: resolve-notebook-comprehensive
+      worked_example: resolve-notebook-comprehensive
+      limitations: resolve-notebook-comprehensive
+      troubleshooting: resolve-notebook-comprehensive
+      exam_distinctions: errors-exam-distinctions
+      recall_questions: errors-recall-lab
+      scenario_lab: resolve-notebook-comprehensive
+  - objective_id: monitor.errors.eventhouse
+    chapter_id: resolve-errors
+    status: complete
+    subtopics: [Ingestion failures, Mapping and format, Permissions, Table policies, KQL request IDs, Capacity, Empty results]
+    source_ids: [dp700-study-guide, eventhouse-manage-monitor]
+    gaps: []
+    evidence:
+      conceptual_model: resolve-eventhouse-comprehensive
+      prerequisites: resolve-eventhouse-comprehensive
+      procedure: resolve-eventhouse-comprehensive
+      decision_guidance: resolve-eventhouse-comprehensive
+      worked_example: resolve-eventhouse-comprehensive
+      limitations: resolve-eventhouse-comprehensive
+      troubleshooting: resolve-eventhouse-comprehensive
+      exam_distinctions: errors-exam-distinctions
+      recall_questions: errors-recall-lab
+      scenario_lab: resolve-eventhouse-comprehensive
+  - objective_id: monitor.errors.eventstream
+    chapter_id: resolve-errors
+    status: complete
+    subtopics: [Connector state, Source rate, Transform schema, Event time, Destination health, Poison events, Backpressure]
+    source_ids: [dp700-study-guide, real-time-intelligence-overview]
+    gaps: []
+    evidence:
+      conceptual_model: resolve-eventstream-comprehensive
+      prerequisites: resolve-eventstream-comprehensive
+      procedure: resolve-eventstream-comprehensive
+      decision_guidance: resolve-eventstream-comprehensive
+      worked_example: resolve-eventstream-comprehensive
+      limitations: resolve-eventstream-comprehensive
+      troubleshooting: resolve-eventstream-comprehensive
+      exam_distinctions: errors-exam-distinctions
+      recall_questions: errors-recall-lab
+      scenario_lab: resolve-eventstream-comprehensive
+  - objective_id: monitor.errors.tsql
+    chapter_id: resolve-errors
+    status: complete
+    subtopics: [Error numbers, Context and names, Permissions, Conversions, Constraints, Transactions, Deadlocks, Timeouts and plans]
+    source_ids: [dp700-study-guide, warehouse-troubleshooting]
+    gaps: []
+    evidence:
+      conceptual_model: resolve-tsql-comprehensive
+      prerequisites: resolve-tsql-comprehensive
+      procedure: resolve-tsql-comprehensive
+      decision_guidance: resolve-tsql-comprehensive
+      worked_example: resolve-tsql-comprehensive
+      limitations: resolve-tsql-comprehensive
+      troubleshooting: resolve-tsql-comprehensive
+      exam_distinctions: errors-exam-distinctions
+      recall_questions: errors-recall-lab
+      scenario_lab: resolve-tsql-comprehensive
+  - objective_id: monitor.errors.shortcut
+    chapter_id: resolve-errors
+    status: complete
+    subtopics: [Target existence, Connections, Source permissions, Format, Tables path, Schema sync, Cache and acceleration]
+    source_ids: [dp700-study-guide, onelake-shortcuts]
+    gaps: []
+    evidence:
+      conceptual_model: resolve-shortcut-comprehensive
+      prerequisites: resolve-shortcut-comprehensive
+      procedure: resolve-shortcut-comprehensive
+      decision_guidance: resolve-shortcut-comprehensive
+      worked_example: resolve-shortcut-comprehensive
+      limitations: resolve-shortcut-comprehensive
+      troubleshooting: resolve-shortcut-comprehensive
+      exam_distinctions: errors-exam-distinctions
+      recall_questions: errors-recall-lab
+      scenario_lab: resolve-shortcut-comprehensive
+  - objective_id: monitor.optimize.lakehouse
+    chapter_id: optimize-performance
+    status: complete
+    subtopics: [Small files, OPTIMIZE, V-Order, Partitioning, Statistics, VACUUM, Retention, Maintenance cadence]
+    source_ids: [dp700-study-guide, lakehouse-delta-tables, delta-v-order]
+    gaps: []
+    evidence:
+      conceptual_model: optimize-lakehouse-comprehensive
+      prerequisites: optimize-lakehouse-comprehensive
+      procedure: optimize-lakehouse-comprehensive
+      decision_guidance: optimize-lakehouse-comprehensive
+      worked_example: optimize-lakehouse-comprehensive
+      limitations: optimize-lakehouse-comprehensive
+      troubleshooting: optimize-lakehouse-comprehensive
+      exam_distinctions: optimize-exam-distinctions
+      recall_questions: optimize-recall-lab
+      scenario_lab: optimize-lakehouse-comprehensive
+  - objective_id: monitor.optimize.pipeline
+    chapter_id: optimize-performance
+    status: complete
+    subtopics: [Source selection, Copy parallelism, ForEach concurrency, Staging, Activity overhead, Retry backoff, Throughput metrics]
+    source_ids: [dp700-study-guide]
+    gaps: []
+    evidence:
+      conceptual_model: optimize-pipeline-comprehensive
+      prerequisites: optimize-pipeline-comprehensive
+      procedure: optimize-pipeline-comprehensive
+      decision_guidance: optimize-pipeline-comprehensive
+      worked_example: optimize-pipeline-comprehensive
+      limitations: optimize-pipeline-comprehensive
+      troubleshooting: optimize-pipeline-comprehensive
+      exam_distinctions: optimize-exam-distinctions
+      recall_questions: optimize-recall-lab
+      scenario_lab: optimize-pipeline-comprehensive
+  - objective_id: monitor.optimize.warehouse
+    chapter_id: optimize-performance
+    status: complete
+    subtopics: [Scans, Statistics, Data types, Star schema, Joins, Plans, Concurrency, V-Order and materialization]
+    source_ids: [dp700-study-guide, warehouse-performance]
+    gaps: []
+    evidence:
+      conceptual_model: optimize-warehouse-comprehensive
+      prerequisites: optimize-warehouse-comprehensive
+      procedure: optimize-warehouse-comprehensive
+      decision_guidance: optimize-warehouse-comprehensive
+      worked_example: optimize-warehouse-comprehensive
+      limitations: optimize-warehouse-comprehensive
+      troubleshooting: optimize-warehouse-comprehensive
+      exam_distinctions: optimize-exam-distinctions
+      recall_questions: optimize-recall-lab
+      scenario_lab: optimize-warehouse-comprehensive
+  - objective_id: monitor.optimize.realtime
+    chapter_id: optimize-performance
+    status: complete
+    subtopics: [Eventstream filtering, Routing, Ingestion batching, Retention, Caching, KQL shape, Materialized views, Shortcut acceleration]
+    source_ids: [dp700-study-guide, kql-query-best-practices]
+    gaps: []
+    evidence:
+      conceptual_model: optimize-realtime-comprehensive
+      prerequisites: optimize-realtime-comprehensive
+      procedure: optimize-realtime-comprehensive
+      decision_guidance: optimize-realtime-comprehensive
+      worked_example: optimize-realtime-comprehensive
+      limitations: optimize-realtime-comprehensive
+      troubleshooting: optimize-realtime-comprehensive
+      exam_distinctions: optimize-exam-distinctions
+      recall_questions: optimize-recall-lab
+      scenario_lab: optimize-realtime-comprehensive
+  - objective_id: monitor.optimize.spark
+    chapter_id: optimize-performance
+    status: complete
+    subtopics: [Spark UI, Partition pruning, Shuffle, Skew, Broadcast joins, Repartition, Coalesce, Cache, Compute sizing]
+    source_ids: [dp700-study-guide, lakehouse-delta-tables, spark-troubleshooting]
+    gaps: []
+    evidence:
+      conceptual_model: optimize-spark-comprehensive
+      prerequisites: optimize-spark-comprehensive
+      procedure: optimize-spark-comprehensive
+      decision_guidance: optimize-spark-comprehensive
+      worked_example: optimize-spark-comprehensive
+      limitations: optimize-spark-comprehensive
+      troubleshooting: optimize-spark-comprehensive
+      exam_distinctions: optimize-exam-distinctions
+      recall_questions: optimize-recall-lab
+      scenario_lab: optimize-spark-comprehensive
+  - objective_id: monitor.optimize.query
+    chapter_id: optimize-performance
+    status: complete
+    subtopics: [Projection, Predicate pushdown, Pruning, Join grain, Plans, Repeated computation, Preaggregation, Correctness and cost]
+    source_ids: [dp700-study-guide, warehouse-performance, kql-query-best-practices]
+    gaps: []
+    evidence:
+      conceptual_model: optimize-query-comprehensive
+      prerequisites: optimize-query-comprehensive
+      procedure: optimize-query-comprehensive
+      decision_guidance: optimize-query-comprehensive
+      worked_example: optimize-query-comprehensive
+      limitations: optimize-query-comprehensive
+      troubleshooting: optimize-query-comprehensive
+      exam_distinctions: optimize-exam-distinctions
+      recall_questions: optimize-recall-lab
+      scenario_lab: optimize-query-comprehensive
