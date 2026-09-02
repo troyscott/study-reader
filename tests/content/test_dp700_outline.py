@@ -49,8 +49,8 @@ def test_dp700_coverage_audit_records_every_objective_and_evidence() -> None:
     }
     assert all(len(coverage.subtopics) >= 2 for coverage in audit.objectives)
     assert all(coverage.source_ids for coverage in audit.objectives)
-    assert sum(coverage.status == "complete" for coverage in audit.objectives) == 37
-    assert sum(coverage.status == "draft" for coverage in audit.objectives) == 17
+    assert sum(coverage.status == "complete" for coverage in audit.objectives) == 54
+    assert all(coverage.status == "complete" for coverage in audit.objectives)
     assert all(
         coverage.evidence.is_complete and not coverage.gaps
         if coverage.status == "complete"

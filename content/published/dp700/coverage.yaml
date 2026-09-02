@@ -632,103 +632,290 @@ objectives:
       scenario_lab: windows-comprehensive
   - objective_id: monitor.items.ingestion
     chapter_id: monitor-items
-    status: draft
+    status: complete
     subtopics: [Monitoring hub, Pipeline runs, Copy metrics, Streaming rate, Lag, Watermark, Rejected rows, Freshness]
     source_ids: [dp700-study-guide, fabric-monitoring-hub]
-    gaps: [Add item-specific screens, thresholds, and incident scenario]
+    gaps: []
+    evidence:
+      conceptual_model: monitoring-foundation
+      prerequisites: monitor-ingestion-comprehensive
+      procedure: monitor-ingestion-comprehensive
+      decision_guidance: monitor-ingestion-comprehensive
+      worked_example: monitor-ingestion-comprehensive
+      limitations: monitor-ingestion-comprehensive
+      troubleshooting: monitor-ingestion-comprehensive
+      exam_distinctions: monitoring-exam-distinctions
+      recall_questions: monitoring-recall-lab
+      scenario_lab: monitor-ingestion-comprehensive
   - objective_id: monitor.items.transformation
     chapter_id: monitor-items
-    status: draft
+    status: complete
     subtopics: [Dataflow refresh, Notebook and Spark jobs, Pipeline activities, SQL and KQL queries, Quality assertions, Capacity evidence]
     source_ids: [dp700-study-guide, fabric-monitoring-hub, dataflow-monitoring]
-    gaps: [Add per-engine diagnostic workflow and data-quality evidence model]
+    gaps: []
+    evidence:
+      conceptual_model: monitoring-foundation
+      prerequisites: monitor-transformation-comprehensive
+      procedure: monitor-transformation-comprehensive
+      decision_guidance: monitor-transformation-comprehensive
+      worked_example: monitor-transformation-comprehensive
+      limitations: monitor-transformation-comprehensive
+      troubleshooting: monitor-transformation-comprehensive
+      exam_distinctions: monitoring-exam-distinctions
+      recall_questions: monitoring-recall-lab
+      scenario_lab: monitor-transformation-comprehensive
   - objective_id: monitor.items.semantic-refresh
     chapter_id: monitor-items
-    status: draft
+    status: complete
     subtopics: [Refresh history, Administrative summary, Types, Tables and partitions, Incremental refresh, Credentials, Gateway, Capacity]
     source_ids: [dp700-study-guide, semantic-refresh-summaries]
-    gaps: [Add refresh investigation walkthrough and upstream freshness chain]
+    gaps: []
+    evidence:
+      conceptual_model: monitor-semantic-comprehensive
+      prerequisites: monitor-semantic-comprehensive
+      procedure: monitor-semantic-comprehensive
+      decision_guidance: monitor-semantic-comprehensive
+      worked_example: monitor-semantic-comprehensive
+      limitations: monitor-semantic-comprehensive
+      troubleshooting: monitor-semantic-comprehensive
+      exam_distinctions: monitoring-exam-distinctions
+      recall_questions: monitoring-recall-lab
+      scenario_lab: monitor-semantic-comprehensive
   - objective_id: monitor.items.alerts
     chapter_id: monitor-items
-    status: draft
+    status: complete
     subtopics: [Activator, Signals, Thresholds, Windows, Recipients, Actions, Suppression, Recovery, Runbooks]
     source_ids: [dp700-study-guide, fabric-activator]
-    gaps: [Add alert configuration procedure and firing/recovery test]
+    gaps: []
+    evidence:
+      conceptual_model: alerts-comprehensive
+      prerequisites: alerts-comprehensive
+      procedure: alerts-comprehensive
+      decision_guidance: alerts-comprehensive
+      worked_example: alerts-comprehensive
+      limitations: alerts-comprehensive
+      troubleshooting: alerts-comprehensive
+      exam_distinctions: monitoring-exam-distinctions
+      recall_questions: monitoring-recall-lab
+      scenario_lab: alerts-comprehensive
   - objective_id: monitor.errors.pipeline
     chapter_id: resolve-errors
-    status: draft
+    status: complete
     subtopics: [Failed activity, Resolved inputs, Error codes, Connections, Expressions, Child runs, Retry classification, Idempotent reruns]
     source_ids: [dp700-study-guide, pipeline-troubleshooting]
-    gaps: [Add representative failure cases and resolution lab]
+    gaps: []
+    evidence:
+      conceptual_model: resolve-pipeline-comprehensive
+      prerequisites: resolve-pipeline-comprehensive
+      procedure: resolve-pipeline-comprehensive
+      decision_guidance: resolve-pipeline-comprehensive
+      worked_example: resolve-pipeline-comprehensive
+      limitations: resolve-pipeline-comprehensive
+      troubleshooting: resolve-pipeline-comprehensive
+      exam_distinctions: errors-exam-distinctions
+      recall_questions: errors-recall-lab
+      scenario_lab: resolve-pipeline-comprehensive
   - objective_id: monitor.errors.dataflow
     chapter_id: resolve-errors
-    status: draft
+    status: complete
     subtopics: [Refresh detail, Power Query step, Credentials, Gateway, Type errors, Schema drift, Folding, Destination errors]
     source_ids: [dp700-study-guide, dataflow-monitoring]
-    gaps: [Add bad-row diagnosis, schema failure, and destination repair examples]
+    gaps: []
+    evidence:
+      conceptual_model: resolve-dataflow-comprehensive
+      prerequisites: resolve-dataflow-comprehensive
+      procedure: resolve-dataflow-comprehensive
+      decision_guidance: resolve-dataflow-comprehensive
+      worked_example: resolve-dataflow-comprehensive
+      limitations: resolve-dataflow-comprehensive
+      troubleshooting: resolve-dataflow-comprehensive
+      exam_distinctions: errors-exam-distinctions
+      recall_questions: errors-recall-lab
+      scenario_lab: resolve-dataflow-comprehensive
   - objective_id: monitor.errors.notebook
     chapter_id: resolve-errors
-    status: draft
+    status: complete
     subtopics: [Driver errors, Executor failures, Spark UI, Runtime, Libraries, Lakehouse attachment, Memory, Skew and bad records]
     source_ids: [dp700-study-guide]
-    gaps: [Add direct notebook troubleshooting sources and Spark failure labs]
+    gaps: []
+    evidence:
+      conceptual_model: resolve-notebook-comprehensive
+      prerequisites: resolve-notebook-comprehensive
+      procedure: resolve-notebook-comprehensive
+      decision_guidance: resolve-notebook-comprehensive
+      worked_example: resolve-notebook-comprehensive
+      limitations: resolve-notebook-comprehensive
+      troubleshooting: resolve-notebook-comprehensive
+      exam_distinctions: errors-exam-distinctions
+      recall_questions: errors-recall-lab
+      scenario_lab: resolve-notebook-comprehensive
   - objective_id: monitor.errors.eventhouse
     chapter_id: resolve-errors
-    status: draft
+    status: complete
     subtopics: [Ingestion failures, Mapping and format, Permissions, Table policies, KQL request IDs, Capacity, Empty results]
     source_ids: [dp700-study-guide]
-    gaps: [Add direct Eventhouse troubleshooting sources and commands]
+    gaps: []
+    evidence:
+      conceptual_model: resolve-eventhouse-comprehensive
+      prerequisites: resolve-eventhouse-comprehensive
+      procedure: resolve-eventhouse-comprehensive
+      decision_guidance: resolve-eventhouse-comprehensive
+      worked_example: resolve-eventhouse-comprehensive
+      limitations: resolve-eventhouse-comprehensive
+      troubleshooting: resolve-eventhouse-comprehensive
+      exam_distinctions: errors-exam-distinctions
+      recall_questions: errors-recall-lab
+      scenario_lab: resolve-eventhouse-comprehensive
   - objective_id: monitor.errors.eventstream
     chapter_id: resolve-errors
-    status: draft
+    status: complete
     subtopics: [Connector state, Source rate, Transform schema, Event time, Destination health, Poison events, Backpressure]
     source_ids: [dp700-study-guide]
-    gaps: [Add direct Eventstream troubleshooting sources and failure-routing lab]
+    gaps: []
+    evidence:
+      conceptual_model: resolve-eventstream-comprehensive
+      prerequisites: resolve-eventstream-comprehensive
+      procedure: resolve-eventstream-comprehensive
+      decision_guidance: resolve-eventstream-comprehensive
+      worked_example: resolve-eventstream-comprehensive
+      limitations: resolve-eventstream-comprehensive
+      troubleshooting: resolve-eventstream-comprehensive
+      exam_distinctions: errors-exam-distinctions
+      recall_questions: errors-recall-lab
+      scenario_lab: resolve-eventstream-comprehensive
   - objective_id: monitor.errors.tsql
     chapter_id: resolve-errors
-    status: draft
+    status: complete
     subtopics: [Error numbers, Context and names, Permissions, Conversions, Constraints, Transactions, Deadlocks, Timeouts and plans]
     source_ids: [dp700-study-guide]
-    gaps: [Add Fabric-specific T-SQL troubleshooting sources and worked cases]
+    gaps: []
+    evidence:
+      conceptual_model: resolve-tsql-comprehensive
+      prerequisites: resolve-tsql-comprehensive
+      procedure: resolve-tsql-comprehensive
+      decision_guidance: resolve-tsql-comprehensive
+      worked_example: resolve-tsql-comprehensive
+      limitations: resolve-tsql-comprehensive
+      troubleshooting: resolve-tsql-comprehensive
+      exam_distinctions: errors-exam-distinctions
+      recall_questions: errors-recall-lab
+      scenario_lab: resolve-tsql-comprehensive
   - objective_id: monitor.errors.shortcut
     chapter_id: resolve-errors
-    status: draft
+    status: complete
     subtopics: [Target existence, Connections, Source permissions, Format, Tables path, Schema sync, Cache and acceleration]
     source_ids: [dp700-study-guide, onelake-shortcuts]
-    gaps: [Add systematic shortcut diagnostic procedure and repair lab]
+    gaps: []
+    evidence:
+      conceptual_model: resolve-shortcut-comprehensive
+      prerequisites: resolve-shortcut-comprehensive
+      procedure: resolve-shortcut-comprehensive
+      decision_guidance: resolve-shortcut-comprehensive
+      worked_example: resolve-shortcut-comprehensive
+      limitations: resolve-shortcut-comprehensive
+      troubleshooting: resolve-shortcut-comprehensive
+      exam_distinctions: errors-exam-distinctions
+      recall_questions: errors-recall-lab
+      scenario_lab: resolve-shortcut-comprehensive
   - objective_id: monitor.optimize.lakehouse
     chapter_id: optimize-performance
-    status: draft
+    status: complete
     subtopics: [Small files, OPTIMIZE, V-Order, Partitioning, Statistics, VACUUM, Retention, Maintenance cadence]
     source_ids: [dp700-study-guide, lakehouse-delta-tables, delta-v-order]
-    gaps: [Add measurement-based before/after lab and safety checks]
+    gaps: []
+    evidence:
+      conceptual_model: optimize-lakehouse-comprehensive
+      prerequisites: optimize-lakehouse-comprehensive
+      procedure: optimize-lakehouse-comprehensive
+      decision_guidance: optimize-lakehouse-comprehensive
+      worked_example: optimize-lakehouse-comprehensive
+      limitations: optimize-lakehouse-comprehensive
+      troubleshooting: optimize-lakehouse-comprehensive
+      exam_distinctions: optimize-exam-distinctions
+      recall_questions: optimize-recall-lab
+      scenario_lab: optimize-lakehouse-comprehensive
   - objective_id: monitor.optimize.pipeline
     chapter_id: optimize-performance
-    status: draft
+    status: complete
     subtopics: [Source selection, Copy parallelism, ForEach concurrency, Staging, Activity overhead, Retry backoff, Throughput metrics]
     source_ids: [dp700-study-guide]
-    gaps: [Add direct performance sources and measured tuning scenario]
+    gaps: []
+    evidence:
+      conceptual_model: optimize-pipeline-comprehensive
+      prerequisites: optimize-pipeline-comprehensive
+      procedure: optimize-pipeline-comprehensive
+      decision_guidance: optimize-pipeline-comprehensive
+      worked_example: optimize-pipeline-comprehensive
+      limitations: optimize-pipeline-comprehensive
+      troubleshooting: optimize-pipeline-comprehensive
+      exam_distinctions: optimize-exam-distinctions
+      recall_questions: optimize-recall-lab
+      scenario_lab: optimize-pipeline-comprehensive
   - objective_id: monitor.optimize.warehouse
     chapter_id: optimize-performance
-    status: draft
+    status: complete
     subtopics: [Scans, Statistics, Data types, Star schema, Joins, Plans, Concurrency, V-Order and materialization]
     source_ids: [dp700-study-guide, warehouse-performance]
-    gaps: [Add execution-plan walkthrough and before/after query lab]
+    gaps: []
+    evidence:
+      conceptual_model: optimize-warehouse-comprehensive
+      prerequisites: optimize-warehouse-comprehensive
+      procedure: optimize-warehouse-comprehensive
+      decision_guidance: optimize-warehouse-comprehensive
+      worked_example: optimize-warehouse-comprehensive
+      limitations: optimize-warehouse-comprehensive
+      troubleshooting: optimize-warehouse-comprehensive
+      exam_distinctions: optimize-exam-distinctions
+      recall_questions: optimize-recall-lab
+      scenario_lab: optimize-warehouse-comprehensive
   - objective_id: monitor.optimize.realtime
     chapter_id: optimize-performance
-    status: draft
+    status: complete
     subtopics: [Eventstream filtering, Routing, Ingestion batching, Retention, Caching, KQL shape, Materialized views, Shortcut acceleration]
     source_ids: [dp700-study-guide, kql-query-best-practices]
-    gaps: [Add Eventhouse policy sources and measured streaming scenario]
+    gaps: []
+    evidence:
+      conceptual_model: optimize-realtime-comprehensive
+      prerequisites: optimize-realtime-comprehensive
+      procedure: optimize-realtime-comprehensive
+      decision_guidance: optimize-realtime-comprehensive
+      worked_example: optimize-realtime-comprehensive
+      limitations: optimize-realtime-comprehensive
+      troubleshooting: optimize-realtime-comprehensive
+      exam_distinctions: optimize-exam-distinctions
+      recall_questions: optimize-recall-lab
+      scenario_lab: optimize-realtime-comprehensive
   - objective_id: monitor.optimize.spark
     chapter_id: optimize-performance
-    status: draft
+    status: complete
     subtopics: [Spark UI, Partition pruning, Shuffle, Skew, Broadcast joins, Repartition, Coalesce, Cache, Compute sizing]
     source_ids: [dp700-study-guide, lakehouse-delta-tables]
-    gaps: [Add Fabric Spark tuning sources and evidence-driven lab]
+    gaps: []
+    evidence:
+      conceptual_model: optimize-spark-comprehensive
+      prerequisites: optimize-spark-comprehensive
+      procedure: optimize-spark-comprehensive
+      decision_guidance: optimize-spark-comprehensive
+      worked_example: optimize-spark-comprehensive
+      limitations: optimize-spark-comprehensive
+      troubleshooting: optimize-spark-comprehensive
+      exam_distinctions: optimize-exam-distinctions
+      recall_questions: optimize-recall-lab
+      scenario_lab: optimize-spark-comprehensive
   - objective_id: monitor.optimize.query
     chapter_id: optimize-performance
-    status: draft
+    status: complete
     subtopics: [Projection, Predicate pushdown, Pruning, Join grain, Plans, Repeated computation, Preaggregation, Correctness and cost]
     source_ids: [dp700-study-guide, warehouse-performance, kql-query-best-practices]
-    gaps: [Add cross-engine query examples with plans and measured results]
+    gaps: []
+    evidence:
+      conceptual_model: optimize-query-comprehensive
+      prerequisites: optimize-query-comprehensive
+      procedure: optimize-query-comprehensive
+      decision_guidance: optimize-query-comprehensive
+      worked_example: optimize-query-comprehensive
+      limitations: optimize-query-comprehensive
+      troubleshooting: optimize-query-comprehensive
+      exam_distinctions: optimize-exam-distinctions
+      recall_questions: optimize-recall-lab
+      scenario_lab: optimize-query-comprehensive

@@ -89,6 +89,227 @@ Across SQL, KQL, and Spark SQL, the durable principles are similar:
 
 Optimization must preserve correctness. Compare row counts, totals, null behavior, and representative results after a rewrite. Report both latency and capacity/resource change so a faster query that costs far more is visible as a trade-off.
 
+## The optimization experiment contract
+
+<!-- block-id: optimization-foundation -->
+Write the experiment before changing the system: workload/query/data version,
+concurrency and cache state, environment/capacity, baseline runs, metric target,
+correctness assertions, proposed bottleneck, one change, repeated result, and
+cost/resource comparison. Use median and a tail percentile when variability
+matters; one warm run after a cold baseline is not evidence. Preserve query/run
+IDs and actual plans or engine metrics.
+
+Optimize the dominant bottleneck. If time is source I/O, adding pipeline
+activities can hurt. If one Spark partition is skewed, adding executors leaves
+one long task. If capacity throttles many workloads, a local SQL rewrite may not
+explain all latency. Scaling is valid when measured demand genuinely exceeds
+available resources after reasonable efficiency work, but it proves only that
+more resources helped that tested workload.
+
+## Lakehouse optimization field guide
+
+<!-- block-id: optimize-lakehouse-comprehensive -->
+Inspect table size, file count and size distribution, partition columns/count,
+write cadence, query predicates, bytes/files scanned, and Delta history before
+maintenance. Many tiny files create metadata and task overhead. `OPTIMIZE`
+compacts eligible files; V-Order reorganizes Parquet for Fabric read efficiency.
+Partitioning creates directory-level pruning boundaries. These mechanisms solve
+different problems and can be combined deliberately.
+
+Choose low-cardinality, frequently filtered columns with balanced volume for
+partitioning—often date at an appropriate grain. High-cardinality customer or
+transaction IDs produce tiny partitions. Use optimized write/maintenance based
+on accumulated data and query SLA, not after every micro-batch. Maintain
+statistics where the engine uses them. Before `VACUUM`, confirm time-travel,
+concurrent-reader, replay, legal retention, and recovery requirements; removed
+files cannot support old versions.
+
+**Lab.** Write the same representative table as thousands of tiny files and as
+compacted files. Run identical selective and broad queries three times under
+documented cache state; record planning/tasks, files/bytes, duration, and CU or
+compute evidence. Apply `OPTIMIZE`/V-Order as supported and compare. Then test a
+date partition versus an intentionally bad high-cardinality partition. Validate
+row count, distinct key, and totals after every layout change.
+
+If optimization appears ineffective, verify the query actually reads the
+optimized table/version, predicate can prune, file accumulation warranted
+compaction, and competing capacity/cache conditions are comparable. V-Order
+does not repair skewed partitioning, nonselective queries, or incorrect data
+modeling.
+
+## Pipeline optimization field guide
+
+<!-- block-id: optimize-pipeline-comprehensive -->
+Break elapsed time into trigger/queue, orchestration overhead, source query,
+transfer, transform, staging, sink write/commit, and retry. Capture rows/bytes,
+throughput, parallel copies, ForEach concurrency, source and sink utilization,
+throttling, file counts, and capacity. First reduce work with incremental
+selection, partition pruning, column projection, and compression. Then tune
+parallelism within source, gateway/network, Fabric capacity, and sink limits.
+
+Copy parallelism controls work within a copy; ForEach concurrency controls
+simultaneous activities. Raising both multiplies pressure. Many tiny activities
+increase scheduling and connection overhead, while one giant serial copy may
+underutilize resources. Partition/batch at recoverable boundaries. Use staging
+only when a connector path or measured bulk-loading improvement warrants its
+extra I/O. Backoff protects a throttled dependency; instant high retry amplifies
+the outage.
+
+**Lab.** Copy 20 equally sized partitions at concurrency 1, 4, and 12 while
+recording total throughput, source/sink throttling, activity duration, and
+capacity. Keep mapping and data fixed. The best point is the lowest reliable
+resource cost meeting SLA, not automatically 12. Repeat with 2,000 tiny files
+versus consolidated inputs to expose orchestration/file overhead. Validate
+source-to-target counts and repeat-safe rerun.
+
+If throughput falls as concurrency rises, inspect source connection limits,
+gateway/network, sink commits/locks, capacity, and generated small files. If
+queue time dominates, inspect capacity and activity count. If one partition
+dominates, rebalance boundaries rather than globally increasing parallelism.
+
+## Warehouse optimization field guide
+
+<!-- block-id: optimize-warehouse-comprehensive -->
+Begin with Query insights/monitor, actual plan and runtime metrics, query text
+and parameters, data volume/distribution, statistics, concurrency, and Capacity
+Metrics. Classify scan, join/data movement, sort/aggregate, blocking, queueing,
+spill, or compilation/plan change. Select only required columns, use types that
+represent values without needless width, filter with sargable/selective
+predicates, preaggregate before many-to-many joins, and preserve a clean star
+grain.
+
+Statistics help estimates; stale or absent statistics can lead to a poor join
+order or movement. Materialized views or persisted curated tables can trade
+refresh/storage cost for repeated query savings. Avoid wrapping a filter column
+in a conversion when the same boundary can be expressed on the original type.
+Avoid `SELECT *`, accidental Cartesian joins, and row-by-row procedural logic.
+Capacity scale can help concurrency saturation but not a query that scans every
+wide row unnecessarily.
+
+**Lab.** Start with a query joining order facts to a dimension whose business
+key is duplicated. Capture the wrong row count and plan. Repair dimension
+uniqueness, project only required columns, add a selective date predicate, and
+compare scan, duration, and correct total. Next preaggregate facts before a
+consumer-level join and compare. Run at one and several concurrent users so a
+single-query gain is not mistaken for workload capacity.
+
+For regressions, compare code/data/statistics/plan/concurrency/capacity changes.
+If all queries slow, suspect shared resource or blocking before rewriting each.
+If only one parameter shape slows, investigate selectivity and plan behavior.
+Do not “optimize” by removing correctness filters or changing decimal semantics.
+
+## Real-Time Intelligence optimization field guide
+
+<!-- block-id: optimize-realtime-comprehensive -->
+For Eventstreams, measure source input, operator/branch output, processing lag,
+invalid/drop rate, and each destination. Filter and project early, avoid
+duplicating expensive transforms on every branch, and route only required
+events. Choose batching and destinations with end-to-end latency in mind; one
+slow destination must be identifiable rather than silently backing up every
+route.
+
+For Eventhouse, compare ingestion rate/batch metrics, hot-cache horizon,
+retention, storage, query logs/insights, scanned extents/data, concurrency, and
+capacity. Put time and selective `where` early, `project` needed columns, use
+term-aware operators, reduce both sides before joins, and avoid repeatedly
+parsing broad dynamic payloads. Set caching to the frequently queried hot
+horizon and retention to the business/governance horizon; they answer different
+questions.
+
+Use materialized views for frequently repeated aggregates when ingestion-time
+maintenance and freshness semantics are acceptable. Use update policies for
+supported deterministic derived ingestion when duplicated storage and failure
+behavior are understood. For external Delta, compare standard shortcut,
+accelerated recent window, and native ingestion; acceleration does not unlock
+all native-table features.
+
+**Lab.** Query 90 days when most users need 24 hours. Add an explicit time
+predicate and projection, measure scanned data and latency, then configure a hot
+cache/accelerated period aligned to the observed horizon where appropriate.
+Create a repeated five-minute aggregation and compare direct query with a
+materialized design including ingestion cost. Validate bucket totals and late-
+event behavior. If lag increases, localize source, operator, Eventhouse
+ingestion, or query/capacity pressure before scaling.
+
+## Spark optimization field guide
+
+<!-- block-id: optimize-spark-comprehensive -->
+Use Spark UI to identify the critical stage and its task distribution. Record
+input/output rows and bytes, partitions, median/max task duration, shuffle read
+and write, spill, skew, executor CPU/memory/GC, failures, and plan. Reduce scan
+through partition pruning, column projection, and predicate pushdown. Prefer
+built-in functions and vectorized execution to Python UDFs. Avoid unnecessary
+wide transformations and repeated recomputation.
+
+Broadcast a dimension only when its serialized size safely fits every executor
+and the plan confirms broadcast. Otherwise align/repartition around large joins
+carefully. `repartition` performs a shuffle to reshape/increase/decrease
+partitions; `coalesce` typically reduces without full balancing. Address skew
+with better keys, preaggregation, adaptive query execution, or selective
+salting. Cache only an expensive reused intermediate that fits memory and
+unpersist it; caching one-use data adds cost.
+
+Size compute after the plan is efficient. More executors increase parallel
+capacity but cannot split a single indivisible/skewed task automatically. A
+larger driver helps driver duties but can hide an unsafe collect. Too many tiny
+partitions add scheduling overhead; too few large partitions underuse compute
+or spill. Match output partitioning/file sizes to downstream reads as well as
+current job speed.
+
+**Lab.** Create a skewed join and capture one long task. Compare baseline,
+preaggregation, and selective salting/adaptive execution; record task spread,
+shuffle, spill, duration, and totals. Separately compare a built-in expression
+with an equivalent Python UDF and inspect the plan. Cache a reused intermediate
+for two actions, then unpersist; prove a one-action workload does not benefit.
+
+## Cross-engine query optimization field guide
+
+<!-- block-id: optimize-query-comprehensive -->
+The common model is scan → filter/project → join → aggregate/sort → return or
+write. Reduce data as early as semantics permit, use engine-prunable predicates,
+make join keys compatible, prevent many-to-many explosion, and calculate
+expensive repeated results once. But verify the actual engine plan: SQL
+statistics and relational operations, KQL extent/time pruning and operator
+pipeline, and Spark partition/file pruning plus shuffle have different evidence.
+
+Compare both cold and representative warm-cache conditions, several runs,
+concurrency, result size, and capacity cost. A query can be faster because the
+result changed, cache warmed, data volume shrank, or capacity was quieter. Use a
+fixed correctness fixture plus production-scale measurement. Validate row count,
+key uniqueness, null behavior, decimal/time-zone semantics, and totals before
+accepting a rewrite.
+
+**Worked comparison.** SQL `WHERE OrderDate >= @start`, KQL `where EventTime >=
+start`, and Spark `.filter(col("OrderDate") >= start)` can all reduce scans only
+when types, storage organization, and optimizer/source pushdown support it.
+Wrapping the stored date in string conversion may prevent pruning. Preaggregate
+a large fact by join key before joining to a small classification when only
+group totals are needed—but never if detail-level matching changes meaning.
+
+If a rewrite shows no gain, check plan equivalence, predicate selectivity,
+storage/partitioning, statistics, cache, result transfer, and shared resource
+noise. If it is faster but CU/resource cost rises sharply, state the trade-off
+and decide against the SLA/cost objective. Mini-lab: build a result checksum and
+metrics table, then optimize one SQL, KQL, and Spark query using the same
+filter/project/join principles and engine-specific evidence.
+
+<!-- block-id: optimize-exam-distinctions -->
+`OPTIMIZE` compacts Delta files, V-Order changes file layout, partitioning enables
+pruning, and `VACUUM` removes obsolete files under retention rules. Copy
+parallelism differs from loop concurrency. Eventhouse retention differs from hot
+cache. Spark repartition differs from coalesce, and broadcast is a join strategy,
+not “send output everywhere.” A faster run is not proven optimization until
+correctness, comparable conditions, and resource cost are included.
+
+<!-- block-id: optimize-recall-lab -->
+**Recall.** Which metrics prove a small-file problem? Why can 12 concurrent
+copies be slower than four? What plan evidence distinguishes warehouse scan from
+queueing? When does a materialized view move cost rather than remove it? Why does
+one long Spark task suggest skew? How can conversion prevent pruning? For
+practice, write an A/B optimization record with hypothesis, fixed conditions,
+three baseline and three changed runs, correctness checksum, p50/p95, bytes
+scanned, and CU/compute result.
+
 ## Exam distinctions
 
 - `OPTIMIZE` compacts Delta files; V-Order changes Parquet layout; partitioning organizes data for pruning.

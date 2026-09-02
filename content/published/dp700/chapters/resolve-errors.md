@@ -66,6 +66,198 @@ Verify that the shortcut target still exists, the stored connection is valid, th
 
 For KQL shortcuts, validate with `external_table('name')`. For lakehouse table shortcuts, confirm the target is a supported Delta table and appears at the correct Tables path. Acceleration has separate status, cache-window, and schema constraints.
 
+## Pipeline failure clinic
+
+<!-- block-id: resolve-pipeline-comprehensive -->
+A pipeline run is a graph of resolved activities, not just a canvas definition.
+Start with run ID, trigger, parameters, identity, and the earliest failed
+activity. Open its resolved input/output and exact error code. Trace a child
+pipeline or notebook using its child run ID. Validate dynamic-expression type
+and JSON path, source/sink connection, path/table, mapping, target constraints,
+timeout, retry, and concurrency. Do not expose secret values while capturing
+evidence.
+
+Classify before repair: permission/authentication requires identity or connection
+correction; missing/renamed input requires source contract or routing; mapping
+and constraint failures require schema/data handling; throttling and temporary
+network faults may use bounded backoff. For partial ForEach completion, enumerate
+successful units and prove target idempotency before replay. A retry cannot make
+an invalid column mapping valid.
+
+**Lab.** A metadata-driven child receives `sourcePath=null`, so `concat()` builds
+an unintended path and Copy fails “not found.” Capture the lookup output and
+resolved child input, add boundary validation, correct the metadata, and rerun
+only that entity. Then simulate throttling and verify backoff succeeds without
+duplicate rows. The regression checks both null rejection and repeat-safe
+application. If the activity remains queued, add capacity, integration runtime,
+and concurrency evidence rather than changing the path again.
+
+## Dataflow Gen2 failure clinic
+
+<!-- block-id: resolve-dataflow-comprehensive -->
+Separate **author/save validation**, **refresh execution**, and **destination
+write**. In refresh history identify the run, failing query, first failing step,
+connection/gateway, and detailed log. Reproduce on the offending query and data,
+not only the small preview. Test credentials and privacy/firewall boundaries,
+then schema names/types, locale conversions, merge cardinality, custom functions,
+folding/source timeout, and destination schema/update behavior.
+
+An added source column may be harmless while a removed/renamed or changed-type
+column is breaking. Replacing every error with null can turn a visible failure
+into silent corruption. Route conversion failures with source value, reason,
+run, and rule; correct or approve disposition. If refresh is slow rather than
+failed, inspect folding, source rows/bytes, gateway routing, and destination
+write. Some connectors report rows and others bytes, so do not compare unlike
+statistics.
+
+**Lab.** Preview contains 1,000 valid dates, while the full source contains
+`31/13/2026`. Refresh fails at `Changed Type`. Create an errors query, apply an
+explicit locale, quarantine the invalid row, and reconcile accepted plus rejected
+to source. Next rename a source column and prove schema validation fails before
+publish. The correct regression includes the previously unseen value, not just
+another preview.
+
+## Notebook and Spark failure clinic
+
+<!-- block-id: resolve-notebook-comprehensive -->
+Identify whether failure occurs before session start, in the driver/cell, or in
+distributed stages/tasks. Pre-session failures point to pool/capacity,
+environment runtime, library publication, permissions, or lakehouse attachment.
+A driver stack trace points to Python/SQL/control logic or collecting too much
+data. Repeated executor/task failure points to one bad record/partition, skew,
+shuffle, memory, serialization, or transient worker loss. Use Spark UI and logs
+for the first failing stage and compare task duration, input, shuffle, spill, and
+failure reasons.
+
+Confirm code version, parameters, runtime, published environment, libraries,
+Spark configuration, attached item, identity, input partition, and checkpoint
+for streaming. Avoid `collect()`/`toPandas()` on unbounded data; filter/project
+early; replace Python UDFs with built-ins where possible; isolate corrupt input;
+fix skew before scaling. A library that imports interactively but is absent from
+the published environment will fail scheduled execution.
+
+**Lab.** One key holds 70% of rows. The Spark stage shows one task far longer
+than its peers and spilling, while executor utilization elsewhere is low.
+Preaggregate or redesign the key; if legitimate, use a measured skew strategy
+such as adaptive execution or selective salting. Compare task distribution and
+correct totals before/after. Separately force a driver OOM with a test `collect`
+and repair it with distributed aggregation; explain why adding executors would
+not increase driver memory.
+
+## Eventhouse failure clinic
+
+<!-- block-id: resolve-eventhouse-comprehensive -->
+Split ingestion, command/policy, query, and capacity. Eventhouse monitoring can
+expose metrics plus command, data-operation, ingestion-result, and query logs.
+For ingestion, keep source/connection, database/table, operation/request ID,
+format and ingestion mapping, schema/type, identity, batching, and result. For a
+query, keep request ID, database context, text, time range, scanned/result rows,
+duration, and error. Check that event time—not ingestion time—is used as intended.
+
+Mapping name, delimiter/encoding, dynamic JSON path, unsupported type, missing
+table permission, source connectivity, and retention/caching policy can fail or
+misroute ingestion. An empty query can result from the wrong database/table,
+too-narrow time filter, time-zone/parse error, or ingestion delay. Reduce a
+failing KQL pipeline operator by operator; start with `take` and a known broad
+time range, then reapply filters and parsing.
+
+**Lab.** Five events are sent; four ingest and one rejects because
+`Temperature="hot"` conflicts with mapping. Locate the ingestion result, retain
+the source position, correct or route the event, and reconcile five outcomes.
+Then query a future event-time range and prove empty results are a query-boundary
+issue, not ingestion failure. If all databases slow simultaneously, examine
+Eventhouse system/capacity evidence before rewriting one mapping.
+
+## Eventstream failure clinic
+
+<!-- block-id: resolve-eventstream-comprehensive -->
+Walk the graph and compare rate at every boundary: source connected/input,
+operator input/output/error, route match, destination accepted/failed, and
+end-to-end lag. Capture item, time, source partition/offset or event ID,
+event-time/schema version, and destination status. Validate connector credentials
+and network, then transformation fields/types, window time/watermark, route
+conditions, and destination permissions/capacity.
+
+A flat zero input points upstream; normal source input and zero after an operator
+points to filter/schema logic; normal branch output plus destination failures
+points downstream. Rising lag with input greater than output indicates
+backpressure or a slow sink, not necessarily lost events. Route poison messages
+to a restricted quarantine with reason and replay reference; do not create an
+infinite retry loop around deterministic bad payloads.
+
+**Lab.** Rename `eventTime` to `event_time` at the source without updating the
+window transform. Raw route continues, curated output stops. Boundary rates
+localize the first zero-output operator. Add schema validation/version handling,
+replay retained raw events, and verify window totals. Then deny only one
+destination and show the healthy branch continues; the incident scope is one
+sink, not the entire stream.
+
+## T-SQL failure clinic
+
+<!-- block-id: resolve-tsql-comprehensive -->
+Capture statement/query ID, database and schema context, executing identity,
+parameters, exact number/message, transaction state, and time. Compilation/name
+errors differ from permission, conversion, constraint, blocking/deadlock,
+resource, and timeout failures. Query Monitor, query insights, DMVs, or plans
+provide runtime evidence where supported. Use the least-privilege grant rather
+than changing ownership or granting a broad workspace role.
+
+For truncation/conversion, find the column and offending value, compare source
+and target types/length/precision, and choose validated cleansing or schema
+change. For key/null constraints, test staged uniqueness and required values
+before the target. For deadlocks, keep the graph/context, make transaction order
+consistent and transactions short, and use safe retry only for the chosen
+victim. For timeout, separate client timeout, blocking, capacity queueing, scan,
+and plan regression.
+
+**Lab.** Two staged rows share a target business key and `MERGE` fails. Rank to
+one trusted source version, quarantine ambiguous ties, enforce the invariant,
+and rerun idempotently. Then create a safe blocking scenario in a test database,
+identify blocker versus victim, and resolve transaction scope rather than adding
+an index at random. Regression fixtures retain the duplicate key and verify one
+deterministic outcome.
+
+## Shortcut failure clinic
+
+<!-- block-id: resolve-shortcut-comprehensive -->
+A shortcut failure spans reference metadata, connection identity, source target,
+format, consuming engine, and optional cache/acceleration. Record shortcut/item,
+target URI/path, internal versus external type, connection, querying identity,
+engine, schema, and exact error. Confirm target existence first, then connection
+validity and source ACL, supported location/format, Delta `_delta_log` for table
+use, Tables versus Files placement, and schema/cache status.
+
+Different users can see different results because credential delegation and
+permissions differ. Deleting a shortcut is not target recovery; moving the
+target requires updating/recreating the reference. For KQL validate
+`external_table()` and time/schema assumptions; for accelerated shortcuts check
+cache status/window and external-table limitations separately. A standard
+shortcut cannot hide source outage or latency.
+
+**Lab.** Query a known Delta shortcut, revoke the connection identity's source
+read, and confirm an authorization failure while target files remain. Restore
+read, then remove `_delta_log` in a disposable copy and show file access may not
+qualify as a table. Repair the test target and validate row count and schema.
+Record a denied identity as well as the allowed one so success is not proved only
+with owner privileges.
+
+<!-- block-id: errors-exam-distinctions -->
+Resolved pipeline inputs show runtime truth; Dataflow preview is sampled authoring
+evidence; Spark UI separates driver, stage, and task behavior; Eventhouse
+ingestion logs differ from query logs; Eventstream boundary rates localize graph
+failures; T-SQL error/plan context distinguishes correctness from slowness; a
+shortcut is a reference whose target can remain intact. Retry only a classified
+transient fault and only with repeat-safe effects.
+
+<!-- block-id: errors-recall-lab -->
+**Recall.** What is the earliest-failure rule? Why can `collect()` cause driver
+rather than executor failure? Which Eventhouse evidence proves a rejected event?
+How do Eventstream boundary rates distinguish source from destination? What
+makes a T-SQL timeout ambiguous? Which three identities/permissions can affect a
+shortcut path? For practice, write one incident record with time, scope,
+correlation ID, classification, evidence, correction, rerun boundary, outcome,
+and regression test.
+
 ## Exam distinctions
 
 - Retry transient faults; correct deterministic faults.
