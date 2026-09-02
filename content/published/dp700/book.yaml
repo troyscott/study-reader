@@ -58,6 +58,162 @@ sources:
     retrieved_at: 2026-09-02T05:18:00Z
     content_sha256: 058c6d6feb30c2984ff481f9719866b4df8ae245a6497dcb232cc9a22df243fb
     chapter_ids: [workspace-settings]
+  - id: fabric-cicd-overview
+    title: Introduction to CI/CD in Microsoft Fabric
+    url: https://learn.microsoft.com/en-us/fabric/cicd/cicd-overview
+    retrieved_at: 2026-09-02T06:52:59Z
+    content_sha256: c6d1ff511b78b958eefedd97f7fda84f1a90c28f038f5a9a8608fc9203d1ae12
+    chapter_ids: [lifecycle-management]
+  - id: fabric-permission-model
+    title: Microsoft Fabric permission model
+    url: https://learn.microsoft.com/en-us/fabric/security/permission-model
+    retrieved_at: 2026-09-02T06:52:59Z
+    content_sha256: 9f56c7b377bb93cf4faf351e0d376db1dc11ac85cb8e588cb2b5472147d793cc
+    chapter_ids: [security-governance]
+  - id: onelake-data-access-control
+    title: OneLake data access control model
+    url: https://learn.microsoft.com/en-us/fabric/onelake/security/data-access-control-model
+    retrieved_at: 2026-09-02T06:52:59Z
+    content_sha256: 354acecf19058ef3b9b46cc66e79cac85fae72d09dae6b16ad0ca1a5c70d2a37
+    chapter_ids: [security-governance]
+  - id: warehouse-dynamic-masking
+    title: Dynamic data masking in Fabric Data Warehouse
+    url: https://learn.microsoft.com/en-us/fabric/data-warehouse/dynamic-data-masking
+    retrieved_at: 2026-09-02T06:52:59Z
+    content_sha256: 934514244c3d1d7524befcceaf5a19abb4a9ef628fe4bb38c83586b2cf65da55
+    chapter_ids: [security-governance]
+  - id: fabric-information-protection
+    title: Information protection in Fabric
+    url: https://learn.microsoft.com/en-us/fabric/governance/information-protection
+    retrieved_at: 2026-09-02T06:52:59Z
+    content_sha256: 444ee731afe960b7bede916f9a8c8e0e9fd3eb636e019231e7a587b251d7f84a
+    chapter_ids: [security-governance]
+  - id: fabric-endorsement
+    title: Endorsement overview
+    url: https://learn.microsoft.com/en-us/fabric/governance/endorsement-overview
+    retrieved_at: 2026-09-02T06:52:59Z
+    content_sha256: 9394961cf55a6e0efa296695d5f45c94dd84bd30e37b1f4e7a1b5680bc25f59d
+    chapter_ids: [security-governance]
+  - id: fabric-audit-activities
+    title: Track user activities in Microsoft Fabric
+    url: https://learn.microsoft.com/en-us/fabric/admin/track-user-activities
+    retrieved_at: 2026-09-02T06:52:59Z
+    content_sha256: 5883ebfb1e0078495253d2d10e479e811cb40aee5cdbd6e90cc19cc4aa3a6ae2
+    chapter_ids: [security-governance]
+  - id: pipeline-overview
+    title: Pipeline overview
+    url: https://learn.microsoft.com/en-us/fabric/data-factory/pipeline-overview
+    retrieved_at: 2026-09-02T06:52:59Z
+    content_sha256: dba592f9593cf0d012435d0b69378878aad33e7db1aadf43859a67c8fcaefeaa
+    chapter_ids: [orchestration]
+  - id: pipeline-parameters
+    title: Parameters for Data Factory in Microsoft Fabric
+    url: https://learn.microsoft.com/en-us/fabric/data-factory/parameters
+    retrieved_at: 2026-09-02T06:52:59Z
+    content_sha256: afd48104e7cabaa3379d941584061a6ecd8a9591537b1a1b2a20c80700c91171
+    chapter_ids: [orchestration]
+  - id: data-movement-decision-guide
+    title: Choose a data movement strategy
+    url: https://learn.microsoft.com/en-us/fabric/data-factory/decision-guide-data-movement
+    retrieved_at: 2026-09-02T06:52:59Z
+    content_sha256: 9c28e69274c076d7db280c6c5b334b74b00c4756e45fa19e984dd7d422a264de
+    chapter_ids: [loading-patterns, batch-data]
+  - id: dimensional-model-loading
+    title: Load tables in a dimensional model
+    url: https://learn.microsoft.com/en-us/fabric/data-warehouse/dimensional-modeling-load-tables
+    retrieved_at: 2026-09-02T06:52:59Z
+    content_sha256: e6148d2232549d19b1788f733b54b66c7fe7bb486d93a8525e7cab358bbb62f3
+    chapter_ids: [loading-patterns]
+  - id: dataflows-gen2-overview
+    title: Dataflows Gen2 overview
+    url: https://learn.microsoft.com/en-us/fabric/data-factory/dataflows-gen2-overview
+    retrieved_at: 2026-09-02T06:52:59Z
+    content_sha256: 207bccd75fa09ec51d15af4b6d02f0ddba2eaa2ce3984ab10edc85626aa66615
+    chapter_ids: [batch-data]
+  - id: onelake-shortcuts
+    title: OneLake shortcuts
+    url: https://learn.microsoft.com/en-us/fabric/onelake/onelake-shortcuts
+    retrieved_at: 2026-09-02T06:52:59Z
+    content_sha256: 5744075b37e0f09ffe6a8ad53ee395c2bf39d424aaefed579028f0fbacb14ed6
+    chapter_ids: [batch-data, resolve-errors]
+  - id: fabric-mirroring
+    title: What is mirroring in Fabric?
+    url: https://learn.microsoft.com/en-us/fabric/mirroring/overview
+    retrieved_at: 2026-09-02T06:52:59Z
+    content_sha256: 6053b3f02e2500a7343f4a0f48bb81b0292aef79d9d78fb886176abee5d020e7
+    chapter_ids: [batch-data]
+  - id: real-time-intelligence-overview
+    title: What is Real-Time Intelligence?
+    url: https://learn.microsoft.com/en-us/fabric/real-time-intelligence/overview
+    retrieved_at: 2026-09-02T06:52:59Z
+    content_sha256: db73725804e0643422b247e2648b9b7a6b34c7f96914bd45d52d9b2349ae690d
+    chapter_ids: [streaming-data]
+  - id: query-acceleration-overview
+    title: Query acceleration for OneLake shortcuts
+    url: https://learn.microsoft.com/en-us/fabric/real-time-intelligence/query-acceleration-overview
+    retrieved_at: 2026-09-02T06:52:59Z
+    content_sha256: dbeb43e271e47b8d481b4947ed65460fd096d80ae367636b4af27083d18b8282
+    chapter_ids: [streaming-data]
+  - id: structured-streaming-state
+    title: Stateful processing with Structured Streaming
+    url: https://learn.microsoft.com/en-us/fabric/data-engineering/structured-streaming-stateful-processing
+    retrieved_at: 2026-09-02T06:52:59Z
+    content_sha256: 533e2f97674a8f549d70ff090fc1c5389a0bd8ce5fa7cb01455b8b17f92f6772
+    chapter_ids: [loading-patterns, streaming-data]
+  - id: fabric-monitoring-hub
+    title: Use the Monitoring hub
+    url: https://learn.microsoft.com/en-us/fabric/admin/monitoring-hub
+    retrieved_at: 2026-09-02T06:52:59Z
+    content_sha256: b4accbd5cb3ace8d9461c5c4e2d8bc1e284a1eaaceb90bb0155d71b688a9e760
+    chapter_ids: [monitor-items]
+  - id: dataflow-monitoring
+    title: Monitor Dataflow Gen2 refreshes
+    url: https://learn.microsoft.com/en-us/fabric/data-factory/dataflows-gen2-monitor
+    retrieved_at: 2026-09-02T06:52:59Z
+    content_sha256: 3db701d42efb9edb28e31eeeab2a9ab722f17636e54a107e85477f6564a30389
+    chapter_ids: [monitor-items, resolve-errors]
+  - id: semantic-refresh-summaries
+    title: Refresh summaries
+    url: https://learn.microsoft.com/en-us/power-bi/connect-data/refresh-summaries
+    retrieved_at: 2026-09-02T06:52:59Z
+    content_sha256: 2b0e7caf1d23cbc7becb9acbdeb52982b280757f4f0336856a4236d9581f000b
+    chapter_ids: [monitor-items]
+  - id: fabric-activator
+    title: What is Fabric Activator?
+    url: https://learn.microsoft.com/en-us/fabric/real-time-intelligence/data-activator/activator-introduction
+    retrieved_at: 2026-09-02T06:52:59Z
+    content_sha256: df31c30d7d1997890bb07e029f7896701342be422644e73bbb5c71379addb369
+    chapter_ids: [monitor-items]
+  - id: pipeline-troubleshooting
+    title: Pipeline troubleshooting guide
+    url: https://learn.microsoft.com/en-us/fabric/data-factory/pipeline-troubleshoot-guide
+    retrieved_at: 2026-09-02T06:52:59Z
+    content_sha256: b73934e3aac0206c60ce1a05e15233be0af212201019d2bfc9da9ae57368cd26
+    chapter_ids: [resolve-errors]
+  - id: lakehouse-delta-tables
+    title: Lakehouse and Delta tables
+    url: https://learn.microsoft.com/en-us/fabric/data-engineering/lakehouse-and-delta-tables
+    retrieved_at: 2026-09-02T06:52:59Z
+    content_sha256: 1f95d4f63b5776cb61fc7b7a6ed76c181ac1f212b4da99264a9d252bb9839820
+    chapter_ids: [optimize-performance]
+  - id: delta-v-order
+    title: Delta optimization and V-Order
+    url: https://learn.microsoft.com/en-us/fabric/data-engineering/delta-optimization-and-v-order
+    retrieved_at: 2026-09-02T06:52:59Z
+    content_sha256: 0608a02fe58ff6011a005af236fa849ff97bdedb81a059171a8814000b3c2b45
+    chapter_ids: [optimize-performance]
+  - id: warehouse-performance
+    title: Guidelines for Fabric Data Warehouse performance
+    url: https://learn.microsoft.com/en-us/fabric/data-warehouse/guidelines-warehouse-performance
+    retrieved_at: 2026-09-02T06:52:59Z
+    content_sha256: 70fea084b235f11015ee4e55670d258bcedceb6b6ee66d86a5191664d53fa025
+    chapter_ids: [optimize-performance]
+  - id: kql-query-best-practices
+    title: KQL query best practices
+    url: https://learn.microsoft.com/en-us/kusto/query/best-practices
+    retrieved_at: 2026-09-02T06:52:59Z
+    content_sha256: 9e4ddae5cb3f3a33152876d2583ee99c8df9924f8bf03125c9d750a33d456607
+    chapter_ids: [optimize-performance]
 domains:
   - id: implement-manage
     title: Implement and manage an analytics solution
@@ -78,7 +234,8 @@ domains:
         slug: lifecycle-management
         title: Implement lifecycle management in Fabric
         content_path: lifecycle-management.md
-        source_ids: [dp700-study-guide]
+        status: published
+        source_ids: [dp700-study-guide, fabric-cicd-overview]
         objectives:
           - {id: implement.lifecycle.version-control, title: Configure version control}
           - {id: implement.lifecycle.database-projects, title: Implement database projects}
@@ -87,7 +244,8 @@ domains:
         slug: security-governance
         title: Configure security and governance
         content_path: security-governance.md
-        source_ids: [dp700-study-guide]
+        status: published
+        source_ids: [dp700-study-guide, fabric-permission-model, onelake-data-access-control, warehouse-dynamic-masking, fabric-information-protection, fabric-endorsement, fabric-audit-activities]
         objectives:
           - {id: implement.security.workspace-access, title: Implement workspace-level access controls}
           - {id: implement.security.item-access, title: Implement item-level access controls}
@@ -101,7 +259,8 @@ domains:
         slug: orchestration
         title: Orchestrate processes
         content_path: orchestration.md
-        source_ids: [dp700-study-guide]
+        status: published
+        source_ids: [dp700-study-guide, pipeline-overview, pipeline-parameters]
         objectives:
           - {id: implement.orchestration.choose-tool, title: "Choose between Dataflow Gen2, a pipeline, and a notebook"}
           - {id: implement.orchestration.triggers, title: Design and implement schedules and event-based triggers}
@@ -114,7 +273,8 @@ domains:
         slug: loading-patterns
         title: Design and implement loading patterns
         content_path: loading-patterns.md
-        source_ids: [dp700-study-guide]
+        status: published
+        source_ids: [dp700-study-guide, data-movement-decision-guide, dimensional-model-loading, structured-streaming-state]
         objectives:
           - {id: ingest.loading.full-incremental, title: Design and implement full and incremental data loads}
           - {id: ingest.loading.dimensional, title: Prepare data for loading into a dimensional model}
@@ -123,7 +283,8 @@ domains:
         slug: batch-data
         title: Ingest and transform batch data
         content_path: batch-data.md
-        source_ids: [dp700-study-guide]
+        status: published
+        source_ids: [dp700-study-guide, data-movement-decision-guide, dataflows-gen2-overview, onelake-shortcuts, fabric-mirroring]
         objectives:
           - {id: ingest.batch.store, title: Choose an appropriate data store}
           - {id: ingest.batch.transform-tool, title: "Choose between Dataflows Gen2, notebooks, KQL, and T-SQL for data transformation"}
@@ -138,7 +299,8 @@ domains:
         slug: streaming-data
         title: Ingest and transform streaming data
         content_path: streaming-data.md
-        source_ids: [dp700-study-guide]
+        status: published
+        source_ids: [dp700-study-guide, real-time-intelligence-overview, query-acceleration-overview, structured-streaming-state]
         objectives:
           - {id: ingest.streaming.engine, title: Choose an appropriate streaming engine}
           - {id: ingest.streaming.native-shortcut, title: Choose between native tables and OneLake shortcuts in Real-Time Intelligence}
@@ -155,7 +317,8 @@ domains:
         slug: monitor-items
         title: Monitor Fabric items
         content_path: monitor-items.md
-        source_ids: [dp700-study-guide]
+        status: published
+        source_ids: [dp700-study-guide, fabric-monitoring-hub, dataflow-monitoring, semantic-refresh-summaries, fabric-activator]
         objectives:
           - {id: monitor.items.ingestion, title: Monitor data ingestion}
           - {id: monitor.items.transformation, title: Monitor data transformation}
@@ -165,7 +328,8 @@ domains:
         slug: resolve-errors
         title: Identify and resolve errors
         content_path: resolve-errors.md
-        source_ids: [dp700-study-guide]
+        status: published
+        source_ids: [dp700-study-guide, pipeline-troubleshooting, dataflow-monitoring, onelake-shortcuts]
         objectives:
           - {id: monitor.errors.pipeline, title: Identify and resolve pipeline errors}
           - {id: monitor.errors.dataflow, title: Identify and resolve Dataflow Gen2 errors}
@@ -178,7 +342,8 @@ domains:
         slug: optimize-performance
         title: Optimize performance
         content_path: optimize-performance.md
-        source_ids: [dp700-study-guide]
+        status: published
+        source_ids: [dp700-study-guide, lakehouse-delta-tables, delta-v-order, warehouse-performance, kql-query-best-practices]
         objectives:
           - {id: monitor.optimize.lakehouse, title: Optimize a Lakehouse table}
           - {id: monitor.optimize.pipeline, title: Optimize a pipeline}
