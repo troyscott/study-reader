@@ -36,6 +36,11 @@ def test_chapter_page_contains_mobile_reader_landmarks() -> None:
     assert 'class="reader-layout"' in response.text
     assert 'class="toc-details" open' in response.text
     assert 'aria-label="DP-700 table of contents"' in response.text
+    assert 'id="appearance-button"' in response.text
+    assert 'id="appearance-dialog"' in response.text
+    assert 'id="chapter-progress-value"' in response.text
+    assert 'id="book-progress-value"' in response.text
+    assert 'id="chapter-complete-button"' in response.text
     assert "Configure Microsoft Fabric workspace settings" in response.text
     assert "Open official DP-700 study guide" in response.text
     assert "Copy Markdown" not in response.text
