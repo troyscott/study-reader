@@ -62,7 +62,9 @@ def test_reader_and_admin_route_tables_are_separate(test_settings: Settings) -> 
     assert reader_paths.isdisjoint(admin_paths)
 
     with TestClient(create_reader_app(test_settings)) as reader_client:
-        assert "Study Reader" in reader_client.get("/").text
+        response = reader_client.get("/", follow_redirects=False)
+        assert response.status_code == 307
+        assert response.headers["location"].startswith("/books/")
 
     with TestClient(create_admin_app(test_settings)) as admin_client:
         assert admin_client.get("/admin/").json() == {

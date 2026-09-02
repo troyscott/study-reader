@@ -13,7 +13,10 @@ authors = [{ name = "Troy Scott" }]
 dependencies = [
   "fastapi>=0.116,<1",
   "jinja2>=3.1,<4",
+  "markdown-it-py>=4,<5",
+  "nh3>=0.3,<1",
   "pydantic-settings>=2.10,<3",
+  "pyyaml>=6,<7",
   "uvicorn[standard]>=0.35,<1",
 ]
 
@@ -24,6 +27,7 @@ dev = [
   "pytest>=8.4,<9",
   "pytest-cov>=6.2,<7",
   "ruff>=0.12,<1",
+  "types-pyyaml>=6.0,<7",
 ]
 
 [tool.hatch.build.targets.wheel]
