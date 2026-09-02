@@ -1,6 +1,6 @@
 """Exam-agnostic, validated book content models."""
 
-from datetime import date
+from datetime import date, datetime
 from functools import cached_property
 from typing import Self
 
@@ -19,6 +19,9 @@ class Source(ContentModel):
     id: str = Field(pattern=r"^[a-z0-9][a-z0-9-]*$")
     title: str = Field(min_length=1)
     url: HttpUrl
+    retrieved_at: datetime
+    content_sha256: str = Field(pattern=r"^[a-f0-9]{64}$")
+    chapter_ids: tuple[str, ...] = Field(min_length=1)
 
 
 class Objective(ContentModel):
@@ -110,12 +113,38 @@ class Book(ContentModel):
         if len(objective_ids) != len(set(objective_ids)):
             raise ValueError("objective identifiers must be unique")
 
-        source_ids = {source.id for source in self.sources}
+        source_ids = [source.id for source in self.sources]
+        if len(source_ids) != len(set(source_ids)):
+            raise ValueError("source identifiers must be unique")
+
+        chapter_id_set = set(chapter_ids)
+        for source in self.sources:
+            if source.url.host != "learn.microsoft.com":
+                raise ValueError(f"source {source.id} is not hosted on Microsoft Learn")
+            unknown_chapters = set(source.chapter_ids) - chapter_id_set
+            if unknown_chapters:
+                raise ValueError(
+                    f"source {source.id} maps unknown chapters: "
+                    f"{sorted(unknown_chapters)}"
+                )
+
+        source_id_set = set(source_ids)
         for chapter in self.chapters:
-            unknown_sources = set(chapter.source_ids) - source_ids
+            unknown_sources = set(chapter.source_ids) - source_id_set
             if unknown_sources:
                 raise ValueError(
                     f"chapter {chapter.id} references unknown source: "
                     f"{sorted(unknown_sources)}"
+                )
+
+        for source in self.sources:
+            referencing_chapters = {
+                chapter.id
+                for chapter in self.chapters
+                if source.id in chapter.source_ids
+            }
+            if referencing_chapters != set(source.chapter_ids):
+                raise ValueError(
+                    f"source {source.id} chapter mappings must be bidirectional"
                 )
         return self

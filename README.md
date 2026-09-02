@@ -11,12 +11,12 @@ reproducing Microsoft Learn pages.
 
 ## Project status
 
-The project is in its first reader milestone. The repository provides separate
+The project has completed its reader-foundation milestone. The repository provides separate
 public reader and private administration application factories, a validated
 exam-agnostic book contract, the current DP-700 outline, sanitized Markdown
-rendering, a responsive reader shell, automated boundary tests, and CI. Reader
-preferences, local progress, annotations, and offline support remain roadmap
-work.
+rendering, a responsive reader shell, persistent appearance and progress state,
+an official-source registry, automated boundary tests, and CI. Annotations,
+offline support, and the refresh/publishing pipeline remain roadmap work.
 
 ## Architecture boundary
 

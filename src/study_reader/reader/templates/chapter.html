@@ -143,11 +143,13 @@
             <h2 id="source-heading">Grounded in Microsoft Learn</h2>
             <p>This reader summarizes and teaches. Microsoft Learn remains the source of truth.</p>
           </div>
-          {% for source in sources %}
-            <a href="{{ source.url }}" target="_blank" rel="noopener noreferrer">
-              Open official DP-700 study guide <span aria-hidden="true">↗</span>
-            </a>
-          {% endfor %}
+          <div class="source-links" aria-label="Official sources">
+            {% for source in sources %}
+              <a href="{{ source.url }}" target="_blank" rel="noopener noreferrer">
+                {{ source.title }} <span aria-hidden="true">↗</span>
+              </a>
+            {% endfor %}
+          </div>
         </section>
 
         <button id="chapter-complete-button" class="complete-button" type="button" aria-pressed="false">

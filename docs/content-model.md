@@ -29,9 +29,18 @@ MUST NOT infer order from identifiers or filenames.
 ## Sources and ownership
 
 Every chapter MUST map to at least one source declared in its book manifest.
-The manifest records the official blueprint URL and effective date. Additional
-chapter-specific sources will record retrieval dates and hashes in the refresh
-milestone.
+The manifest records the official blueprint URL and effective date. Each source
+record contains its canonical Microsoft Learn URL, retrieval timestamp, SHA-256
+content hash, and direct chapter mappings. Source-to-chapter and
+chapter-to-source mappings MUST agree so that a future refresh can identify the
+affected chapters without a lineage service.
+
+Only `https://learn.microsoft.com` sources are accepted by the published
+content contract. Raw retrieval responses are working data and MUST NOT be
+committed as public content. The later refresh milestone will add bounded
+retrieval, normalization, conditional requests, and readable change summaries;
+the registry deliberately does not attempt to generalize those mappings into a
+dependency graph.
 
 Microsoft Learn remains authoritative for Microsoft exam objectives and product
 behavior. Markdown chapters MUST contain original study-oriented writing and
@@ -39,8 +48,9 @@ MUST NOT reproduce Microsoft Learn pages wholesale.
 
 ## Validation
 
-Pydantic rejects duplicate identifiers, duplicate slugs, broken source
-references, invalid paths, and unknown manifest fields. Content tests confirm
-that every planned chapter file exists and maps at least one objective and one
-source. Rendering tests verify sanitized HTML, stable anchors, external-link
-behavior, and a reviewed golden fixture.
+Pydantic rejects duplicate identifiers, duplicate slugs, non-Learn source
+hosts, malformed hashes, one-way source mappings, broken source references,
+invalid paths, and unknown manifest fields. Content tests confirm that every
+planned chapter file exists and maps at least one objective and one source.
+Rendering tests verify sanitized HTML, stable anchors, external-link behavior,
+and a reviewed golden fixture.

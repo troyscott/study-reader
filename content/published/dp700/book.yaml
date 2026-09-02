@@ -7,6 +7,39 @@ sources:
   - id: dp700-study-guide
     title: Official DP-700 study guide
     url: https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/dp-700
+    retrieved_at: 2026-09-02T04:45:35Z
+    content_sha256: 97f5520c88cb9cc9833c1cebe2bb61d899f12825ac97dc2198584d683f3e5596
+    chapter_ids: [workspace-settings, lifecycle-management, security-governance, orchestration, loading-patterns, batch-data, streaming-data, monitor-items, resolve-errors, optimize-performance]
+  - id: onelake-overview
+    title: What is OneLake?
+    url: https://learn.microsoft.com/en-us/fabric/onelake/onelake-overview
+    retrieved_at: 2026-09-02T04:45:35Z
+    content_sha256: fd6c5687b64f131db16d4264dbeedc37ec110a52ff13b487e5c9e1ad150c1ebb
+    chapter_ids: [workspace-settings]
+  - id: onelake-diagnostics
+    title: OneLake diagnostics
+    url: https://learn.microsoft.com/en-us/fabric/onelake/onelake-diagnostics-overview
+    retrieved_at: 2026-09-02T04:45:35Z
+    content_sha256: 3cd73c6ff5f198a7faf47f308aa3f58bc649bc1cebd3e215f958b43200cb7bb5
+    chapter_ids: [workspace-settings]
+  - id: onelake-storage-tiers
+    title: Storage tiers in OneLake
+    url: https://learn.microsoft.com/en-us/fabric/onelake/onelake-storage-tiers
+    retrieved_at: 2026-09-02T04:45:35Z
+    content_sha256: 3e6d11876c66873d0cb452a5fe2cef02fdab3782a1400724b758a202f47d2120
+    chapter_ids: [workspace-settings]
+  - id: onelake-lifecycle
+    title: OneLake lifecycle management
+    url: https://learn.microsoft.com/en-us/fabric/onelake/onelake-lifecycle-management
+    retrieved_at: 2026-09-02T04:45:35Z
+    content_sha256: 261d43b3f34bfbc66a472a0f32e9e7d3de5e57801018785d7ef50d1b57311c0a
+    chapter_ids: [workspace-settings]
+  - id: onelake-settings-api
+    title: OneLake Settings - Get Settings REST API
+    url: https://learn.microsoft.com/en-us/rest/api/fabric/core/onelake-settings/get-settings
+    retrieved_at: 2026-09-02T04:45:35Z
+    content_sha256: 5f6c3efbc8db82e5bf7e6864286f2eb9141f7026e02efcdf9eb15252629e28ea
+    chapter_ids: [workspace-settings]
 domains:
   - id: implement-manage
     title: Implement and manage an analytics solution
@@ -16,8 +49,8 @@ domains:
         slug: workspace-settings
         title: Configure Microsoft Fabric workspace settings
         content_path: workspace-settings.md
-        status: draft
-        source_ids: [dp700-study-guide]
+        status: published
+        source_ids: [dp700-study-guide, onelake-overview, onelake-diagnostics, onelake-storage-tiers, onelake-lifecycle, onelake-settings-api]
         objectives:
           - {id: implement.workspace.spark, title: Configure Spark workspace settings}
           - {id: implement.workspace.domain, title: Configure domain workspace settings}
