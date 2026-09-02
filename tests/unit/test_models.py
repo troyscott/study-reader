@@ -1,6 +1,6 @@
 """Reusable book-contract tests."""
 
-from datetime import date
+from datetime import UTC, date, datetime
 
 import pytest
 from pydantic import HttpUrl, ValidationError
@@ -22,6 +22,9 @@ def minimal_book() -> Book:
                 id="official-guide",
                 title="Official guide",
                 url=HttpUrl("https://learn.microsoft.com/example"),
+                retrieved_at=datetime(2026, 1, 2, tzinfo=UTC),
+                content_sha256="a" * 64,
+                chapter_ids=["design-basics"],
             )
         ],
         domains=[
@@ -67,4 +70,25 @@ def test_book_rejects_unknown_source_mapping() -> None:
     book_data["domains"][0]["chapters"][0]["source_ids"] = ["missing"]
 
     with pytest.raises(ValidationError, match="unknown source"):
+        Book.model_validate(book_data)
+
+
+def test_book_rejects_non_learn_sources() -> None:
+    book_data = minimal_book().model_dump()
+    book_data["sources"][0]["url"] = "https://example.com/guide"
+
+    with pytest.raises(ValidationError, match="not hosted on Microsoft Learn"):
+        Book.model_validate(book_data)
+
+
+def test_book_rejects_one_way_source_mapping() -> None:
+    book_data = minimal_book().model_dump()
+    secondary_source = {
+        **book_data["sources"][0],
+        "id": "secondary-guide",
+        "title": "Secondary official guide",
+    }
+    book_data["sources"] = (*book_data["sources"], secondary_source)
+
+    with pytest.raises(ValidationError, match="mappings must be bidirectional"):
         Book.model_validate(book_data)

@@ -42,7 +42,9 @@ def test_chapter_page_contains_mobile_reader_landmarks() -> None:
     assert 'id="book-progress-value"' in response.text
     assert 'id="chapter-complete-button"' in response.text
     assert "Configure Microsoft Fabric workspace settings" in response.text
-    assert "Open official DP-700 study guide" in response.text
+    assert "Official DP-700 study guide" in response.text
+    assert 'aria-label="Official sources"' in response.text
+    assert "OneLake diagnostics" in response.text
     assert "Copy Markdown" not in response.text
 
 
