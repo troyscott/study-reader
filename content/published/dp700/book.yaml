@@ -40,6 +40,24 @@ sources:
     retrieved_at: 2026-09-02T04:45:35Z
     content_sha256: 5f6c3efbc8db82e5bf7e6864286f2eb9141f7026e02efcdf9eb15252629e28ea
     chapter_ids: [workspace-settings]
+  - id: spark-compute-settings
+    title: Spark compute configuration settings in Fabric environments
+    url: https://learn.microsoft.com/en-us/fabric/data-engineering/environment-manage-compute
+    retrieved_at: 2026-09-02T05:18:00Z
+    content_sha256: 5983dc3981f7db4a3d2335b9bfe1d2eb5546b8248fd20704cd96fa6f7af02ba2
+    chapter_ids: [workspace-settings]
+  - id: fabric-domains
+    title: Fabric domains
+    url: https://learn.microsoft.com/en-us/fabric/governance/domains
+    retrieved_at: 2026-09-02T05:18:00Z
+    content_sha256: c8ba21672293a996fadc9669ee4116a6324733f5b616d762417d237b2d56c85e
+    chapter_ids: [workspace-settings]
+  - id: airflow-workspace-settings
+    title: Apache Airflow Job workspace settings
+    url: https://learn.microsoft.com/en-us/fabric/data-factory/apache-airflow-jobs-workspace-settings
+    retrieved_at: 2026-09-02T05:18:00Z
+    content_sha256: 058c6d6feb30c2984ff481f9719866b4df8ae245a6497dcb232cc9a22df243fb
+    chapter_ids: [workspace-settings]
 domains:
   - id: implement-manage
     title: Implement and manage an analytics solution
@@ -50,7 +68,7 @@ domains:
         title: Configure Microsoft Fabric workspace settings
         content_path: workspace-settings.md
         status: published
-        source_ids: [dp700-study-guide, onelake-overview, onelake-diagnostics, onelake-storage-tiers, onelake-lifecycle, onelake-settings-api]
+        source_ids: [dp700-study-guide, spark-compute-settings, fabric-domains, onelake-overview, onelake-diagnostics, onelake-storage-tiers, onelake-lifecycle, onelake-settings-api, airflow-workspace-settings]
         objectives:
           - {id: implement.workspace.spark, title: Configure Spark workspace settings}
           - {id: implement.workspace.domain, title: Configure domain workspace settings}

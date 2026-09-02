@@ -46,6 +46,35 @@ Microsoft Learn remains authoritative for Microsoft exam objectives and product
 behavior. Markdown chapters MUST contain original study-oriented writing and
 MUST NOT reproduce Microsoft Learn pages wholesale.
 
+## Authoring depth
+
+The official study guide is the coverage contract, not the finished teaching
+material. Every measured objective in a published chapter MUST receive
+substantive coverage. A title match or repeated bullet is insufficient.
+
+For each objective, authors SHOULD provide the elements that materially aid
+understanding:
+
+- an orientation and conceptual model;
+- precise terminology and responsibility boundaries;
+- decision criteria, trade-offs, and common failure modes;
+- a worked configuration, query, transformation, or scenario when applicable;
+- exam distinctions that separate easily confused features;
+- active-recall questions; and
+- exact authoritative links.
+
+Microsoft Learn is authoritative for Microsoft Fabric behavior. Chapters MAY
+link to primary specifications or official upstream projects for underlying
+concepts such as SQL, Apache Spark, Apache Airflow, Delta Lake, or Apache Kafka.
+Those links supplement rather than override Microsoft Learn for Fabric-specific
+claims.
+
+For example, coverage of Dataflow Gen2 MUST explain the transformations a
+learner is expected to reason about—such as data types, filtering, joins,
+grouping, shaping, schema handling, and query folding—along with destinations
+and tool-selection trade-offs. Merely listing “Dataflow Gen2” does not satisfy
+the objective.
+
 ## Validation
 
 Pydantic rejects duplicate identifiers, duplicate slugs, non-Learn source

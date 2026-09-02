@@ -41,7 +41,7 @@ def test_every_dp700_chapter_maps_objectives_sources_and_content() -> None:
 def test_source_registry_records_current_learn_provenance() -> None:
     book = BookCatalog(CONTENT_ROOT).load_book("dp700")
 
-    assert len(book.sources) == 6
+    assert len(book.sources) == 9
     assert {source.url.host for source in book.sources} == {"learn.microsoft.com"}
     assert all(source.retrieved_at.tzinfo is not None for source in book.sources)
     assert all(len(source.content_sha256) == 64 for source in book.sources)
@@ -55,7 +55,12 @@ def test_representative_chapter_is_published_and_directly_sourced() -> None:
     markdown = catalog.load_chapter_markdown(book, chapter)
 
     assert chapter.status == "published"
-    assert len(chapter.source_ids) == 6
+    assert len(chapter.source_ids) == 9
+    assert all(objective.title in markdown for objective in chapter.objectives)
+    assert "## Configure Spark workspace settings" in markdown
+    assert "## Configure domain workspace settings" in markdown
+    assert "## What the OneLake settings control" in markdown
+    assert "## Configure Apache Airflow workspace settings" in markdown
     assert "## Responsibility and prerequisite boundaries" in markdown
     assert "## Exam distinctions" in markdown
     assert "## Active recall" in markdown
