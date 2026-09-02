@@ -213,6 +213,50 @@ A useful decision sequence is:
 
 Current Microsoft Learn documentation states that Fabric Apache Airflow jobs do not support private networks or virtual networks. Treat that as a time-sensitive product limitation and recheck the authoritative source when designing a secured deployment.
 
+## Troubleshooting and practice
+
+<!-- block-id: spark-troubleshooting-lab -->
+**Spark practice.** In a test workspace, record the default pool and whether item
+customization is enabled. Attach an environment to a notebook, change its
+runtime or pool, save without publishing, and predict which configuration the
+next session will use. Publish and repeat. If publication fails, inspect runtime
+and library compatibility; if a session starts with unexpected resources,
+compare workspace default, environment publication state, attached environment,
+and session-level configuration. Distinguish slow startup from slow execution:
+starter-pool availability affects the former, while partitioning, shuffle,
+skew, executor sizing, and capacity pressure affect the latter.
+
+<!-- block-id: domain-troubleshooting-lab -->
+**Domain practice.** Draw a tenant with Sales and Finance domains, one subdomain,
+two default-domain groups, and an already assigned shared workspace. Predict the
+workspace assignment after each administrator creates a new workspace. Then
+verify who can assign each workspace and whether a consumer gains access. If an
+assignment control is unavailable, check Fabric/domain role, workspace Admin,
+the domain's allowed contributors, and tenant delegation. If catalog placement
+is correct but access is denied, stop troubleshooting domains and inspect
+workspace, item, and data permissions.
+
+<!-- block-id: onelake-troubleshooting-lab -->
+**OneLake practice.** Design a diagnostics destination and a lifecycle rule for
+`Files/DiagnosticExports/`. Record capacity placement, configuring identity,
+immutability period, path scope, age condition, tier action, and cleanup owner.
+After enabling, allow for documented activation and asynchronous evaluation
+instead of repeatedly toggling settings. For missing diagnostic events, check
+destination prerequisites, permissions, activation time, and the requested
+access route. For unexpected tiering, inspect default tier, explicit file tier,
+rule scope, time basis, access-time tracking, minimum-retention cost, and the
+policy's asynchronous run—not only the file's current modified timestamp.
+
+<!-- block-id: airflow-troubleshooting-lab -->
+**Airflow practice.** Given four concurrent DAGs, separate scheduler delay,
+pool-resume delay, worker saturation, and slow task code. Compare starter versus
+custom pool, node size, extra nodes, autoscale, and uptime ownership. Create a
+decision record for an intermittent development workload and a production
+workload with a start-time objective. If an Airflow environment uses an
+unexpected pool, check the workspace default and whether item customization is
+allowed. If tasks queue after the environment is running, examine worker
+concurrency and task demand before increasing compute.
+
 ## Exam distinctions
 
 <!-- block-id: exam-distinctions -->

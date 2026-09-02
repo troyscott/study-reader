@@ -3,112 +3,310 @@ blueprint_effective_date: 2026-07-21
 objectives:
   - objective_id: implement.workspace.spark
     chapter_id: workspace-settings
-    status: draft
+    status: complete
     subtopics: [Workspace defaults, Environment overrides, Runtimes, Pools, Driver and executor sizing, Session configuration]
     source_ids: [dp700-study-guide, spark-compute-settings]
-    gaps: [Add a hands-on configuration lab and objective-specific evidence blocks]
+    gaps: []
+    evidence:
+      conceptual_model: spark-settings
+      prerequisites: spark-layers
+      procedure: spark-settings
+      decision_guidance: spark-decisions
+      worked_example: spark-troubleshooting-lab
+      limitations: spark-layers
+      troubleshooting: spark-troubleshooting-lab
+      exam_distinctions: exam-distinctions
+      recall_questions: active-recall
+      scenario_lab: spark-troubleshooting-lab
   - objective_id: implement.workspace.domain
     chapter_id: workspace-settings
-    status: draft
+    status: complete
     subtopics: [Domain hierarchy, Workspace assignment, Domain roles, Default domains, Delegated governance, Catalog discovery]
     source_ids: [dp700-study-guide, fabric-domains]
-    gaps: [Add a domain-assignment lab and negative authorization test]
+    gaps: []
+    evidence:
+      conceptual_model: domain-settings
+      prerequisites: domain-roles
+      procedure: domain-roles
+      decision_guidance: domain-defaults
+      worked_example: domain-troubleshooting-lab
+      limitations: domain-defaults
+      troubleshooting: domain-troubleshooting-lab
+      exam_distinctions: exam-distinctions
+      recall_questions: active-recall
+      scenario_lab: domain-troubleshooting-lab
   - objective_id: implement.workspace.onelake
     chapter_id: workspace-settings
-    status: draft
+    status: complete
     subtopics: [Diagnostics, Immutability, Storage tiers, Lifecycle rules, REST API, Permissions and placement]
     source_ids: [dp700-study-guide, onelake-overview, onelake-diagnostics, onelake-storage-tiers, onelake-lifecycle, onelake-settings-api]
-    gaps: [Add an end-to-end diagnostics and lifecycle scenario]
+    gaps: []
+    evidence:
+      conceptual_model: terminology
+      prerequisites: responsibility-boundaries
+      procedure: lifecycle-rules
+      decision_guidance: tier-decision
+      worked_example: lifecycle-rules
+      limitations: settings-map
+      troubleshooting: onelake-troubleshooting-lab
+      exam_distinctions: exam-distinctions
+      recall_questions: active-recall
+      scenario_lab: onelake-troubleshooting-lab
   - objective_id: implement.workspace.airflow
     chapter_id: workspace-settings
-    status: draft
+    status: complete
     subtopics: [Workspace runtime, Starter pools, Custom pools, Sizing, Autoscaling, Concurrency and limitations]
     source_ids: [dp700-study-guide, airflow-workspace-settings]
-    gaps: [Add configuration procedure and pool-sizing lab]
+    gaps: []
+    evidence:
+      conceptual_model: airflow-settings
+      prerequisites: airflow-settings
+      procedure: airflow-settings
+      decision_guidance: airflow-decisions
+      worked_example: airflow-troubleshooting-lab
+      limitations: airflow-decisions
+      troubleshooting: airflow-troubleshooting-lab
+      exam_distinctions: exam-distinctions
+      recall_questions: active-recall
+      scenario_lab: airflow-troubleshooting-lab
   - objective_id: implement.lifecycle.version-control
     chapter_id: lifecycle-management
-    status: draft
+    status: complete
     subtopics: [Git providers, Workspace connection, Branches, Commit and update direction, Conflicts, Supported items, Secrets]
     source_ids: [dp700-study-guide, fabric-cicd-overview]
-    gaps: [Add portal workflow, conflict exercise, and supported-item limitations]
+    gaps: []
+    evidence:
+      conceptual_model: version-control-model
+      prerequisites: version-control-operations
+      procedure: version-control-operations
+      decision_guidance: version-control-decisions
+      worked_example: version-control-example
+      limitations: version-control-decisions
+      troubleshooting: version-control-diagnostics
+      exam_distinctions: lifecycle-exam-distinctions
+      recall_questions: lifecycle-recall-lab
+      scenario_lab: version-control-diagnostics
   - objective_id: implement.lifecycle.database-projects
     chapter_id: lifecycle-management
-    status: draft
+    status: complete
     subtopics: [Declarative schema, Project structure, Build validation, DACPAC, Publish plan, State versus migration, Data-loss safeguards]
     source_ids: [dp700-study-guide, fabric-cicd-overview]
-    gaps: [Add direct database-project sources and a build-deploy walkthrough]
+    gaps: []
+    evidence:
+      conceptual_model: database-projects-model
+      prerequisites: database-projects-operations
+      procedure: database-projects-operations
+      decision_guidance: database-projects-decisions
+      worked_example: database-projects-example
+      limitations: database-projects-decisions
+      troubleshooting: database-projects-diagnostics
+      exam_distinctions: lifecycle-exam-distinctions
+      recall_questions: lifecycle-recall-lab
+      scenario_lab: database-projects-example
   - objective_id: implement.lifecycle.deployment-pipelines
     chapter_id: lifecycle-management
-    status: draft
+    status: complete
     subtopics: [Stages, Workspace assignment, Item pairing, Comparison, Deployment rules, Dependency binding, Post-deployment checks]
     source_ids: [dp700-study-guide, fabric-cicd-overview]
-    gaps: [Add current pipeline configuration procedure and failed-binding scenario]
+    gaps: []
+    evidence:
+      conceptual_model: deployment-pipelines-model
+      prerequisites: deployment-pipelines-operations
+      procedure: deployment-pipelines-operations
+      decision_guidance: deployment-pipelines-decisions
+      worked_example: deployment-pipelines-example
+      limitations: deployment-pipelines-decisions
+      troubleshooting: deployment-pipelines-diagnostics
+      exam_distinctions: lifecycle-exam-distinctions
+      recall_questions: lifecycle-recall-lab
+      scenario_lab: deployment-pipelines-example
   - objective_id: implement.security.workspace-access
     chapter_id: security-governance
-    status: draft
+    status: complete
     subtopics: [Admin, Member, Contributor, Viewer, Group assignment, Least privilege, Workspace scope]
     source_ids: [dp700-study-guide, fabric-permission-model]
-    gaps: [Add complete capability matrix and representative access tests]
+    gaps: []
+    evidence:
+      conceptual_model: workspace-access-model
+      prerequisites: workspace-access-operations
+      procedure: workspace-access-operations
+      decision_guidance: workspace-access-decisions
+      worked_example: workspace-access-example
+      limitations: workspace-access-decisions
+      troubleshooting: workspace-access-diagnostics
+      exam_distinctions: security-exam-distinctions
+      recall_questions: security-recall-lab
+      scenario_lab: workspace-access-example
   - objective_id: implement.security.item-access
     chapter_id: security-governance
-    status: draft
+    status: complete
     subtopics: [Item sharing, Direct permissions, Read and reshare, Ownership, Group-based grants, Revocation]
     source_ids: [dp700-study-guide, fabric-permission-model]
-    gaps: [Add item-type examples and portal/API procedure]
+    gaps: []
+    evidence:
+      conceptual_model: item-access-model
+      prerequisites: item-access-operations
+      procedure: item-access-operations
+      decision_guidance: item-access-decisions
+      worked_example: item-access-example
+      limitations: item-access-decisions
+      troubleshooting: item-access-diagnostics
+      exam_distinctions: security-exam-distinctions
+      recall_questions: security-recall-lab
+      scenario_lab: item-access-diagnostics
   - objective_id: implement.security.data-access
     chapter_id: security-governance
-    status: draft
+    status: complete
     subtopics: [Row-level security, Column-level security, Object-level security, Folder and file access, Engine enforcement paths, Bypass testing]
     source_ids: [dp700-study-guide, fabric-permission-model, onelake-data-access-control]
-    gaps: [Add implementation examples for every control and cross-engine enforcement matrix]
+    gaps: []
+    evidence:
+      conceptual_model: data-access-model
+      prerequisites: data-access-operations
+      procedure: data-access-operations
+      decision_guidance: data-access-decisions
+      worked_example: data-access-example
+      limitations: data-access-decisions
+      troubleshooting: data-access-diagnostics
+      exam_distinctions: security-exam-distinctions
+      recall_questions: security-recall-lab
+      scenario_lab: data-access-example
   - objective_id: implement.security.masking
     chapter_id: security-governance
-    status: draft
+    status: complete
     subtopics: [Mask functions, UNMASK permission, Stored versus returned values, Inference risk, Combining DDM with RLS and CLS]
     source_ids: [dp700-study-guide, warehouse-dynamic-masking]
-    gaps: [Add complete mask examples, grants, and negative tests]
+    gaps: []
+    evidence:
+      conceptual_model: masking-comprehensive
+      prerequisites: masking-comprehensive
+      procedure: masking-comprehensive
+      decision_guidance: masking-comprehensive
+      worked_example: masking-comprehensive
+      limitations: masking-comprehensive
+      troubleshooting: masking-comprehensive
+      exam_distinctions: security-exam-distinctions
+      recall_questions: security-recall-lab
+      scenario_lab: security-recall-lab
   - objective_id: implement.security.sensitivity
     chapter_id: security-governance
-    status: draft
+    status: complete
     subtopics: [Purview labels, Tenant enablement, Label publishing, Defaults, Mandatory labels, Inheritance, Export behavior]
     source_ids: [dp700-study-guide, fabric-information-protection]
-    gaps: [Add application procedure, supported-item matrix, and inheritance scenario]
+    gaps: []
+    evidence:
+      conceptual_model: sensitivity-comprehensive
+      prerequisites: sensitivity-comprehensive
+      procedure: sensitivity-comprehensive
+      decision_guidance: sensitivity-comprehensive
+      worked_example: sensitivity-comprehensive
+      limitations: sensitivity-comprehensive
+      troubleshooting: sensitivity-comprehensive
+      exam_distinctions: security-exam-distinctions
+      recall_questions: security-recall-lab
+      scenario_lab: security-recall-lab
   - objective_id: implement.security.endorsement
     chapter_id: security-governance
-    status: draft
+    status: complete
     subtopics: [Promoted, Certified, Master data, Authorized reviewers, Discovery, Trust versus authorization]
     source_ids: [dp700-study-guide, fabric-endorsement]
-    gaps: [Add endorsement workflow and governance scenario]
+    gaps: []
+    evidence:
+      conceptual_model: endorsement-comprehensive
+      prerequisites: endorsement-comprehensive
+      procedure: endorsement-comprehensive
+      decision_guidance: endorsement-comprehensive
+      worked_example: endorsement-comprehensive
+      limitations: endorsement-comprehensive
+      troubleshooting: endorsement-comprehensive
+      exam_distinctions: security-exam-distinctions
+      recall_questions: security-recall-lab
+      scenario_lab: security-recall-lab
   - objective_id: implement.security.audit
     chapter_id: security-governance
-    status: draft
+    status: complete
     subtopics: [Purview Audit, Search filters, Operations, Retention, Export, Investigation procedure, Audit versus diagnostic logs]
     source_ids: [dp700-study-guide, fabric-audit-activities]
-    gaps: [Add investigation walkthrough and evidence-handling lab]
+    gaps: []
+    evidence:
+      conceptual_model: audit-comprehensive
+      prerequisites: audit-comprehensive
+      procedure: audit-comprehensive
+      decision_guidance: audit-comprehensive
+      worked_example: audit-comprehensive
+      limitations: audit-comprehensive
+      troubleshooting: audit-comprehensive
+      exam_distinctions: security-exam-distinctions
+      recall_questions: security-recall-lab
+      scenario_lab: audit-comprehensive
   - objective_id: implement.security.onelake
     chapter_id: security-governance
-    status: draft
+    status: complete
     subtopics: [OneLake roles, Tables and folders, Read and write grants, Role membership, Shortcut security, Cross-engine access paths]
     source_ids: [dp700-study-guide, onelake-data-access-control]
-    gaps: [Add role-creation procedure, API example, and denied-access tests]
+    gaps: []
+    evidence:
+      conceptual_model: onelake-security-comprehensive
+      prerequisites: onelake-security-comprehensive
+      procedure: onelake-security-comprehensive
+      decision_guidance: onelake-security-comprehensive
+      worked_example: data-access-example
+      limitations: onelake-security-comprehensive
+      troubleshooting: data-access-diagnostics
+      exam_distinctions: security-exam-distinctions
+      recall_questions: security-recall-lab
+      scenario_lab: data-access-example
   - objective_id: implement.orchestration.choose-tool
     chapter_id: orchestration
-    status: draft
+    status: complete
     subtopics: [Dataflow Gen2, Pipeline, Notebook, Transformation versus orchestration, Personas, Scale and maintainability]
     source_ids: [dp700-study-guide, pipeline-overview]
-    gaps: [Add representative tool-selection cases and cost/operability trade-offs]
+    gaps: []
+    evidence:
+      conceptual_model: choose-tool-model
+      prerequisites: choose-tool-operations
+      procedure: choose-tool-operations
+      decision_guidance: choose-tool-decisions
+      worked_example: choose-tool-example
+      limitations: choose-tool-decisions
+      troubleshooting: choose-tool-diagnostics
+      exam_distinctions: orchestration-exam-distinctions
+      recall_questions: orchestration-recall-lab
+      scenario_lab: choose-tool-diagnostics
   - objective_id: implement.orchestration.triggers
     chapter_id: orchestration
-    status: draft
+    status: complete
     subtopics: [Schedules, Time zones, Event triggers, File events, Filtering, Concurrency, Idempotency, Reconciliation]
     source_ids: [dp700-study-guide, pipeline-overview]
-    gaps: [Add trigger configuration procedures and duplicate-event lab]
+    gaps: []
+    evidence:
+      conceptual_model: triggers-model
+      prerequisites: triggers-operations
+      procedure: triggers-operations
+      decision_guidance: triggers-decisions
+      worked_example: triggers-example
+      limitations: triggers-decisions
+      troubleshooting: triggers-diagnostics
+      exam_distinctions: orchestration-exam-distinctions
+      recall_questions: orchestration-recall-lab
+      scenario_lab: triggers-diagnostics
   - objective_id: implement.orchestration.patterns
     chapter_id: orchestration
-    status: draft
+    status: complete
     subtopics: [Parameters, Variables, Dynamic expressions, Parent-child pipelines, Metadata-driven loops, Dependencies, Retry and failure paths]
     source_ids: [dp700-study-guide, pipeline-overview, pipeline-parameters]
-    gaps: [Add executable expression catalog and end-to-end pipeline/notebook example]
+    gaps: []
+    evidence:
+      conceptual_model: patterns-model
+      prerequisites: patterns-operations
+      procedure: patterns-operations
+      decision_guidance: patterns-decisions
+      worked_example: patterns-example
+      limitations: patterns-decisions
+      troubleshooting: patterns-diagnostics
+      exam_distinctions: orchestration-exam-distinctions
+      recall_questions: orchestration-recall-lab
+      scenario_lab: patterns-diagnostics
   - objective_id: ingest.loading.full-incremental
     chapter_id: loading-patterns
     status: draft

@@ -145,3 +145,31 @@ def test_complete_coverage_rejects_remaining_gaps() -> None:
             gaps=["Still incomplete"],
             evidence=evidence,
         )
+
+
+def test_complete_coverage_requires_evidence_blocks_in_its_chapter() -> None:
+    book = minimal_book()
+    evidence = CoverageEvidence(
+        **{name: "design-evidence" for name in CoverageEvidence.model_fields}
+    )
+    audit = CoverageAudit(
+        book_id=book.id,
+        blueprint_effective_date=book.blueprint_effective_date,
+        objectives=[
+            ObjectiveCoverage(
+                objective_id="design.choose",
+                chapter_id="design-basics",
+                status="complete",
+                subtopics=["Constraints", "Trade-offs"],
+                source_ids=["official-guide"],
+                evidence=evidence,
+            )
+        ],
+    )
+
+    with pytest.raises(ValueError, match="missing evidence blocks"):
+        audit.validate_evidence_blocks({"design-basics": "# Design basics"})
+
+    audit.validate_evidence_blocks(
+        {"design-basics": "<!-- block-id: design-evidence -->\nEvidence."}
+    )

@@ -44,6 +44,12 @@ class BookCatalog:
             raise FileNotFoundError(audit_path) from error
         audit = CoverageAudit.model_validate(raw_audit)
         audit.validate_against(book)
+        audit.validate_evidence_blocks(
+            {
+                chapter.id: self.load_chapter_markdown(book, chapter)
+                for chapter in book.chapters
+            }
+        )
         return audit
 
     def load_chapter_markdown(self, book: Book, chapter: Chapter) -> str:

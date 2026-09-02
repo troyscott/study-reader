@@ -5,6 +5,7 @@ from typing import Literal, Self
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+from study_reader.content.markdown import BLOCK_MARKER
 from study_reader.content.models import Book
 
 BLOCK_ID = r"^[a-z0-9][a-z0-9-]*$"
@@ -114,3 +115,25 @@ class CoverageAudit(CoverageModel):
                 raise ValueError(f"unknown coverage source for {objective_id}")
             if not set(coverage.source_ids) <= set(chapter.source_ids):
                 raise ValueError(f"coverage source not mapped to {chapter.id}")
+
+    def validate_evidence_blocks(self, chapter_markdown: dict[str, str]) -> None:
+        """Verify that completion evidence names durable blocks in its chapter."""
+
+        for coverage in self.objectives:
+            if coverage.status != "complete":
+                continue
+            markdown = chapter_markdown.get(coverage.chapter_id)
+            if markdown is None:
+                raise ValueError(f"missing chapter content for {coverage.chapter_id}")
+            block_ids = {
+                marker.group(1)
+                for line in markdown.splitlines()
+                if (marker := BLOCK_MARKER.fullmatch(line)) is not None
+            }
+            missing = set(coverage.evidence.block_ids) - block_ids
+            if missing:
+                missing_list = ", ".join(sorted(missing))
+                raise ValueError(
+                    f"missing evidence blocks for {coverage.objective_id}: "
+                    f"{missing_list}"
+                )

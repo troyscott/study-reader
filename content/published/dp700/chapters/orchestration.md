@@ -58,6 +58,172 @@ Keep configuration typed and explicit. Validate required parameters at the bound
 
 A daily sales load receives `businessDate` and `fullReload` parameters. The pipeline checks that the landing file exists, invokes a notebook to validate schema, runs a parameterized copy for valid data, invokes a SQL procedure to merge the target, and records the watermark only after the merge succeeds. An event trigger provides low latency, while a nightly scheduled run reconciles missing events. Because the merge key is stable, either path can retry safely.
 
+## Tool selection as a separation of concerns
+
+<!-- block-id: choose-tool-model -->
+The three tools sit at different layers. **Dataflow Gen2** is a visual,
+Power Query-based transformation experience with managed destinations.
+**Notebook** is a code-first execution surface for Spark, Python, and SQL logic.
+**Pipeline** is a control plane that moves data and coordinates activities.
+The fact that a pipeline can copy data or evaluate an expression does not make
+it the best home for complex transformation logic; the fact that a notebook can
+call APIs does not make it a maintainable enterprise scheduler.
+
+<!-- block-id: choose-tool-operations -->
+Begin with the unit of work. If a business analyst can express repeatable
+tabular shaping in Power Query and use a supported destination, prototype a
+Dataflow Gen2. If the work requires distributed computation, custom libraries,
+complex testing, or code reuse, create a notebook and parameterize its inputs.
+When two or more activities require dependencies, data movement, retries,
+branching, parameters, or schedules, put the control flow in a pipeline and
+invoke the transformation item. Give the pipeline identity access to each
+invoked item and data endpoint; do not embed secrets in expressions.
+
+<!-- block-id: choose-tool-decisions -->
+Select by maintainability as well as capability. Dataflow Gen2 improves visual
+accessibility but complicated M expressions can become difficult to test.
+Notebooks provide flexibility but require software discipline and can incur
+Spark startup cost. Pipelines provide operational visibility but deeply nested
+activities and business rules in expression strings become brittle. A common
+design is pipeline → parameterized notebook or Dataflow Gen2 → governed
+destination. Use a single tool when it genuinely owns the whole job; adding an
+orchestrator to one simple transformation can create needless failure points.
+
+<!-- block-id: choose-tool-example -->
+**Worked decision.** A CSV requires column renaming, type conversion, a lookup
+join, and loading to a warehouse table. A Dataflow Gen2 is suitable when the
+volume and transformations fit its connectors and the owning team works in
+Power Query. If the lookup is a very large Delta table and the logic uses a
+tested Python library, choose a notebook. If the file must first be copied from
+an on-premises source, the transform run after validation, and an alert sent on
+failure, use a pipeline to coordinate the chosen transformer. The tool decision
+is about responsibilities, not a contest for one universal winner.
+
+<!-- block-id: choose-tool-diagnostics -->
+When a solution becomes hard to operate, look for logic at the wrong layer:
+hundreds of pipeline expressions, a notebook reimplementing scheduling and
+retry, or a Dataflow whose steps hide an opaque procedural algorithm. Inspect
+run history at the orchestration layer and the invoked item's detailed logs at
+the compute layer. As a mini-lab, implement the same three-column cleanup once
+in a Dataflow and once in a notebook, then write a pipeline that invokes one;
+compare authoring, testability, startup, lineage, and error evidence.
+
+## Trigger engineering
+
+<!-- block-id: triggers-model -->
+A schedule asserts that **time is the readiness signal**. An event trigger
+asserts that **an observed event is the readiness signal**. Neither proves that
+all business inputs are complete. Scheduled runs must reason about time zone,
+daylight-saving transitions, source close times, and overlap. Event-driven runs
+must reason about event filtering, duplication, ordering, partial writes, and
+bursts. A reconciliation schedule often complements events because delivery
+systems can be at-least-once or temporarily unavailable.
+
+<!-- block-id: triggers-operations -->
+For a schedule, define recurrence, start and end boundaries, time zone, missed
+run policy, expected duration, and safe concurrency. For an event trigger,
+select the event source, filter to the intended objects, pass stable event
+metadata into pipeline parameters, and validate that the object is ready before
+processing. In both cases, generate or receive an idempotency key, persist the
+source version and watermark, and make retries safe. Configure monitoring for
+failed, unusually long, and unexpectedly absent runs.
+
+<!-- block-id: triggers-decisions -->
+Prefer schedules for periodic snapshots, closed accounting periods, and
+reconciliation. Prefer events for low-latency response to discrete arrivals.
+Use both when fast processing and eventual completeness matter. Prevent overlap
+when the target uses destructive replace semantics; allow controlled
+concurrency when inputs and target partitions are independent. A “file created”
+event can fire before an upstream multi-file delivery is complete, so use a
+manifest, completion marker, stable-size check, or upstream contract rather
+than an arbitrary delay.
+
+<!-- block-id: triggers-example -->
+**Worked trigger.** An event for
+`landing/region=CA/business_date=2026-09-01/orders.parquet` passes the URL,
+event ID, and modification timestamp to a pipeline. The first activity rejects
+unexpected paths and checks a control table keyed by URL plus version. A valid
+new object is processed and the key recorded atomically. A duplicate event
+finds the completed key and exits successfully without inserting rows again. A
+02:00 scheduled reconciliation compares the manifest with processed keys and
+submits only missing versions.
+
+<!-- block-id: triggers-diagnostics -->
+For a run that never started, inspect whether the trigger is enabled, its time
+zone or event subscription, filter, source event, and permissions. For duplicate
+runs, compare event IDs and business idempotency keys; do not simply increase a
+delay. For overlapping schedules, compare trigger time, actual start time,
+duration, queueing, and concurrency settings. A useful mini-lab is to submit the
+same event twice and prove the target has one logical result, then intentionally
+withhold an event and prove reconciliation finds it.
+
+## Parameterized orchestration patterns
+
+<!-- block-id: patterns-model -->
+Parameters are run inputs and should be treated as immutable. Variables hold
+mutable run state. System variables expose orchestration context. Dynamic
+expressions resolve values from parameters, activity outputs, variables, and
+system context at runtime. A parent-child pattern centralizes common control
+flow; a metadata-driven pattern turns configuration rows into repeated work;
+fan-out/fan-in runs independent units in parallel and then joins their results.
+
+<!-- block-id: patterns-operations -->
+Define parameter names, types, defaults, allowed values, and ownership before
+building expressions. Validate required inputs in the first activity. Pass only
+the values a child requires and return a small, documented result. In a
+metadata-driven pipeline, look up enabled configuration rows, iterate with a
+bounded concurrency, and parameterize datasets, paths, or notebook arguments.
+Use activity dependencies for success, failure, completion, and skip paths.
+Route secrets through managed connections or secret integration, mask sensitive
+outputs, and include the pipeline run ID in operational records.
+
+<!-- block-id: patterns-decisions -->
+Use a parent-child pipeline when the child is a coherent reusable workflow, not
+merely to reduce the number of boxes on screen. Use metadata-driven iteration
+when many entities share one algorithm and differ in configuration. Use
+fan-out/fan-in only when target isolation and capacity support parallelism.
+Prefer explicit expressions over clever nested expressions, and calculate
+complex business logic in a tested transform. Parameters configure behavior;
+copying whole environment-specific JSON documents into them can create an
+unreviewed second configuration system.
+
+<!-- block-id: patterns-example -->
+**Worked pattern.** A control table contains `entity`, `source_path`,
+`target_table`, `watermark_column`, and `enabled`. The parent looks up enabled
+rows and invokes child `load_entity` with those five typed values. The child
+reads the previous watermark, copies the bounded range to staging, validates
+counts, merges into the target, advances the watermark only after success, and
+returns rows read and written. The parent aggregates results and fails if any
+required entity failed. Rerunning one entity uses the same algorithm and a
+deliberate watermark override.
+
+<!-- block-id: patterns-diagnostics -->
+Expression failures often come from the wrong evaluation context, null activity
+output, incorrect JSON path, unintended string conversion, or escaping. Inspect
+the resolved activity input in run details rather than only the expression
+source. For a failed child, retain both parent and child run IDs. For loops,
+record the current entity and concurrency. Reproduce with one known metadata row
+before scaling out. A mini-lab should process two entities, force one child to
+fail, confirm the parent captures both results, and rerun only the failed unit
+without duplicating the successful target.
+
+<!-- block-id: orchestration-exam-distinctions -->
+On the exam, “transform with a visual Power Query experience” points to
+Dataflow Gen2; “distributed custom code” points to a notebook; “coordinate,
+copy, branch, retry, or trigger” points to a pipeline. Parameters are immutable
+run inputs, variables are mutable run state, and dynamic expressions compute
+runtime values. An event trigger reduces latency but does not remove the need
+for idempotency and reconciliation.
+
+<!-- block-id: orchestration-recall-lab -->
+**Recall and mini-lab.** Why might a pipeline invoke a notebook rather than
+place all logic in pipeline expressions? Give two ways to prove a multi-file
+delivery is complete. What state must advance only after a successful
+incremental load? Contrast an event ID with a business idempotency key. Finally,
+draw a parent pipeline with lookup, bounded fan-out, child invocation, failure
+collection, and a reconciliation trigger; label parameters, variables, and
+system values.
+
 ## Exam distinctions
 
 - A schedule answers *when*; an activity dependency answers *after what*.
