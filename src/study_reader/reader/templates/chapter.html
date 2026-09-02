@@ -7,12 +7,12 @@
     <title>{{ chapter.title }} · {{ book.exam_code }} Study Reader</title>
     <link rel="icon" href="{{ url_for('static', path='/favicon.svg') }}" type="image/svg+xml">
     <link rel="stylesheet" href="{{ url_for('static', path='/reader.css') }}">
-    <script src="{{ url_for('static', path='/reader.js') }}" defer></script>
+    <script src="{{ url_for('static', path='/reader.js') }}" type="module"></script>
   </head>
-  <body>
+  <body data-book-id="{{ book.id }}" data-chapter-id="{{ chapter.id }}">
     <a class="skip-link" href="#chapter-content">Skip to chapter</a>
     <div class="reading-progress" aria-hidden="true">
-      <span style="--chapter-progress: {{ (chapter_number / book.chapter_count * 100) | round }}%"></span>
+      <span id="reading-progress-bar"></span>
     </div>
 
     <header class="site-header">
@@ -23,8 +23,69 @@
           <small>{{ book.exam_code }} · Fabric Data Engineer</small>
         </span>
       </a>
-      <span class="chapter-count">Chapter {{ chapter_number }} of {{ book.chapter_count }}</span>
+      <div class="header-actions">
+        <span class="chapter-count">Chapter {{ chapter_number }} of {{ book.chapter_count }}</span>
+        <span class="progress-summary" aria-live="polite">
+          <span id="chapter-progress-value">0%</span><span class="progress-label"> chapter</span>
+          <span aria-hidden="true">·</span>
+          <span id="book-progress-value">0%</span><span class="progress-label"> book</span>
+        </span>
+        <button id="appearance-button" class="appearance-button" type="button" aria-haspopup="dialog" aria-controls="appearance-dialog">
+          <span aria-hidden="true">Aa</span><span class="visually-hidden">Reading appearance</span>
+        </button>
+      </div>
     </header>
+
+    <section id="appearance-dialog" class="appearance-dialog" role="dialog" aria-modal="false" aria-labelledby="appearance-title" hidden>
+      <div class="appearance-heading">
+        <div>
+          <p class="eyebrow">Reading comfort</p>
+          <h2 id="appearance-title">Appearance</h2>
+        </div>
+        <button class="dialog-close" type="button" aria-label="Close appearance settings">×</button>
+      </div>
+      <div class="appearance-controls">
+        <fieldset>
+          <legend>Background</legend>
+          <div class="theme-options">
+            {% for theme_id, theme_name in [('white', 'White'), ('sepia', 'Sepia'), ('grey', 'Grey'), ('dark', 'Dark')] %}
+              <label class="theme-choice theme-{{ theme_id }}">
+                <input type="radio" name="theme" value="{{ theme_id }}">
+                <span>{{ theme_name }}</span>
+              </label>
+            {% endfor %}
+          </div>
+        </fieldset>
+
+        <label class="control-row">
+          <span>Typeface</span>
+          <select id="font-control">
+            <option value="serif">Serif</option>
+            <option value="sans">Sans serif</option>
+            <option value="system">System</option>
+          </select>
+        </label>
+
+        <label class="range-control">
+          <span>Text size <output id="text-size-output">17px</output></span>
+          <input id="text-size-control" type="range" min="15" max="24" step="1" value="17">
+        </label>
+        <label class="range-control">
+          <span>Line spacing <output id="line-height-output">1.78</output></span>
+          <input id="line-height-control" type="range" min="1.4" max="2.1" step="0.05" value="1.78">
+        </label>
+        <label class="range-control">
+          <span>Page margins <output id="page-margin-output">48px</output></span>
+          <input id="page-margin-control" type="range" min="12" max="96" step="4" value="48">
+        </label>
+        <label class="range-control">
+          <span>Content width <output id="content-width-output">68ch</output></span>
+          <input id="content-width-control" type="range" min="42" max="82" step="2" value="68">
+        </label>
+
+        <button id="appearance-reset" class="secondary-button" type="button">Reset appearance</button>
+      </div>
+    </section>
 
     <div class="reader-layout">
       <aside class="toc-shell">
@@ -45,10 +106,12 @@
                     <li>
                       <a
                         href="/books/{{ book.id }}/chapters/{{ toc_chapter.slug }}"
+                        data-chapter-id="{{ toc_chapter.id }}"
                         {% if toc_chapter.id == chapter.id %}aria-current="page"{% endif %}
                       >
                         {{ toc_chapter.title }}
                         {% if toc_chapter.status == 'placeholder' %}<span class="status-dot" title="Outline placeholder"></span>{% endif %}
+                        <span class="completion-mark" title="Completed" aria-label="Completed">✓</span>
                       </a>
                     </li>
                   {% endfor %}
@@ -86,6 +149,10 @@
             </a>
           {% endfor %}
         </section>
+
+        <button id="chapter-complete-button" class="complete-button" type="button" aria-pressed="false">
+          <span aria-hidden="true">✓</span> Mark chapter complete
+        </button>
 
         <nav class="chapter-navigation" aria-label="Chapter navigation">
           {% if previous_chapter %}
