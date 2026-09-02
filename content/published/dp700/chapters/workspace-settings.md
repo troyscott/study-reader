@@ -257,6 +257,72 @@ unexpected pool, check the workspace default and whether item customization is
 allowed. If tasks queue after the environment is running, examine worker
 concurrency and task demand before increasing compute.
 
+## Scenario drills
+
+### Spark: one workload, different runtime
+
+A workspace uses the starter pool and the default runtime for every job. One
+machine-learning notebook needs a newer runtime, a published library, and more
+executor memory. Other notebooks must remain unchanged. The workspace Admin
+should first allow item-level compute customization, then the owner should
+configure an environment with the required runtime, library, pool/resources,
+save and publish it, and attach it to the notebook. Changing only `spark.conf`
+does not select the environment runtime or driver/executor allocation.
+
+The negative tests matter: confirm another notebook still inherits the workspace
+default; confirm the target notebook fails predictably if the environment is
+unpublished or incompatible; and confirm the scheduled identity can use the
+environment and data. If all notebooks instead need the same change, revise the
+workspace default rather than creating many identical overrides.
+
+### Domain: discovery without accidental authorization
+
+The organization wants all new Sales workspaces discoverable under Sales, with
+Sales data stewards managing supported governance settings. Existing Finance
+workspaces must not move, and catalog organization must not grant sales staff
+access. Create a Sales domain, appoint the appropriate domain administrators and
+contributors, configure a default domain scoped to Sales creators/groups, and
+delegate only supported governance settings. Existing assigned workspaces remain
+assigned; eligible unassigned and new workspaces follow the default mechanism.
+
+Test catalog placement and authorization separately. A user who can find the
+workspace through the domain should still fail to open its items without a
+workspace/item/data grant. A contributor assigning a workspace must also
+administer that workspace. This is the exam pattern: domains organize and
+delegate; security controls authorize.
+
+### OneLake: compliance logs and historical data
+
+A compliance workspace needs access diagnostics protected from modification for
+180 days. Curated tables are queried hourly, while exported evidence is rarely
+read after 30 days. Select a same-capacity diagnostic lakehouse satisfying
+network constraints; grant the configuring workspace Admin appropriate
+destination access; enable diagnostics; and apply the documented immutability
+window. Define privacy, reviewer, and cleanup ownership before protection begins.
+
+Keep active curated data hot. Use a path-scoped lifecycle rule for eligible
+evidence exports after modeling cool/cold minimum retention, access, transaction,
+and early-deletion cost. Monitor activation and asynchronous lifecycle timing.
+Diagnostics creates evidence, immutability protects it, lifecycle manages its
+tier, and a later cleanup process removes it after legal retention. No one
+setting performs all four jobs.
+
+### Airflow: startup objective versus worker capacity
+
+A production team needs DAGs to begin within a predictable window at 06:00 and
+runs eight independent worker tasks. The managed starter pool is acceptable for
+development but its availability and configuration do not meet the production
+objective. Evaluate a custom pool whose active uptime covers the schedule,
+choose node size from task demand, choose extra nodes from justified concurrent
+workers, and use autoscaling only when variable demand warrants it. Assign an
+owner for pause/resume, cost, and monitoring.
+
+If the environment takes time to resume, adjust uptime/pool readiness. If it is
+running but tasks wait, examine worker concurrency and task duration. If one task
+is slow, fix or size for that task rather than adding workers. Finally, recheck
+current network limitations from Microsoft Learn before assuming private/VNet
+connectivity is supported.
+
 ## Exam distinctions
 
 <!-- block-id: exam-distinctions -->

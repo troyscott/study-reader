@@ -299,6 +299,140 @@ How can a KQL query distinguish parse failures from filtered values? How many
 operational contract listing event ID, event time, allowed lateness, checkpoint,
 raw retention, sink key, replay method, metrics, and owner.
 
+## Streaming scenario drills
+
+### Hot live data plus long OneLake history
+
+Operations needs subsecond KQL over the last two hours; analysts occasionally
+query two years of Delta history in OneLake. Ingest live events to a native
+Eventhouse table for predictable indexed serving and route raw events to durable
+OneLake. Expose historical Delta through a shortcut. If users frequently join a
+recent historical window to live data, measure query acceleration for that
+window; do not cache two years merely because it exists.
+
+Define event ID/time and schema consistently across both representations. Test
+the handoff boundary so no events are missing or double-counted. Native retention
+and cache horizon differ from raw historical retention. An accelerated external
+table still cannot replace native policies/features that its documented
+limitations exclude.
+
+### Poison event without stopping the stream
+
+One producer changes `temperature` from number to object for a single message.
+Raw retention receives the original event. Eventstream or Spark validation
+routes the malformed event to restricted quarantine with source position,
+schema version, reason, and replay reference; valid events continue. A quality
+metric and threshold determines whether the incident is warning or stops
+publication.
+
+Do not log the entire payload indiscriminately or retry the same deterministic
+event forever. After the producer or transform is corrected, replay the event
+using its stable ID and prove the sink has one logical result. Monitor invalid
+rate because one tolerated event can become a breaking schema rollout.
+
+### Hopping-window double counting
+
+A ten-minute window hops every two minutes. One event can belong to five windows.
+This is correct for a moving view, but summing those window totals into a daily
+total counts the same event multiple times. Use a nonoverlapping source
+aggregation for additive daily totals or compute daily directly from events.
+
+Hand-calculate boundary timestamps, including an event exactly at the end of a
+window, using the engine's interval semantics. Add events arriving within and
+beyond the watermark. Validate emitted mode/finality, late-event handling, and
+time zone before comparing totals.
+
+### Stateful Spark restart
+
+A structured-streaming job uses a unique checkpoint and idempotent Delta merge.
+After restart with unchanged compatible logic, it resumes from checkpointed
+progress and state. If a developer points a different query at that checkpoint,
+state/query incompatibility or incorrect recovery can result. Restore the
+intended code or create a controlled new checkpoint and replay range into an
+isolated target.
+
+Compare source offsets, checkpoint, state schema, last committed sink batch, and
+target keys. Never delete the checkpoint as a first troubleshooting step. A
+checkpoint protects engine progress; the stable merge key protects target
+effects.
+
+### Streaming join state explosion
+
+Two infinite streams are joined by device ID without time bounds. The engine
+must retain unbounded history because any future event could match any prior
+event. Add event-time watermarks and a business-valid time-range condition—for
+example, readings may match commands within five minutes. Measure state rows and
+memory, late/unmatched behavior, and output correctness.
+
+If the relationship is actually stream-to-small-static reference data, use the
+appropriate static/broadcast or lookup pattern instead of a stream-stream join.
+The engine decision follows state semantics, not just syntactic availability.
+
+## Capstone: fleet telemetry in real time
+
+A fleet emits location-free synthetic engine telemetry: `event_id`, `vehicle_id`,
+`event_time`, `metric`, `value`, and `schema_version`. Operations needs five-
+minute alerts, engineers need 30-day KQL exploration, and data science needs two
+years of replayable Delta history.
+
+### Architecture
+
+Use Eventstreams to authenticate the event source, normalize field names/types,
+filter supported schema versions, branch raw events to OneLake, route curated
+events to Eventhouse, and send a derived condition stream toward Activator where
+appropriate. Eventhouse native tables provide low-latency KQL and 30-day
+retention/cache aligned to operational use. OneLake holds durable Delta history.
+Spark Structured Streaming performs a custom stateful correlation only if the
+visual/KQL route cannot express it maintainably.
+
+Define source partition/offset, stable event ID, event-time UTC contract, allowed
+lateness distribution, duplicate horizon, raw retention, schema ownership,
+checkpoint, sink key, and replay process. Keep the raw path less transformed so
+future logic can be recomputed.
+
+### Derived products
+
+Create tumbling five-minute counts and average value by vehicle/metric for
+operational tiles. A separate hopping 15-minute window every five minutes can
+detect a moving threshold; never sum those overlapping windows for a daily
+total. Use a session window only for a question genuinely defined by inactivity.
+In KQL, constrain time early, project needed columns, parse dynamic content only
+when required, and retain request/query IDs for diagnosis.
+
+For historical-to-live comparison, expose Delta through a shortcut. Measure
+query acceleration for the recent historical period frequently joined to live
+data; keep standard external access for infrequent broad history. Choose native
+ingestion instead if required policies/features are unsupported on accelerated
+external tables.
+
+### Test sequence
+
+Inject 20 known events including one duplicate ID, one prior schema version, one
+invalid numeric value, two events out of order but within watermark, one beyond
+watermark, and events on exact window boundaries. Before execution, calculate
+expected raw, curated, quarantine, deduplicated, window, late, and alert counts.
+Check each Eventstream boundary and destination, Eventhouse ingestion result,
+KQL aggregate, Spark progress/checkpoint if used, and OneLake retained raw count.
+
+Stop and restart the stateful query with the same checkpoint; output must remain
+logically identical. Then run corrected logic from a controlled new checkpoint
+over a bounded raw range into an isolated target, reconcile, and publish. Deny
+one Eventhouse destination connection and verify raw retention continues and
+the incident is localized.
+
+### Operations and acceptance
+
+Monitor source/input/output rates, lag/backlog, invalid and late counts, state
+size, micro-batch duration, checkpoint progress, destination ingestion, KQL
+latency/scanned data, hot-cache coverage, and capacity. Alerts use sustained lag
+and data-quality thresholds with owner, runbook, deduplication, and recovery.
+
+The capstone passes when all 20 events have an explicit disposition; duplicate
+delivery produces one logical curated event; window math matches hand results;
+restart is repeat-safe; raw replay repairs a logic defect; source and destination
+failures are distinguishable; and the two-year history does not force every
+operational query to scan two years.
+
 ## Exam distinctions
 
 - Native Eventhouse tables ingest and index; shortcuts query supported data in place.

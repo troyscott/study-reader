@@ -222,6 +222,118 @@ auditable? Why use hysteresis for recovery? For practice, write one outcome,
 execution, and resource signal for pipeline, Dataflow, notebook, Eventstream,
 and semantic model; identify the authoritative screen/log for each.
 
+## Monitoring scenario drills
+
+### Green run, stale consumer
+
+The latest pipeline and semantic-model refresh both succeeded, but the dashboard
+is four hours stale. Compare newest business timestamp at source, committed
+ingestion watermark, curated publish timestamp, refresh source boundary, and
+consumer-visible maximum. The first boundary that stops advancing owns the
+initial investigation. A green downstream job may have consumed stale upstream
+data correctly.
+
+Alert on end-to-end freshness by dataset and cutoff, while retaining failed-run
+alerts for execution diagnosis. Include last run IDs and stage timestamps. This
+pair distinguishes “job failed” from “no fresh data arrived.”
+
+### Rising stream lag with no failures
+
+Input increases from 5,000 to 12,000 events/sec; output remains 7,000 and lag
+grows. Examine boundary rates, micro-batch duration, state/shuffle, destination
+latency, Eventhouse ingestion, and capacity. The absence of a red status does not
+mean the service objective is healthy. Estimate time to exhaust backlog under
+current rates and trigger before consumer freshness breaches.
+
+After tuning or scaling, verify output eventually exceeds input long enough to
+drain backlog, no events were dropped, and cost remains acceptable. Recovery is
+not merely the moment input falls.
+
+### Dataflow regression after a source release
+
+Refresh duration triples immediately after a source deployment. Output remains
+correct. Compare folding indicators/native query, source rows/bytes, gateway
+route, query steps, destination metrics, and capacity. A new source view or type
+can prevent folding without generating an error.
+
+Record baseline and changed source/code versions. Repair foldability or move
+selective operations earlier, then compare equivalent loads. Add a duration or
+scan-volume anomaly alert only after understanding expected variation.
+
+### Alert fires but nobody can act
+
+An email says “pipeline failed” with no workspace, item, run ID, owner, or
+runbook. The signal is technically correct and operationally weak. Redesign it
+with dataset/item, environment, severity, failure/freshness context, correlation
+ID, first diagnostic link, owner group, escalation, suppression key, and recovery
+condition. Keep sensitive parameters and payloads out.
+
+Test delivery during staffed and after-hours paths, duplicate failure retries,
+maintenance suppression, and recovery. An alert is complete only when the
+intended responder can locate and classify the incident.
+
+## Capstone: the 06:00 operations review
+
+You are the on-call analytics engineer. Executives expect the sales dashboard by
+06:00. The chain is source close → pipeline ingestion → Dataflow cleanup → Spark
+enrichment → warehouse publish → semantic refresh. Shipment events supply a
+separate live tile. Build a five-minute review that finds risk before the user
+does.
+
+### Review order
+
+Start with the outcome: newest consumer-visible sales business date/time and
+live shipment lag. Compare each with its service objective. Then inspect the
+stage boundary timestamps and committed watermarks. Only after locating the
+first stale boundary drill into execution and resource evidence. This prevents
+spending the whole review on one slow but noncritical activity.
+
+Use Monitoring hub for supported run overview; pipeline/activity detail for
+resolved runs and copy metrics; Dataflow refresh history/logs for query and
+destination; Spark application/UI for stages and skew; warehouse query/monitor
+for publish; semantic refresh history/summary for tables and partitions;
+Eventstream/Eventhouse monitoring for rate, lag, invalid events, ingestion and
+queries; and Capacity Metrics for shared throttling/CU context.
+
+### Morning evidence board
+
+Record a small operational table:
+
+```text
+dataset | source_ready | ingested_to | curated_to | model_to | consumer_to
+        | status | run_id | rejects | freshness_lag | owner
+```
+
+For streaming add input rate, output rate, backlog/lag, late/invalid count, and
+destination. For quality add evaluated and failed per critical rule. This table
+contains references and aggregates, not raw sensitive payloads.
+
+### Three observations
+
+1. Sales ingestion succeeded to 05:40, Dataflow succeeded, but semantic model is
+   at 04:00. Refresh detail shows incremental partitions excluded the newest
+   boundary. Correct refresh policy/partition and retest; do not rerun ingestion.
+2. Shipment input is 9,000/sec and output 6,000/sec with rising lag, no failure.
+   Inspect operator/destination and capacity; alert on sustained lag because
+   status alone is green.
+3. Customer rejects rise from 0.02% to 4% after a source release. Stop publish
+   under the quality contract, preserve last known-good output, investigate
+   schema/type change, and communicate freshness impact.
+
+### Alerts and handoff
+
+Create distinct alerts for missed freshness cutoff, required job failure,
+critical quality breach, sustained stream lag, and capacity throttling. Each
+contains environment, dataset/item, current/threshold value, time window,
+run/request ID, owner and runbook, deduplication, escalation, and recovery.
+Suppress maintenance deliberately, not by muting broad channels.
+
+The review is successful when it identifies the first stale/failing boundary,
+distinguishes outcome from execution and resource, preserves correlation IDs,
+routes to an accountable owner, and verifies recovery at the consumer. A ticket
+closed after rerun is insufficient if the source-to-consumer timestamp or
+quality control remains wrong.
+
 ## Exam distinctions
 
 - Monitoring hub gives centralized visibility; item detail provides engine-specific evidence.

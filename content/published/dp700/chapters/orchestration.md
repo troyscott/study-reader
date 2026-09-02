@@ -139,9 +139,13 @@ manifest, completion marker, stable-size check, or upstream contract rather
 than an arbitrary delay.
 
 <!-- block-id: triggers-example -->
-**Worked trigger.** An event for
-`landing/region=CA/business_date=2026-09-01/orders.parquet` passes the URL,
-event ID, and modification timestamp to a pipeline. The first activity rejects
+**Worked trigger.** An event arrives for this object:
+
+```text
+landing/region=CA/business_date=2026-09-01/orders.parquet
+```
+
+It passes the URL, event ID, and modification timestamp to a pipeline. The first activity rejects
 unexpected paths and checks a control table keyed by URL plus version. A valid
 new object is processed and the key recorded atomically. A duplicate event
 finds the completed key and exits successfully without inserting rows again. A
@@ -223,6 +227,141 @@ incremental load? Contrast an event ID with a business idempotency key. Finally,
 draw a parent pipeline with lookup, bounded fan-out, child invocation, failure
 collection, and a reconciliation trigger; label parameters, variables, and
 system values.
+
+## Orchestration scenario drills
+
+### Choose the owner of each responsibility
+
+A finance process copies eight source tables, applies dimensional logic, and
+publishes a quality summary. Use a pipeline to own schedule, dependencies, Copy
+activities, parameters, retry classification, and failure routing. Use a
+notebook or warehouse SQL procedure for code-first/set-based dimensional logic.
+Use Dataflow Gen2 only where its visual Power Query transformations and supported
+destinations improve maintainability. Do not translate tested SQL into dozens of
+pipeline expressions.
+
+Define one run contract: business date, full/incremental flag, source upper
+bound, target environment, and correlation ID. The pipeline passes only required
+typed values; transformations return small status/count outputs. Success requires
+quality and reconciliation, not merely every activity turning green.
+
+### Event burst and duplicate delivery
+
+Ten thousand object-created events arrive after a source outage, including
+duplicates. An unbounded trigger-to-run design overwhelms the source and sink.
+Filter expected paths, validate a stable object/version idempotency key, and
+control run concurrency. A completed key exits successfully; an in-progress key
+prevents unsafe overlap; a failed key is retriable according to target semantics.
+
+If events can describe partially written objects, require a manifest/completion
+marker or other readiness contract. A later scheduled reconciliation compares
+expected versus processed objects and submits gaps. Monitor event rate, queued
+runs, source/sink throttling, duplicate suppression, failed keys, and freshness.
+
+### Metadata-driven loading with one bad entity
+
+A control table lists 40 entities. One row references a removed source column.
+The parent lookup returns enabled rows and invokes a parameterized child with
+bounded ForEach concurrency. The child validates metadata, extracts, stages,
+checks schema, applies target changes, and returns counts. Thirty-nine succeed;
+one fails deterministically.
+
+The parent records each result and fails the required overall run without
+reapplying successful entities. Repair the metadata/source contract and rerun
+only the failed entity. A blanket retry of the ForEach would waste capacity and
+could duplicate outputs if sinks are not idempotent. Retain parent and child run
+IDs to correlate the incident.
+
+### Clock schedule across daylight saving
+
+A daily job must run after a source closes at 01:30 local time, in a region with
+daylight-saving transitions. Specify the business time zone explicitly and
+decide behavior for the repeated or missing local hour. Better, use the source's
+published completion signal when available and keep a cutoff reconciliation.
+Record logical business date separately from UTC trigger timestamp.
+
+Prevent concurrent runs when the job replaces the same partition; allow parallel
+business dates only if target isolation is proven. Alert on “no successful
+business date by cutoff,” which catches a missing trigger as well as a failed
+run. A simple alert on activity failure cannot detect a run that never started.
+
+## Capstone: metadata-driven retail ingestion
+
+A retailer receives daily customer and product snapshots, hourly order files,
+and near-real-time shipment events. Build one operating design without forcing
+all three sources through the same pattern.
+
+### Requirements and proposed design
+
+- Customer and product snapshots close at 02:00 local business time and must be
+  available before fact processing.
+- Order files arrive by region and can be redelivered with the same object
+  version. All regions must be complete by 05:30.
+- Shipment events should appear within five minutes, but correctness by next
+  morning matters more than never missing an event.
+- Development, Test, and Production use different connections; credentials must
+  not appear in parameters or logs.
+
+Use a scheduled parent pipeline for snapshot dimensions. It validates the
+business date, invokes parameterized child loads, checks uniqueness and counts,
+and publishes a dimension-ready control only after both dimensions succeed. Use
+event-triggered order ingestion keyed by object URL plus version, with bounded
+concurrency and an idempotent target merge. A 04:30 reconciliation pipeline
+compares the regional manifest with completed keys. Use Eventstreams or Spark for
+continuous shipment processing, retain raw events, and schedule a bounded replay
+comparison before the 05:30 cutoff.
+
+Connections or variable libraries provide environment configuration where
+supported; a governed credential mechanism owns secrets. Parameters carry
+business date, entity, object reference, source upper bound, and correlation ID.
+Variables hold only mutable run state such as collected failure count. System
+variables supply pipeline/trigger identifiers.
+
+### Control tables
+
+Design three small contracts:
+
+```text
+entity_config(entity, source, target, load_type, watermark_column, enabled)
+object_run(object_url, object_version, business_date, status, pipeline_run_id)
+batch_control(entity, lower_bound, upper_bound, rows_read, rows_written,
+              rows_rejected, status, committed_at)
+```
+
+The parent reads enabled configuration and passes one typed row to each child.
+The child selects a fixed interval, stages, validates, writes idempotently, and
+commits its watermark after target success. `object_run` enforces duplicate
+suppression. Do not use a pipeline variable as the durable watermark; variables
+disappear with the run and are unsafe under concurrency.
+
+### Failure injections
+
+1. Deliver one order file twice. The second event should find the completed
+   object/version and exit without another logical write.
+2. Make one region's schema incompatible. Other independent regions may finish,
+   but the cutoff reconciliation reports the missing required region and blocks
+   readiness.
+3. Crash after target merge but before watermark update. A rerun reads the same
+   range and produces the same target through stable keys.
+4. Withhold a shipment event from the trigger path while retaining it in raw
+   source. The scheduled comparison discovers and replays it.
+5. Expire a Test connection. Deployment remains successful, while the runtime
+   smoke test fails authorization and prevents promotion.
+
+### Monitoring and acceptance
+
+Monitor schedule/trigger state, queue and activity duration, source rows/files,
+input/output, rejects, watermarks, duplicate suppressions, reconciliation gaps,
+stream lag, and consumer-visible freshness. Each failure alert carries
+environment, entity/object, run ID, source boundary, first failing activity, and
+runbook. A separate cutoff alert catches missing runs.
+
+The capstone is accepted only when every failure can be replayed from the
+smallest safe boundary; secrets remain outside ordinary parameters; duplicate
+delivery changes no totals; all control equations reconcile; and Test deployment
+plus runtime/data checks pass. This is the central orchestration idea: the
+pipeline coordinates evidence-backed state transitions while the selected
+compute tool owns transformation.
 
 ## Exam distinctions
 

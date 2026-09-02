@@ -318,6 +318,142 @@ Finally, design a five-row access matrix for an administrator, engineer,
 analyst, report-only consumer, and unassigned user; include at least one denied
 test for workspace, item, SQL, and OneLake access.
 
+## Security scenario drills
+
+### Report consumer versus direct lake access
+
+Nora must view a governed Power BI report but must not browse lakehouse files or
+query its SQL endpoint. Share the report/app through the supported consumption
+path and provide only the semantic-model/report permissions that path requires.
+Do not add Nora as Contributor and do not grant `ReadAll` merely because the
+report uses OneLake-backed data. Test report rendering, build/export behavior as
+required, direct SQL, direct OneLake, unrelated item discovery, and reshare.
+
+If the report works but direct SQL fails, that may be the intended least-
+privilege outcome. If the report fails, trace the semantic model's connection,
+identity, Direct Lake/fallback behavior, model security, and source permissions
+instead of granting a broad workspace role. Record the successful consumer path
+and every denied alternate route.
+
+### Regional analysts with protected attributes
+
+Analysts may see orders only for assigned regions and must not see personal
+email; Finance may see all regions and email. Start with group-based identities
+and ensure analysts do not inherit Admin, Member, or Contributor. Grant the
+appropriate item/data access, implement a region policy using a governed
+identity-to-region mapping, and use CLS/object design to remove Email from the
+analyst path. DDM may reduce accidental display but is not the primary boundary.
+
+Test an analyst in one region, an analyst assigned to two regions, Finance, an
+unassigned user, a null/unknown region, and Spark/SQL/Direct Lake routes in scope.
+Count expected versus actual rows and columns. If an analyst sees everything,
+inspect additive OneLake roles and workspace write before rewriting the RLS
+predicate.
+
+### Labeled and certified does not mean authorized
+
+A curated lakehouse is labeled Highly Confidential and certified as the trusted
+source. A new user still cannot open it. This is consistent: the sensitivity
+label classifies and may protect supported flows; certification signals that an
+authorized governance process trusts the asset; neither grants the user an item
+or data permission. Determine the business requirement and grant the narrow
+workspace/item/OneLake or endpoint permission only if approved.
+
+Conversely, a user with access can still mishandle content if the label/export
+route is not supported or organizational policy is absent. Test the exact item,
+downstream inheritance/export path, and access separately. Review certification
+when owner, quality, freshness, security, or documentation changes.
+
+### Audit an unexpected permission change
+
+A restricted table became readable to a contractor. Preserve the observation,
+identity, time zone, item, endpoint, and current effective memberships. Search
+Purview Audit over an appropriate window for share, permission, role, or group-
+related operations available to the investigation; export with query criteria.
+Compare audit history with current workspace roles, direct item grants, OneLake
+roles, SQL/model roles, and Entra group membership.
+
+Audit can show recorded actions but may not encode the entire present effective-
+permission calculation, and absence can reflect retention, ingestion delay, or
+filter choice. After removing the unintended grant, re-test denied and approved
+users, identify the control gap, and add periodic access review or alerting. Keep
+sensitive audit evidence under restricted investigation handling.
+
+### Shortcut across security boundaries
+
+A lakehouse shortcut points to an external storage account. The shortcut object,
+Fabric item, OneLake role, connection identity, and source ACL all participate.
+Granting the user access to see the lakehouse does not necessarily authorize the
+target, and a workspace Contributor can be broader than the intended narrow
+role. Document whether access uses a shared connection, delegated identity, or
+another supported credential route.
+
+Test an owner, intended reader, denied reader, and expired/rotated connection.
+Deleting the shortcut removes the reference, not external data. Sensitivity and
+endorsement should be reviewed for the exposed Fabric item, but neither repairs
+the underlying authorization path.
+
+## Capstone: governed analytics workspace
+
+A health-services analytics team (using synthetic exam data) needs engineers to
+build, regional analysts to query only their region, executives to consume one
+report, and an external auditor to inspect access-change evidence for a limited
+period. Design the boundary before assigning roles.
+
+Place engineers in an Entra group with Contributor only in the development
+workspace. Keep workspace Admin and Member groups small and separate. Analysts
+and executives should not become Contributors in Production. Share the required
+warehouse/lakehouse or semantic/report item and grant the documented data path:
+regional row policy plus protected columns for analysts; report-only consumption
+for executives. Give the audit investigator controlled Purview Audit access and
+an evidence export location, not broad data authoring.
+
+Classify sensitive items through published Purview labels and verify supported
+inheritance/export routes. Certify the curated semantic model only after owner,
+source, quality, freshness, security, documentation, and support criteria pass.
+Certification signals trusted reuse; the label communicates sensitivity; the
+permission layers enforce access.
+
+### Expected access matrix
+
+| Identity | Workspace author | Direct curated data | Other regions | Sensitive column | Report | Audit evidence |
+| --- | --- | --- | --- | --- | --- | --- |
+| Platform Admin | Yes | Elevated | Elevated | Elevated | Yes | As assigned |
+| Engineer | Dev only | Dev/build need | Dev scope | Dev need | Test | No by default |
+| Regional analyst | No | Assigned region | Denied | Denied | Yes | No |
+| Executive | No | No direct route | No direct route | No direct route | Yes | No |
+| Auditor | No | No | No | No | No | Time-bounded investigation |
+| Unassigned user | No | Denied | Denied | Denied | Denied | Denied |
+
+“Elevated” is a warning in the matrix: administrators and Contributors are poor
+negative-test identities because workspace write can supersede narrow OneLake
+grants. Test each persona with clean membership and record effective groups,
+endpoint, action, expected and actual result.
+
+### Changes and investigation
+
+Simulate four events: an analyst changes region, an engineer leaves, a label is
+changed, and an unintended direct item share is added. Group-driven regional
+mapping and engineer access should update through governed identity processes.
+The label change follows information-protection policy and review. The direct
+share should be discovered through access review and investigated through the
+relevant audit activities and current effective-permission state.
+
+Preserve audit query criteria, UTC/local time interpretation, operation/user/item
+identifiers, exported evidence, and investigator. Remove the unintended share,
+retest both allowed and denied paths, and add a preventive control. Do not infer
+from a missing search result that no change occurred until retention, ingestion
+delay, licensing, operation naming, and filters are considered.
+
+### Acceptance evidence
+
+The capstone passes when least-privilege groups and owners are documented;
+workspace, item, OneLake/SQL/model policies form one traced path; regional and
+column tests include denied cases; direct lake access remains unavailable to
+report-only users; label and endorsement behavior is verified separately from
+authorization; shortcut/source credentials are owned and rotated; and a benign
+permission change can be found, explained, remediated, and retested.
+
 ## Exam distinctions
 
 - Workspace roles are broad collaboration grants; item permissions are narrower.

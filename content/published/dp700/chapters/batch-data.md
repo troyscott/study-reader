@@ -376,6 +376,159 @@ For practice, take one customer/order dataset through Dataflow, PySpark, SQL,
 and KQL; document types, joins, quality dispositions, output grain, and expected
 totals before comparing results.
 
+## Batch scenario drills
+
+### Dataflow transformation review
+
+A Dataflow reads 40 million warehouse rows, then filters to the last day after a
+custom text function. Refresh is slow. Inspect folding. Move supported date
+filter and column projection before the nonfolding custom step, while preserving
+semantics, and compare source rows/bytes plus duration. If the custom function
+can be rewritten with foldable native operations, validate it on edge cases.
+
+The same flow merges Customers to Orders. Before accepting it, test Customer key
+uniqueness, unmatched orders, row count before/after, and total Amount. A single
+duplicate customer can multiply facts even though refresh succeeds. Keep an
+anti-join quality output for missing customers and route invalid types rather
+than turning all errors into null.
+
+### Shortcut, mirroring, or copy
+
+Three source cases look similar. Historical Delta tables already in supported
+cloud storage need shared in-place access: use a shortcut if source availability,
+security, and direct-read performance are acceptable. A supported operational
+database needs continuously synchronized analytics with minimal custom logic:
+evaluate database mirroring. A legacy source needs nightly extracts, column
+mapping, and a warehouse destination: use pipeline Copy.
+
+For each, state ownership when the source moves or credentials rotate, how
+deletes/schema changes propagate, whether data is writable in Fabric, and how
+recovery works. “Avoid a copy” is not sufficient if consumers require isolation
+from source outages or native Eventhouse features.
+
+### Denormalization at the wrong grain
+
+Orders has one row per order, OrderLines has many rows per order, and Payments
+can also have many rows per order. Joining all three then summing line amount
+multiplies each line by payment count. Declare the desired grain. Aggregate
+payments to one row per order before joining to line grain, or keep separate fact
+tables related through dimensions. Validate distinct line key, row count, and
+known total.
+
+Denormalization is valuable when it simplifies a stable consumption pattern,
+but it does not waive dimensional grain. Repeated order attributes are expected;
+repeated line measures caused by a many-to-many join are not.
+
+### Semi-additive inventory
+
+An inventory snapshot records ending quantity by product and warehouse each
+day. Summing products and warehouses for one day is meaningful; summing seven
+daily ending balances is not weekly inventory. Select the last valid snapshot
+for the period, or calculate a defined average, instead of `SUM` across date.
+Revenue, by contrast, may be additive across those days.
+
+Create measures with their allowed aggregation dimensions documented. For a
+late correction to Tuesday, restate aggregates whose chosen Tuesday value or
+derived period metric changes. Retain numerator/denominator for ratios rather
+than averaging percentages.
+
+### Quality threshold and quarantine replay
+
+A batch contains 0.02% invalid dates under a documented warning threshold of
+0.05%. Publish accepted records, quarantine failures with rule and source
+reference, record the rate, and alert at warning severity. The next day reaches
+2%; stop publish according to policy because this likely indicates a source
+contract change. Last known-good curated data remains available but freshness
+is now at risk.
+
+After correcting parsing or source data, replay quarantined/bounded source rows,
+reconcile counts, update affected aggregates, and close the incident. Quarantine
+needs access control, retention, owner, and replay state; otherwise it merely
+hides data loss.
+
+## Capstone: build a trustworthy sales mart
+
+The source landscape contains a supported operational sales database, customer
+master Delta tables in external storage, monthly CSV targets, and application
+logs. The product needs a governed dimensional sales mart, exploratory data
+science access, and recent operational monitoring.
+
+### Place and move the data
+
+Evaluate database mirroring for supported sales tables that need low-latency
+analytical replication without custom transforms. Use an external OneLake
+shortcut for the customer master Delta table if source availability, credential
+path, security, and schema ownership are acceptable. Use pipeline Copy for CSV
+targets because they need scheduled acquisition, explicit mapping, file/run
+metadata, and quarantine. Land application logs in the route best suited to
+Eventhouse/KQL when time-series exploration dominates.
+
+The lakehouse holds open bronze and engineering tables used by Spark. The
+warehouse serves the conformed star schema to T-SQL/BI consumers. This is not
+unnecessary duplication if each representation has a documented workload and
+refresh contract. Avoid copying the customer master again merely by habit, but
+create a governed snapshot if consumers require isolation from source change or
+outage.
+
+### Transform and validate
+
+Build Customer shaping in Dataflow Gen2 for maintainers who own Power Query:
+explicit locale-aware types, trimmed/cased business key, anti-join for missing
+reference values, duplicate detection, address cleanup, and a curated
+destination. Preserve query folding for source filtering/projection as far as
+supported and inspect it. Use notebooks for high-volume/order logic requiring
+distributed processing and reusable tests. Use warehouse T-SQL for dimension and
+fact application near the final model. Use KQL for log/time-window analysis
+rather than moving logs into SQL only for language familiarity.
+
+Declare `SalesFact` grain: one row per posted order line. Load Customer and
+Product dimensions before facts. Use surrogate keys, a stable unknown member,
+and explicit Type 1/Type 2 attributes. Validate one current Type 2 row per
+business key, nonoverlapping validity, fact foreign keys, distinct order-line
+key, row count, quantity and amount controls.
+
+### Quality fixture
+
+Create a ten-row test fixture containing:
+
+- two versions of one order line, with the newer source sequence winning;
+- one exact duplicate delivery;
+- one missing customer that uses the governed unknown/inferred path;
+- one customer business key duplicated in the dimension staging data;
+- one invalid localized date;
+- one null amount whose business rule forbids publish;
+- one late order affecting yesterday's regional total; and
+- one valid order at a Type 2 validity boundary.
+
+Write expected accepted, quarantined, superseded, and late-restatement counts
+before execution. The duplicate dimension key must block or quarantine the
+ambiguous dimension—not multiply fact totals. The late order must restate the
+affected daily aggregate. The invalid date and forbidden null remain diagnosable
+with rule and source reference.
+
+### Equivalent transformations
+
+Implement one filter, join, and regional aggregate in PySpark, T-SQL, and KQL on
+the same normalized fixture. Compare key/type/null semantics and ordered output.
+Do not claim equivalence from similar syntax. Power Query's Merge and Group By
+version should produce the same declared output grain. Retain numerator and
+denominator for average order value, then compute the ratio after aggregation.
+
+### Operations and change
+
+Monitor mirroring lag/change application, shortcut connectivity, Copy rows and
+rejects, Dataflow refresh/folding/destination, notebook stages, warehouse load
+controls, and consumer freshness. Rotate the shortcut connection in Test and
+prove denied/allowed behavior. Rename a CSV column and verify schema handling
+fails visibly. Move a disposable shortcut target and diagnose the reference
+without deleting source data.
+
+The capstone is complete when every source has an accountable access/update
+path; every tool owns a justified layer; the quality fixture matches expected
+disposition; star-schema totals reconcile; late data restates the right period;
+reruns are idempotent; and the published mart includes source/run/watermark and
+quality evidence.
+
 ## Exam distinctions
 
 - Merge joins columns; append stacks rows.

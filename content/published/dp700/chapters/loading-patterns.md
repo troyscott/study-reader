@@ -226,6 +226,74 @@ stream after logic changes? For practice, write control records for one batch
 increment and one streaming micro-batch, including state before, durable effects,
 validation evidence, and state after.
 
+## Loading scenario drills
+
+Use each drill twice. First answer without looking at the explanation: name the
+selection boundary, durable state, target application rule, validation equation,
+failure recovery, and reconciliation. Then change one assumption—introduce
+deletes, concurrent writers, late facts, or insufficient raw retention—and
+redesign the pattern. A strong exam answer identifies the missing correctness
+contract before choosing a Fabric tool. A strong production answer also records
+who owns that contract, how it is observed, and which bounded input can be
+replayed. If the design cannot explain what happens after a crash between target
+write and state update, it is not yet complete.
+
+### Timestamp ties and late commits
+
+The source exposes millisecond `ModifiedAt`, but several rows share a timestamp
+and one transaction commits late. Reading only `ModifiedAt > last_watermark`
+can miss a tied row or late commit. At run start choose a fixed upper bound,
+read a justified overlap from before the committed watermark, retain business
+key plus source version/modified time, and select one trusted winner per key.
+Apply idempotently and advance the watermark only after durable target success.
+
+If the source offers a stable composite cursor or CDC sequence, prefer it over
+ambiguous wall-clock time. Reconcile a bounded source interval and alert on
+unexpected gaps. Test a row with the exact previous timestamp, two versions of
+one key, and a commit visible only on the next run.
+
+### Delete handling
+
+An incremental source sends inserts and updates but no delete flag. The target
+will accumulate records removed upstream. Options include source CDC/tombstones,
+a periodic key snapshot and anti-join, a bounded full comparison, or a business
+rule that never physically deletes and instead closes validity. Choose from
+source semantics and analytical requirements; a modified timestamp cannot infer
+a row that no longer exists.
+
+Apply deletes only after validating scope and controls. An unexpectedly empty
+snapshot could otherwise delete everything. Record deleted/expired counts,
+protect required history, and make replay deterministic. Full loads naturally
+reconcile absence when replace semantics are safe, which can make them preferable
+for small tables.
+
+### Type 2 correction versus real change
+
+A customer address was entered incorrectly yesterday and corrected today. If
+the organization wants historical reports to show the corrected address for all
+time, treat it as Type 1 correction. If the customer genuinely moved and reports
+must preserve the old address for prior facts, use Type 2: expire the current
+row and add a new version. The source must distinguish correction from business
+change or the warehouse needs an explicit policy.
+
+Test nonoverlapping validity, one current row, surrogate-key lookup at boundary
+times, and facts arriving after the dimension but carrying earlier event time.
+Do not use load time as business validity without acknowledging the consequence.
+
+### Streaming logic change and replay
+
+A bug undercounted events for three days. The current checkpoint faithfully
+records progress through incorrect logic. Replaying requires retained raw events,
+the affected source range, corrected code version, compatible/new checkpoint,
+and a target plan that replaces or idempotently restates affected results. Simply
+deleting the production checkpoint can replay more history than intended and
+duplicate side effects.
+
+Build corrected output in isolation, reconcile to raw controls, atomically
+publish or replace the affected partitions, and retain old/new version evidence.
+The recovery design proves why raw retention and deterministic sink keys are
+part of the loading contract, not optional observability.
+
 ## Exam distinctions
 
 - Full versus incremental describes selection and application, not a specific Fabric tool.

@@ -236,6 +236,67 @@ checks for a notebook-to-lakehouse pipeline. Then sketch a release with one
 feature branch, one pull request, one test promotion, and one intentional
 failure; label the evidence produced at each gate.
 
+## Release scenario drills
+
+### Conflicting workspace and branch changes
+
+An engineer edits a notebook in the Fabric portal while another pull request
+changes the same notebook definition in Git. The workspace now reports a
+conflict. First preserve and compare both intentions; do not click update or
+commit merely to clear the status. Decide the winning or combined definition in
+an isolated branch/workspace, validate it, and use the normal pull-request gate.
+Then update the integration workspace from the reviewed branch and run the
+notebook. The conflict resolution is a content decision; synchronization is only
+the mechanism that applies it.
+
+If the item runs locally but fails after update, inspect runtime, environment,
+connections, data permissions, and unsupported properties. Git proves the
+definition and review history, not all external state. Record both Git commit
+and Fabric run ID so later investigators can connect source to execution.
+
+### Safe schema evolution
+
+A warehouse project changes `CustomerName varchar(200)` to `varchar(80)` and
+renames `RegionCode` to `SalesRegionCode`. The project builds. That proves the
+declarations resolve; it does not prove 200-character existing names fit or that
+publish recognizes the rename instead of drop/create. Generate the deployment
+plan against a realistic copy, profile maximum length/nulls, and explicitly
+represent or stage the rename according to supported project tooling. Reject an
+unreviewed destructive plan.
+
+For a zero-downtime transition, add the new representation, backfill and validate,
+deploy compatible readers/writers, then remove the old object in a later release.
+Keep a rollback or restore path and retain the exact artifact and plan. The exam
+distinction is state-model validation versus safe data migration.
+
+### Successful deployment, failed application
+
+A deployment pipeline reports success when promoting a pipeline and notebook to
+Test. The first execution cannot open the lakehouse. Compare paired items and
+dependency bindings, then inspect stage-specific connection/variable values,
+credentials, target permissions, and the execution identity. Deployment rules
+can adapt supported values but do not supply secrets or grant access.
+
+Repair the narrow missing configuration, rerun a test input, validate target
+rows and logs, and then record approval. Do not promote to Production because
+the control-plane deployment succeeded. The gate should require definition
+deployment plus target-environment smoke tests, data checks, negative permission
+tests where relevant, and a rollback plan.
+
+### Choosing a release mechanism
+
+A team asks for “version control, database validation, and Dev/Test/Prod.” The
+answer is not one feature. Connect the development workspace to Git for durable
+definitions, branches, CI, and pull-request review. Build database projects to
+validate declarative SQL schema and produce reviewed artifacts. Use deployment
+pipelines or another selected release route to promote supported Fabric items
+and environment configuration.
+
+Document unsupported items and post-deployment APIs rather than hiding them.
+The complete release record contains issue/intent, commit and PR, CI results,
+database artifact and plan where applicable, Fabric deployment operation,
+configuration evidence, runtime smoke tests, approver, and source revision.
+
 ## Exam distinctions
 
 - Git integration synchronizes a workspace and branch; it is not a Dev/Test/Prod promotion engine.

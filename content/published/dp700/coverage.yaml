@@ -73,7 +73,7 @@ objectives:
     chapter_id: lifecycle-management
     status: complete
     subtopics: [Git providers, Workspace connection, Branches, Commit and update direction, Conflicts, Supported items, Secrets]
-    source_ids: [dp700-study-guide, fabric-cicd-overview]
+    source_ids: [dp700-study-guide, fabric-cicd-overview, fabric-cicd-workflows]
     gaps: []
     evidence:
       conceptual_model: version-control-model
@@ -90,7 +90,7 @@ objectives:
     chapter_id: lifecycle-management
     status: complete
     subtopics: [Declarative schema, Project structure, Build validation, DACPAC, Publish plan, State versus migration, Data-loss safeguards]
-    source_ids: [dp700-study-guide, fabric-cicd-overview]
+    source_ids: [dp700-study-guide, fabric-cicd-overview, fabric-cicd-workflows]
     gaps: []
     evidence:
       conceptual_model: database-projects-model
@@ -107,7 +107,7 @@ objectives:
     chapter_id: lifecycle-management
     status: complete
     subtopics: [Stages, Workspace assignment, Item pairing, Comparison, Deployment rules, Dependency binding, Post-deployment checks]
-    source_ids: [dp700-study-guide, fabric-cicd-overview]
+    source_ids: [dp700-study-guide, fabric-cicd-overview, fabric-cicd-workflows]
     gaps: []
     evidence:
       conceptual_model: deployment-pipelines-model
@@ -260,7 +260,7 @@ objectives:
     chapter_id: orchestration
     status: complete
     subtopics: [Dataflow Gen2, Pipeline, Notebook, Transformation versus orchestration, Personas, Scale and maintainability]
-    source_ids: [dp700-study-guide, pipeline-overview]
+    source_ids: [dp700-study-guide, pipeline-overview, data-factory-overview]
     gaps: []
     evidence:
       conceptual_model: choose-tool-model
@@ -532,7 +532,7 @@ objectives:
     chapter_id: streaming-data
     status: complete
     subtopics: [Native ingestion, Indexed storage, External Delta, Feature support, Latency, Cost, Source availability]
-    source_ids: [dp700-study-guide, real-time-intelligence-overview]
+    source_ids: [dp700-study-guide, real-time-intelligence-overview, rti-onelake-shortcuts]
     gaps: []
     evidence:
       conceptual_model: native-shortcut-comprehensive
@@ -736,7 +736,7 @@ objectives:
     chapter_id: resolve-errors
     status: complete
     subtopics: [Driver errors, Executor failures, Spark UI, Runtime, Libraries, Lakehouse attachment, Memory, Skew and bad records]
-    source_ids: [dp700-study-guide]
+    source_ids: [dp700-study-guide, spark-troubleshooting]
     gaps: []
     evidence:
       conceptual_model: resolve-notebook-comprehensive
@@ -753,7 +753,7 @@ objectives:
     chapter_id: resolve-errors
     status: complete
     subtopics: [Ingestion failures, Mapping and format, Permissions, Table policies, KQL request IDs, Capacity, Empty results]
-    source_ids: [dp700-study-guide]
+    source_ids: [dp700-study-guide, eventhouse-manage-monitor]
     gaps: []
     evidence:
       conceptual_model: resolve-eventhouse-comprehensive
@@ -770,7 +770,7 @@ objectives:
     chapter_id: resolve-errors
     status: complete
     subtopics: [Connector state, Source rate, Transform schema, Event time, Destination health, Poison events, Backpressure]
-    source_ids: [dp700-study-guide]
+    source_ids: [dp700-study-guide, real-time-intelligence-overview]
     gaps: []
     evidence:
       conceptual_model: resolve-eventstream-comprehensive
@@ -787,7 +787,7 @@ objectives:
     chapter_id: resolve-errors
     status: complete
     subtopics: [Error numbers, Context and names, Permissions, Conversions, Constraints, Transactions, Deadlocks, Timeouts and plans]
-    source_ids: [dp700-study-guide]
+    source_ids: [dp700-study-guide, warehouse-troubleshooting]
     gaps: []
     evidence:
       conceptual_model: resolve-tsql-comprehensive
@@ -889,7 +889,7 @@ objectives:
     chapter_id: optimize-performance
     status: complete
     subtopics: [Spark UI, Partition pruning, Shuffle, Skew, Broadcast joins, Repartition, Coalesce, Cache, Compute sizing]
-    source_ids: [dp700-study-guide, lakehouse-delta-tables]
+    source_ids: [dp700-study-guide, lakehouse-delta-tables, spark-troubleshooting]
     gaps: []
     evidence:
       conceptual_model: optimize-spark-comprehensive

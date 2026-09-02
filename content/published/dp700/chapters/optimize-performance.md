@@ -310,6 +310,155 @@ practice, write an A/B optimization record with hypothesis, fixed conditions,
 three baseline and three changed runs, correctness checksum, p50/p95, bytes
 scanned, and CU/compute result.
 
+## Optimization scenario drills
+
+### Fast query, expensive capacity
+
+A warehouse rewrite lowers median latency from 12 to 4 seconds but doubles CU
+consumption and worsens p95 under concurrency. The change is not automatically
+an improvement. Recheck result equivalence, scan/data movement, plan, repeated
+work, and concurrency. Decide against the stated SLA and cost objective: perhaps
+8 seconds at lower CU meets the business need and protects other workloads.
+
+Report latency distribution and cost together. A local speedup that causes
+capacity throttling can make the overall product slower. Optimization ownership
+extends beyond the single developer's test query.
+
+### Small files caused by streaming writes
+
+A Delta table receives frequent tiny micro-batches and accumulates thousands of
+small files per day. Queries spend substantial time listing/planning and launch
+many tiny tasks. Measure file distribution and scan/task evidence, then choose a
+maintenance cadence or optimized-write strategy that compacts after sufficient
+accumulation without running `OPTIMIZE` after every batch.
+
+Coordinate compaction, V-Order, readers, retention, and vacuum safety. Compare
+end-to-end write plus maintenance cost with query benefit. If queries do not read
+the table often, aggressive maintenance may cost more than it saves.
+
+### Parallelism cliff
+
+A Copy pipeline improves from concurrency 1 to 4, then slows at 16 while source
+throttling and sink commit waits rise. Select the measured knee—perhaps 4 or 8—
+and use backoff. Tune copy-internal parallelism and ForEach concurrency together
+because their product determines pressure. Repartition source work so one giant
+partition does not dominate.
+
+Repeat across representative volume and time, since external source limits can
+vary. Validate target counts and file layout; faster transfer that produces a
+small-file problem moves the cost downstream.
+
+### Broadcast assumption fails
+
+A lookup table was small during development but grows to several gigabytes.
+Forced broadcast now causes executor memory pressure and failures. Remove the
+assumption or define a guarded size threshold, inspect the adaptive/actual plan,
+and choose a partitioned join strategy. Project only required lookup columns and
+filter it before considering broadcast.
+
+Compare shuffle, spill, task distribution, executor memory, duration, and
+correct totals. “Dimension” is a logical role, not proof that its physical size
+is safe to copy to every executor.
+
+### Materialization freshness trade-off
+
+A KQL aggregation over raw events is run hundreds of times per hour. A
+materialized view can shift repeated query computation to ingestion/maintenance,
+but adds storage, update cost, and freshness/late-data semantics. Measure total
+query savings against ingestion overhead and verify supported functions and
+correction behavior.
+
+If users require immediate raw detail and only a few queries use the aggregate,
+direct query may be better. If the aggregate is stable and dominant, materialize
+with monitoring for health and lag. Cost is moved and amortized, not magically
+removed.
+
+### Scaling after efficiency work
+
+Capacity Metrics shows sustained throttling across well-designed concurrent
+workloads after unnecessary scans, skew, retries, and schedules are addressed.
+Scaling or autoscale is now an evidence-backed option. Define expected demand,
+budget, success metric, and rollback; compare throttling, latency, throughput,
+and CU/cost after the change.
+
+Scaling is not a failure of engineering when demand exceeds the provisioned
+resource. It is a poor first answer when one accidental Cartesian join or
+unbounded stream state consumes the capacity.
+
+## Capstone: optimize without moving the bottleneck
+
+A Fabric product misses its 07:00 freshness objective. Pipeline elapsed time is
+95 minutes, Spark transformation 40 minutes, warehouse publish 20 minutes, and
+semantic refresh 25 minutes, but several stages overlap. Interactive reports
+also slow during the load. The team proposes a larger capacity immediately.
+
+### Establish the critical path
+
+Create a timeline using trigger, queue, source extraction, Copy, Spark stages,
+warehouse application, model refresh, and publish. Overlap means durations cannot
+simply be added. Identify the earliest time each required output is ready and the
+dependency that determines consumer readiness. Collect Capacity Metrics for
+throttling and workload overlap, item run IDs, source/sink throughput, Spark UI,
+warehouse query/plan, and refresh partition detail.
+
+Set fixed correctness controls: selected source rows = accepted + rejected,
+target distinct business keys, amount totals, late partition count, and
+consumer-visible maximum business time. Record three comparable baseline days
+and their cache/concurrency/capacity state.
+
+### Competing hypotheses
+
+Pipeline evidence shows 6,000 tiny files and source throttling at high copy
+parallelism. Spark shows large file-list/task overhead plus one skewed customer
+key. Warehouse publication scans the full fact table despite processing one day.
+Semantic refresh unnecessarily processes historical partitions. Capacity also
+shows brief throttling while all operations overlap.
+
+These are four hypotheses, not one “Fabric is slow” diagnosis. Test in controlled
+increments:
+
+1. Reduce Copy/ForEach concurrency to the measured throughput knee and consolidate
+   file boundaries, preserving restartable partitions.
+2. Compact/optimize accumulated Delta layout at an evidence-based cadence and
+   address Spark skew through preaggregation or a targeted strategy.
+3. Make warehouse application and query predicates prune the bounded date range;
+   update relevant statistics and inspect the changed plan.
+4. Configure/validate semantic incremental partitions and schedule heavy stages
+   to reduce unnecessary contention where business dependencies permit.
+
+Do not apply every change at once. Each experiment retains input version,
+configuration, p50/p95 or repeated duration, bytes/files/tasks/shuffle/scan,
+capacity/CU, and correctness checksum.
+
+### Interpret results
+
+Suppose file consolidation cuts Spark planning/task overhead by 12 minutes;
+skew repair removes a 9-minute tail; bounded warehouse processing saves 8
+minutes; incremental semantic refresh saves 10. Scheduling reduces p95 report
+latency during the load. End-to-end readiness improves by only 25 minutes because
+some savings overlap. Report critical-path improvement, not the sum of local
+speedups.
+
+Capacity now shows no throttling on typical days but p95 seasonal days still
+breach SLA. Model seasonal demand and compare further efficiency, schedule,
+autoscale, or SKU change. Scaling is now evaluated against a residual measured
+resource limit rather than masking small files, skew, full scans, and unnecessary
+refresh.
+
+### Regression and operations
+
+Add thresholds for file-count/size distribution, Spark skew ratio and spill,
+pipeline throughput/throttling, warehouse scan/plan regression, refresh duration,
+capacity throttling, and end-to-end freshness. Avoid alerting on one noisy sample;
+use appropriate windows and recovery. Maintenance jobs themselves consume
+capacity, so schedule and measure compaction/materialization costs.
+
+The capstone passes when the same source produces identical accepted/rejected
+counts and business totals; the critical path meets the objective on repeated
+representative runs; p95 interactive performance does not regress; capacity cost
+is reported; every maintenance/scale decision has ownership and rollback; and a
+future data-volume change can be detected before the original bottleneck returns.
+
 ## Exam distinctions
 
 - `OPTIMIZE` compacts Delta files; V-Order changes Parquet layout; partitioning organizes data for pruning.
@@ -333,5 +482,6 @@ scanned, and CU/compute result.
 - [Lakehouse and Delta tables](https://learn.microsoft.com/en-us/fabric/data-engineering/lakehouse-and-delta-tables)
 - [Delta optimization and V-Order](https://learn.microsoft.com/en-us/fabric/data-engineering/delta-optimization-and-v-order)
 - [Warehouse performance guidelines](https://learn.microsoft.com/en-us/fabric/data-warehouse/guidelines-warehouse-performance)
+- [Spark errors and performance troubleshooting](https://learn.microsoft.com/en-us/fabric/data-engineering/troubleshoot-spark)
 - [KQL query best practices](https://learn.microsoft.com/en-us/kusto/query/best-practices)
 - [Official DP-700 study guide](https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/dp-700)

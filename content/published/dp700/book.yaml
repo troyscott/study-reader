@@ -147,7 +147,7 @@ sources:
     url: https://learn.microsoft.com/en-us/fabric/real-time-intelligence/overview
     retrieved_at: 2026-09-02T06:52:59Z
     content_sha256: db73725804e0643422b247e2648b9b7a6b34c7f96914bd45d52d9b2349ae690d
-    chapter_ids: [streaming-data]
+    chapter_ids: [streaming-data, resolve-errors]
   - id: query-acceleration-overview
     title: Query acceleration for OneLake shortcuts
     url: https://learn.microsoft.com/en-us/fabric/real-time-intelligence/query-acceleration-overview
@@ -214,6 +214,42 @@ sources:
     retrieved_at: 2026-09-02T06:52:59Z
     content_sha256: 9e4ddae5cb3f3a33152876d2583ee99c8df9924f8bf03125c9d750a33d456607
     chapter_ids: [optimize-performance]
+  - id: fabric-cicd-workflows
+    title: CI/CD workflow options in Fabric
+    url: https://learn.microsoft.com/en-us/fabric/cicd/manage-deployment
+    retrieved_at: 2026-09-02T11:39:23Z
+    content_sha256: 4b8410e415c7f9a0d78f3ee230a3213fd71dea79fe3966da572b68d8777a7ca2
+    chapter_ids: [lifecycle-management]
+  - id: data-factory-overview
+    title: What is Data Factory in Microsoft Fabric?
+    url: https://learn.microsoft.com/en-us/fabric/data-factory/data-factory-overview
+    retrieved_at: 2026-09-02T11:39:23Z
+    content_sha256: 8c3ce1e027cd11fbbc64215a09104de4ae9084d7807f55e4fee76a515b48745e
+    chapter_ids: [orchestration]
+  - id: eventhouse-manage-monitor
+    title: Manage and monitor a KQL database
+    url: https://learn.microsoft.com/en-us/fabric/real-time-intelligence/manage-monitor-database
+    retrieved_at: 2026-09-02T11:39:23Z
+    content_sha256: b8ba7c360762e7ad040ab229ffed1a14c6af921ddb115cc06c3d4e08f9cfd709
+    chapter_ids: [resolve-errors]
+  - id: rti-onelake-shortcuts
+    title: OneLake shortcuts in a KQL database
+    url: https://learn.microsoft.com/en-us/fabric/real-time-intelligence/onelake-shortcuts
+    retrieved_at: 2026-09-02T11:39:23Z
+    content_sha256: 2f276aec9680373d3b4cdd59b76f12431c9d6faa58d903203906412fa6b4373c
+    chapter_ids: [streaming-data]
+  - id: spark-troubleshooting
+    title: Spark errors overview in Microsoft Fabric
+    url: https://learn.microsoft.com/en-us/fabric/data-engineering/troubleshoot-spark
+    retrieved_at: 2026-09-02T11:39:23Z
+    content_sha256: 190a05719f9c53d3e680d4476ada36b6ab314be9cb86ac7419eac3346651dbe1
+    chapter_ids: [resolve-errors, optimize-performance]
+  - id: warehouse-troubleshooting
+    title: Troubleshoot Fabric Data Warehouse
+    url: https://learn.microsoft.com/en-us/fabric/data-warehouse/troubleshoot-fabric-data-warehouse
+    retrieved_at: 2026-09-02T11:39:23Z
+    content_sha256: 52049dad7fd1f07e12f3273269585f1e6bf237edd50597292e97cc8bc4ccc945
+    chapter_ids: [resolve-errors]
 domains:
   - id: implement-manage
     title: Implement and manage an analytics solution
@@ -235,7 +271,7 @@ domains:
         title: Implement lifecycle management in Fabric
         content_path: lifecycle-management.md
         status: published
-        source_ids: [dp700-study-guide, fabric-cicd-overview]
+        source_ids: [dp700-study-guide, fabric-cicd-overview, fabric-cicd-workflows]
         objectives:
           - {id: implement.lifecycle.version-control, title: Configure version control}
           - {id: implement.lifecycle.database-projects, title: Implement database projects}
@@ -260,7 +296,7 @@ domains:
         title: Orchestrate processes
         content_path: orchestration.md
         status: published
-        source_ids: [dp700-study-guide, pipeline-overview, pipeline-parameters]
+        source_ids: [dp700-study-guide, pipeline-overview, pipeline-parameters, data-factory-overview]
         objectives:
           - {id: implement.orchestration.choose-tool, title: "Choose between Dataflow Gen2, a pipeline, and a notebook"}
           - {id: implement.orchestration.triggers, title: Design and implement schedules and event-based triggers}
@@ -300,7 +336,7 @@ domains:
         title: Ingest and transform streaming data
         content_path: streaming-data.md
         status: published
-        source_ids: [dp700-study-guide, real-time-intelligence-overview, query-acceleration-overview, structured-streaming-state]
+        source_ids: [dp700-study-guide, real-time-intelligence-overview, query-acceleration-overview, structured-streaming-state, rti-onelake-shortcuts]
         objectives:
           - {id: ingest.streaming.engine, title: Choose an appropriate streaming engine}
           - {id: ingest.streaming.native-shortcut, title: Choose between native tables and OneLake shortcuts in Real-Time Intelligence}
@@ -329,7 +365,7 @@ domains:
         title: Identify and resolve errors
         content_path: resolve-errors.md
         status: published
-        source_ids: [dp700-study-guide, pipeline-troubleshooting, dataflow-monitoring, onelake-shortcuts]
+        source_ids: [dp700-study-guide, pipeline-troubleshooting, dataflow-monitoring, onelake-shortcuts, eventhouse-manage-monitor, real-time-intelligence-overview, spark-troubleshooting, warehouse-troubleshooting]
         objectives:
           - {id: monitor.errors.pipeline, title: Identify and resolve pipeline errors}
           - {id: monitor.errors.dataflow, title: Identify and resolve Dataflow Gen2 errors}
@@ -343,7 +379,7 @@ domains:
         title: Optimize performance
         content_path: optimize-performance.md
         status: published
-        source_ids: [dp700-study-guide, lakehouse-delta-tables, delta-v-order, warehouse-performance, kql-query-best-practices]
+        source_ids: [dp700-study-guide, lakehouse-delta-tables, delta-v-order, warehouse-performance, kql-query-best-practices, spark-troubleshooting]
         objectives:
           - {id: monitor.optimize.lakehouse, title: Optimize a Lakehouse table}
           - {id: monitor.optimize.pipeline, title: Optimize a pipeline}

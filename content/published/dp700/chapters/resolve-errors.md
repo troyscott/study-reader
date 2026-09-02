@@ -258,6 +258,147 @@ shortcut path? For practice, write one incident record with time, scope,
 correlation ID, classification, evidence, correction, rerun boundary, outcome,
 and regression test.
 
+## Cross-item incident drills
+
+### The downstream cascade
+
+A pipeline Copy fails authentication. Its notebook dependency is skipped, the
+warehouse procedure never runs, and the semantic refresh later fails because a
+staging table is absent. Start at the earliest pipeline authentication failure,
+not the final semantic error. Identify the connection identity, credential
+state, source permission, and whether rotation or ownership changed. Repair and
+rerun from the smallest repeat-safe boundary.
+
+After recovery, validate copied counts, notebook output, warehouse transaction,
+and model freshness. Add credential ownership/rotation monitoring and a pipeline
+failure alert. The later errors are useful impact evidence but not separate root
+causes.
+
+### Intermittent versus data-dependent
+
+A notebook task fails on roughly the same partition every retry. Increasing
+automatic retries makes the run longer but not more reliable. Compare failed
+task input/key range and exception. If the same malformed record, oversized
+group, or serialization path recurs, classify deterministic and isolate/correct
+it. If different workers fail with transient service/network evidence, bounded
+retry may be appropriate.
+
+Build a small fixture containing the failing record or skewed key and preserve
+it as regression input. A production retry policy should not conceal the
+difference between repeatable code/data faults and genuinely transient worker
+loss.
+
+### Permission denied after deployment
+
+A pipeline worked in Development but fails in Test with access denied. The
+definition and parameters deployed, but target connection/identity permission
+did not. Compare resolved Test connection, executing identity, gateway/source
+ACL, workspace/item permissions, and secret binding. Do not grant Contributor
+to make one source read work.
+
+Apply the narrow connection or data permission, test the allowed operation and
+a denied alternate operation, and add the binding/permission check to release
+smoke tests. Deployment success and runtime authorization are different gates.
+
+### Empty KQL result after successful ingestion
+
+Eventhouse ingestion metrics show accepted events, but the query returns none.
+Start with the correct database/table and `take` or a broad known time range.
+Inspect ingestion time and parsed event time, then add each `where`, dynamic
+parse, and join operator one at a time. A future time-zone conversion or null
+event-time filter can eliminate every row.
+
+Retain the request/query ID and input/result counts at each reduction. If a
+broad query is also empty, return to ingestion mapping/table evidence. This
+prevents changing a working ingestion path to repair a query-boundary problem.
+
+### Shortcut works for owner only
+
+The creator can query an external shortcut, while consumers receive denied
+errors. Enumerate creator elevation, consumer workspace/item/OneLake permission,
+connection credential mode, and source ACL. Test with a clean representative
+consumer rather than impersonating through an owner session. Confirm Tables
+versus Files and engine-specific requirements after authorization is understood.
+
+Do not solve it by sharing source credentials or granting broad workspace
+write. Choose the supported least-privilege credential/access design, rotate it
+through governed ownership, and preserve a negative test.
+
+### Repair without losing incident evidence
+
+During an outage, responders are tempted to edit multiple parameters, delete a
+checkpoint, recreate a shortcut, and scale capacity simultaneously. That can
+erase the causal trail. Preserve run/request IDs, logs, resolved values,
+checkpoint/target metadata, source version, and timestamps first. Change one
+hypothesized cause in a safe scope and compare the outcome.
+
+Emergency restoration can justify a faster roll-forward or rollback, but record
+each action and its evidence. After service returns, reproduce the fault safely,
+add a regression, update the runbook, and remove temporary excess permission or
+capacity.
+
+## Capstone: one incident, seven surfaces
+
+At 03:10, a source schema release changes `CustomerId` from integer to text and
+renames `eventTime`. The batch pipeline maps the old integer, Dataflow performs
+an implicit type conversion, a notebook joins on mismatched types, Eventstream
+windows reference the old field, Eventhouse receives some malformed records, a
+warehouse procedure encounters conversion errors, and a lakehouse shortcut still
+points to valid source data. Several red symptoms share one upstream change but
+must be proven, not assumed.
+
+### Evidence funnel
+
+Record incident window, deployment/source version, affected workspace/items,
+identities, pipeline/Dataflow/Spark/Eventhouse/query IDs, and consumer impact.
+Find the earliest boundary: source contract versus pipeline resolved mapping.
+Then trace each branch:
+
+- Pipeline: old mapping and resolved inputs fail conversion. Update the explicit
+  contract after source ownership confirms the change.
+- Dataflow: preview may not include new values; refresh detail identifies the
+  first conversion or renamed-column step. Use explicit text handling and a
+  quarantine query.
+- Notebook: Spark plan/tasks show join keys with incompatible types. Normalize
+  once at the validated boundary, not through scattered casts.
+- Eventstream: raw input continues, but curated output falls to zero after the
+  window operator because `eventTime` is absent. Version/normalize before
+  windowing and replay raw retained events.
+- Eventhouse: ingestion results distinguish accepted from mapping/type rejects;
+  KQL query logs are not the source of ingestion truth.
+- T-SQL: preserve error number/message and offending staged values; correct
+  staging type/mapping before target constraints.
+- Shortcut: verify target/path/connection and known query. If it still works,
+  do not recreate it just because adjacent consumers fail schema expectations.
+
+### Recovery plan
+
+Freeze the committed batch watermark if target application did not succeed.
+Deploy compatible normalization to Test, run a fixture containing legacy and new
+schema versions, and compare explicit dispositions. Replay the bounded batch
+range idempotently. Replay streaming raw events from the source/version boundary
+using controlled checkpoint/target state. Reconcile source = accepted +
+quarantined, warehouse totals, window counts, and consumer freshness.
+
+Avoid broad retry while deterministic mappings remain wrong. Avoid editing all
+seven items independently when a shared schema adapter/contract boundary can
+normalize both versions. Keep the last known-good published output until the
+corrected version passes controls.
+
+### Regression and post-incident controls
+
+Store the breaking records as sanitized fixtures. Add pre-publish schema-
+compatibility tests, explicit type/field assertions, Dataflow error-rate checks,
+notebook join-key tests, Eventstream schema-version routing, Eventhouse ingestion-
+reject alerting, staging constraints, and end-to-end freshness/reconciliation.
+Update source change notification and release coordination.
+
+The incident closes only when every surface is classified as root cause,
+consequence, or unaffected; all affected source data has a disposition; replay
+is repeat-safe; consumer output is fresh and correct; temporary changes are
+removed; and the exact breaking schema change can no longer pass the regression
+gate unnoticed.
+
 ## Exam distinctions
 
 - Retry transient faults; correct deterministic faults.
@@ -280,6 +421,9 @@ and regression test.
 
 - [Pipeline troubleshooting guide](https://learn.microsoft.com/en-us/fabric/data-factory/pipeline-troubleshoot-guide)
 - [Monitor Dataflow Gen2 refreshes](https://learn.microsoft.com/en-us/fabric/data-factory/dataflows-gen2-monitor)
+- [Spark errors overview in Microsoft Fabric](https://learn.microsoft.com/en-us/fabric/data-engineering/troubleshoot-spark)
 - [Manage and monitor a KQL database](https://learn.microsoft.com/en-us/fabric/real-time-intelligence/manage-monitor-database)
+- [Real-Time Intelligence overview](https://learn.microsoft.com/en-us/fabric/real-time-intelligence/overview)
+- [Troubleshoot Fabric Data Warehouse](https://learn.microsoft.com/en-us/fabric/data-warehouse/troubleshoot-fabric-data-warehouse)
 - [OneLake shortcuts](https://learn.microsoft.com/en-us/fabric/onelake/onelake-shortcuts)
 - [Official DP-700 study guide](https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/dp-700)

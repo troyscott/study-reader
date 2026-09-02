@@ -1,5 +1,6 @@
 """Official DP-700 blueprint and source-registry tests."""
 
+import re
 from datetime import date
 from pathlib import Path
 
@@ -69,12 +70,28 @@ def test_source_registry_records_current_learn_provenance() -> None:
     assert set(book.sources[0].chapter_ids) == {chapter.id for chapter in book.chapters}
 
 
-def test_every_chapter_is_published_substantive_and_directly_sourced() -> None:
+def test_every_chapter_learn_link_has_registered_provenance() -> None:
     catalog = BookCatalog(CONTENT_ROOT)
     book = catalog.load_book("dp700")
+    registered_urls = {str(source.url).rstrip("/") for source in book.sources}
 
     for chapter in book.chapters:
         markdown = catalog.load_chapter_markdown(book, chapter)
+        chapter_urls = {
+            url.rstrip("/")
+            for url in re.findall(r"https://learn\.microsoft\.com[^\s)>]+", markdown)
+        }
+        assert chapter_urls <= registered_urls
+
+
+def test_every_chapter_is_published_substantive_and_directly_sourced() -> None:
+    catalog = BookCatalog(CONTENT_ROOT)
+    book = catalog.load_book("dp700")
+    total_words = 0
+
+    for chapter in book.chapters:
+        markdown = catalog.load_chapter_markdown(book, chapter)
+        total_words += len(markdown.split())
 
         assert chapter.status == "published"
         assert len(chapter.source_ids) >= 2
@@ -89,6 +106,8 @@ def test_every_chapter_is_published_substantive_and_directly_sourced() -> None:
         )
         assert "Planned study work" not in markdown
         assert "placeholder" not in markdown.lower()
+
+    assert total_words >= 35_000
 
 
 def test_workspace_settings_retains_representative_technical_depth() -> None:
