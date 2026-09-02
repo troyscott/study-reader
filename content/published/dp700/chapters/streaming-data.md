@@ -108,6 +108,197 @@ Filter early, select only needed columns, parse dynamic fields deliberately, and
 
 Windows should use event time when results describe when events happened. A watermark states how late the engine expects events and bounds retained state; it does not reorder the entire infinite stream or guarantee that later records will be accepted.
 
+## Streaming architecture decisions
+
+<!-- block-id: streaming-engine-comprehensive -->
+Select an engine by answering where events enter, where durable state lives,
+what transformations require, and how results are served. Eventstreams provides
+connector-driven ingestion, visual transformations, routing, and derived
+streams. Eventhouse stores/indexes high-rate events and serves KQL. Spark
+Structured Streaming provides code-first stateful processing over supported
+sources and Delta sinks. Pipelines can deploy, schedule bounded reconciliation,
+or coordinate companion jobs; they do not continuously evaluate each event.
+
+Prerequisites include source authorization, destination write access, capacity,
+network reachability, schema and event-time contract, retention, and an
+operational owner. Prefer Eventstreams for accessible routing and straightforward
+stream transforms; Eventhouse/KQL for low-latency log and time-series serving;
+Spark for custom libraries, complex state, and Delta-centric engineering. A
+combined design can route raw events through Eventstreams to Eventhouse for live
+operations and OneLake/Delta for durable replay and Spark enrichment.
+
+**Scenario.** Correlating device events across 30 minutes with a custom model
+points to Spark; filtering and routing by device type without code points to
+Eventstreams; ad hoc “last 15 minutes by firmware” queries point to Eventhouse.
+Diagnose the architecture by measuring end-to-end latency, input/processing
+rate, state growth, query concurrency, retention, and operator skill—not by
+asking which product is newest. Mini-lab: draw two valid architectures for the
+same stream, one low-code and one code-first, and identify recovery state,
+serving store, and reconciliation in each.
+
+## Native tables, shortcuts, and acceleration
+
+<!-- block-id: native-shortcut-comprehensive -->
+A native Eventhouse table ingests records into Eventhouse-controlled indexed
+storage. It supports predictable KQL query performance and native policies at
+the cost of ingestion, retention, and another representation. A OneLake
+shortcut exposes supported Delta data as an external table without copying it;
+query performance and availability depend on file layout, source, and external-
+table support. Verify Delta format, schema, source permission/connection, and
+the exact KQL access syntax before selecting a shortcut.
+
+Choose native when continuous high-rate ingestion, low-latency concurrent KQL,
+and native table features dominate. Choose a standard shortcut for historical
+or shared open Delta data when avoiding movement matters and direct-read
+performance is acceptable. If external queries are empty or fail, check target
+path, `_delta_log`, schema compatibility, connection identity, source ACL,
+partition/file health, and whether the query uses the external table correctly.
+Mini-lab: query the same small Delta table through a shortcut and a native copy;
+compare freshness boundary, features, rows scanned, latency, and ownership.
+
+<!-- block-id: acceleration-comprehensive -->
+Query acceleration adds an optimized cache for a configured recent period of a
+OneLake shortcut. Choose the period from observed query predicates—for example,
+seven days when most dashboards read seven days—not from total source retention.
+Enable it on a supported shortcut, allow cache population, and inspect the
+documented status/metrics before measuring warm and cold queries. Account for
+premium cache/storage use, refresh lag, schema evolution, and external-table
+feature limits.
+
+Acceleration is preferable when a hot recent slice is repeatedly queried or
+joined with native live data and the measured benefit justifies cost. Standard
+shortcut remains preferable for infrequent, broad, or cost-sensitive access.
+Native ingestion remains preferable when update policies, materialized views,
+or other unsupported external-table features are required. For poor performance,
+verify predicate time range overlaps the cache period, cache readiness, schema,
+file layout, capacity, and query shape. Mini-lab: measure a 24-hour and 90-day
+query before and after a seven-day cache; explain why only one should materially
+benefit.
+
+## Eventstream implementation
+
+<!-- block-id: eventstreams-comprehensive -->
+Define source schema, stable event ID, event-time field, units, expected rate,
+and bad-event disposition. Create and authenticate the source, preview events,
+normalize fields and types, filter unnecessary events early, then add derived
+streams for reusable branches. Use group/aggregate and window operations only
+after choosing event time and lateness behavior. Route raw, curated, and poison
+branches to independently governed destinations. Validate one known event along
+every intended route and monitor input, output, dropped/invalid events, latency,
+and destination status.
+
+**Worked route.** An IoT source branches raw events to a durable lakehouse,
+valid temperature readings to Eventhouse, and invalid schema or out-of-range
+values to a restricted quarantine destination with reason metadata. A derived
+stream calculates five-minute device averages. Do not discard raw data merely
+because the visual transform works; retained source events support replay after
+logic changes. If output stops, walk source connection → incoming rate → each
+operator's schema/output → route condition → destination connection/capacity.
+Mini-lab: inject a valid event, wrong type, duplicate ID, late timestamp, and
+out-of-range value and predict every branch before observing it.
+
+## Structured Streaming implementation
+
+<!-- block-id: spark-streaming-comprehensive -->
+A Structured Streaming query has a logical plan, trigger/micro-batch execution,
+state store when needed, sink, and checkpoint. Give each deployed query a
+stable unique checkpoint path and protect it like operational state. Use
+explicit schema for production inputs. Add event-time watermark before bounded
+deduplication or stateful aggregation, choose an output mode supported by the
+operation/sink, and write to a transactional Delta target. Monitor query progress
+JSON, batch duration, input/processed rows per second, state rows/bytes, and sink
+commit failures.
+
+`foreachBatch` receives a DataFrame plus `batch_id` and is useful for `MERGE` or
+multi-target batch logic. Make the body idempotent using `batch_id` control or
+stable business/event keys; a failed micro-batch can be retried. Avoid calling
+unbounded actions repeatedly, reusing a checkpoint for a changed incompatible
+query, or placing checkpoints in temporary locations. If recovery fails, retain
+the old checkpoint and source offsets, determine whether the query/state schema
+changed, and create a controlled replay to a validated target rather than
+deleting state and hoping.
+
+**Mini-lab.** Run two micro-batches containing a duplicate ID and a late event,
+stop gracefully, restart from the same checkpoint, and prove no logical output
+duplicates. Then point a test copy at a fresh checkpoint and observe replay.
+Compare append, update, and complete output semantics for one windowed count.
+If processing falls behind, use progress metrics and Spark UI to distinguish
+source rate, shuffle/state, skew, sink latency, and capacity.
+
+## KQL transformation implementation
+
+<!-- block-id: kql-comprehensive -->
+KQL reads as an operator pipeline. Start from the smallest time/data scope;
+`where` early, `project` required columns, parse dynamic JSON only where needed,
+`extend` derived fields, and `summarize` at the declared grain. Use `join` with
+the smaller side and a time/key bound, and use `materialize()` only when one
+bounded intermediate is reused and measurement supports caching it. Retain a
+request ID and inspect diagnostics for failed or slow queries.
+
+```kusto
+DeviceEvents
+| where EventTime between (ago(30m) .. now())
+| where isnotempty(DeviceId)
+| extend Payload = todynamic(RawPayload)
+| extend Temperature = todouble(Payload.temperature)
+| where isnotnull(Temperature)
+| summarize Events=count(), AvgTemp=avg(Temperature),
+            P95=percentile(Temperature, 95)
+    by DeviceId, bin(EventTime, 5m)
+```
+
+Validate input count, parse failures, filtered count, distinct devices, and
+bucket totals. KQL null/empty and dynamic conversion rules deserve explicit
+tests. An empty result may be correct because of time range or ingestion delay;
+check table, database, time field, time zone, ingestion status, and filters
+before changing syntax. Mini-lab: add malformed JSON, null temperature, and one
+event outside the range; predict which metric accounts for each exclusion.
+
+## Windowing implementation
+
+<!-- block-id: windows-comprehensive -->
+A tumbling window of width five minutes assigns each event to one nonoverlapping
+bucket. A hopping window of width ten minutes and hop two minutes assigns one
+event to up to five overlapping windows. A session window groups events for one
+key until an inactivity gap closes the session. Sliding is sometimes used
+conceptually for continuously moving boundaries; verify the engine's exact
+operator terminology. Window choice follows the question: accounting totals
+often tumble, moving signals hop, and user/device visits use sessions.
+
+Suppose events for device A occur at 10:01, 10:04, 10:06, and 10:20. Five-minute
+tumbling windows place the first two together and 10:06 separately. A session
+gap of five minutes groups 10:01/10:04/10:06 and starts a new session at 10:20.
+A 10-minute hopping window every five minutes can count an event in two outputs.
+This overlap is expected, so summing hopping-window outputs again usually
+double-counts.
+
+Use event time for business windows, define time zone, establish watermark from
+lateness evidence, and specify correction policy after finalization. A longer
+watermark retains state and delays append-final output; a short watermark drops
+or excludes more late data. Diagnose missing window counts through event-time
+parse, watermark, window boundaries, time zone, late metrics, checkpoint state,
+and output mode. Mini-lab: hand-calculate the four events above for tumbling,
+hopping, and session windows, then add one event arriving 12 minutes late under
+a 10-minute watermark.
+
+<!-- block-id: streaming-exam-distinctions -->
+Native tables ingest/index; standard shortcuts read Delta in place; accelerated
+shortcuts cache a recent external slice but retain external-table limitations.
+Eventstreams shape/route, Spark executes custom stateful code, KQL queries and
+analyzes event stores, and Activator takes actions from conditions. Event time
+drives business windows; processing time measures observation. Watermark bounds
+lateness/state; checkpoint supports recovery; neither alone makes a sink
+idempotent.
+
+<!-- block-id: streaming-recall-lab -->
+**Recall.** When is a native Eventhouse table worth another representation? Why
+can a seven-day acceleration cache fail to help a 90-day query? What must every
+Eventstream poison route retain? Why is each Spark query's checkpoint unique?
+How can a KQL query distinguish parse failures from filtered values? How many
+10-minute windows with a two-minute hop can contain one event? Build a one-page
+operational contract listing event ID, event time, allowed lateness, checkpoint,
+raw retention, sink key, replay method, metrics, and owner.
+
 ## Exam distinctions
 
 - Native Eventhouse tables ingest and index; shortcuts query supported data in place.

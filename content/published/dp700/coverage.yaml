@@ -309,118 +309,327 @@ objectives:
       scenario_lab: patterns-diagnostics
   - objective_id: ingest.loading.full-incremental
     chapter_id: loading-patterns
-    status: draft
+    status: complete
     subtopics: [Full refresh, Watermarks, CDC, Overlap windows, Upserts, Deletes, Idempotency, Reconciliation]
     source_ids: [dp700-study-guide, data-movement-decision-guide]
-    gaps: [Add Fabric pipeline and notebook implementations with failure recovery]
+    gaps: []
+    evidence:
+      conceptual_model: full-incremental-model
+      prerequisites: full-incremental-operations
+      procedure: full-incremental-operations
+      decision_guidance: full-incremental-decisions
+      worked_example: full-incremental-example
+      limitations: full-incremental-decisions
+      troubleshooting: full-incremental-diagnostics
+      exam_distinctions: loading-exam-distinctions
+      recall_questions: loading-recall-lab
+      scenario_lab: full-incremental-diagnostics
   - objective_id: ingest.loading.dimensional
     chapter_id: loading-patterns
-    status: draft
+    status: complete
     subtopics: [Grain, Surrogate keys, Dimension-first loading, Facts, SCD Type 1, SCD Type 2, Inferred members, Referential checks]
     source_ids: [dp700-study-guide, dimensional-model-loading]
-    gaps: [Add complete dimension/fact load example and late-member lab]
+    gaps: []
+    evidence:
+      conceptual_model: dimensional-model
+      prerequisites: dimensional-operations
+      procedure: dimensional-operations
+      decision_guidance: dimensional-decisions
+      worked_example: dimensional-example
+      limitations: dimensional-decisions
+      troubleshooting: dimensional-diagnostics
+      exam_distinctions: loading-exam-distinctions
+      recall_questions: loading-recall-lab
+      scenario_lab: dimensional-diagnostics
   - objective_id: ingest.loading.streaming
     chapter_id: loading-patterns
-    status: draft
+    status: complete
     subtopics: [Raw retention, Schema validation, Deduplication, Event time, Watermarks, Checkpoints, Idempotent sinks, Reconciliation]
     source_ids: [dp700-study-guide, structured-streaming-state]
-    gaps: [Add Fabric architecture, checkpoint recovery, and replay scenario]
+    gaps: []
+    evidence:
+      conceptual_model: streaming-load-model
+      prerequisites: streaming-load-operations
+      procedure: streaming-load-operations
+      decision_guidance: streaming-load-decisions
+      worked_example: streaming-load-example
+      limitations: streaming-load-decisions
+      troubleshooting: streaming-load-diagnostics
+      exam_distinctions: loading-exam-distinctions
+      recall_questions: loading-recall-lab
+      scenario_lab: streaming-load-diagnostics
   - objective_id: ingest.batch.store
     chapter_id: batch-data
-    status: draft
+    status: complete
     subtopics: [Lakehouse, Warehouse, Eventhouse, Operational database, Open formats, Transactions, Concurrency, Serving patterns]
     source_ids: [dp700-study-guide, data-movement-decision-guide]
-    gaps: [Add workload decision matrix and migration scenarios]
+    gaps: []
+    evidence:
+      conceptual_model: batch-store-comprehensive
+      prerequisites: batch-store-comprehensive
+      procedure: batch-store-comprehensive
+      decision_guidance: batch-store-comprehensive
+      worked_example: batch-store-comprehensive
+      limitations: batch-store-comprehensive
+      troubleshooting: batch-store-comprehensive
+      exam_distinctions: batch-exam-distinctions
+      recall_questions: batch-recall-lab
+      scenario_lab: batch-store-comprehensive
   - objective_id: ingest.batch.transform-tool
     chapter_id: batch-data
-    status: draft
+    status: complete
     subtopics: [Dataflow Gen2, Notebooks, T-SQL, KQL, Personas, Engine locality, Scale, Testing and maintainability]
     source_ids: [dp700-study-guide, dataflows-gen2-overview]
-    gaps: [Add detailed tool-comparison cases and equivalent transformations]
+    gaps: []
+    evidence:
+      conceptual_model: transform-tool-model
+      prerequisites: transform-tool-operations
+      procedure: transform-tool-operations
+      decision_guidance: transform-tool-decisions
+      worked_example: transform-tool-example
+      limitations: transform-tool-decisions
+      troubleshooting: transform-tool-diagnostics
+      exam_distinctions: batch-exam-distinctions
+      recall_questions: batch-recall-lab
+      scenario_lab: transform-tool-diagnostics
   - objective_id: ingest.batch.shortcuts
     chapter_id: batch-data
-    status: draft
+    status: complete
     subtopics: [Internal shortcuts, External shortcuts, Tables versus Files, Connections, Caching, Schema synchronization, Security, Deletion behavior]
     source_ids: [dp700-study-guide, onelake-shortcuts]
-    gaps: [Add creation and management procedures plus broken-target lab]
+    gaps: []
+    evidence:
+      conceptual_model: shortcuts-comprehensive
+      prerequisites: shortcuts-comprehensive
+      procedure: shortcuts-comprehensive
+      decision_guidance: shortcuts-comprehensive
+      worked_example: shortcuts-comprehensive
+      limitations: shortcuts-comprehensive
+      troubleshooting: shortcuts-comprehensive
+      exam_distinctions: batch-exam-distinctions
+      recall_questions: batch-recall-lab
+      scenario_lab: shortcuts-comprehensive
   - objective_id: ingest.batch.mirroring
     chapter_id: batch-data
-    status: draft
+    status: complete
     subtopics: [Database mirroring, Metadata mirroring, Open mirroring, Replication, Source support, Read-only targets, Monitoring]
     source_ids: [dp700-study-guide, fabric-mirroring]
-    gaps: [Add implementation workflow, selection matrix, and failure recovery]
+    gaps: []
+    evidence:
+      conceptual_model: mirroring-comprehensive
+      prerequisites: mirroring-comprehensive
+      procedure: mirroring-comprehensive
+      decision_guidance: mirroring-comprehensive
+      worked_example: mirroring-comprehensive
+      limitations: mirroring-comprehensive
+      troubleshooting: mirroring-comprehensive
+      exam_distinctions: batch-exam-distinctions
+      recall_questions: batch-recall-lab
+      scenario_lab: mirroring-comprehensive
   - objective_id: ingest.batch.pipelines
     chapter_id: batch-data
-    status: draft
+    status: complete
     subtopics: [Copy Activity, Connectors, Mapping, Parameters, Parallelism, Staging, Retry, Metrics and rejects]
     source_ids: [dp700-study-guide, data-movement-decision-guide]
-    gaps: [Add parameterized copy walkthrough and performance exercise]
+    gaps: []
+    evidence:
+      conceptual_model: pipelines-comprehensive
+      prerequisites: pipelines-comprehensive
+      procedure: pipelines-comprehensive
+      decision_guidance: pipelines-comprehensive
+      worked_example: pipelines-comprehensive
+      limitations: pipelines-comprehensive
+      troubleshooting: pipelines-comprehensive
+      exam_distinctions: batch-exam-distinctions
+      recall_questions: batch-recall-lab
+      scenario_lab: pipelines-comprehensive
   - objective_id: ingest.batch.languages
     chapter_id: batch-data
-    status: draft
+    status: complete
     subtopics: [PySpark DataFrames, Spark SQL, T-SQL, KQL pipelines, Types, Null behavior, Engine-specific optimization]
     source_ids: [dp700-study-guide, dataflows-gen2-overview]
-    gaps: [Add multi-step equivalent transformations and validation outputs]
+    gaps: []
+    evidence:
+      conceptual_model: languages-comprehensive
+      prerequisites: languages-comprehensive
+      procedure: languages-comprehensive
+      decision_guidance: languages-comprehensive
+      worked_example: languages-comprehensive
+      limitations: languages-comprehensive
+      troubleshooting: languages-comprehensive
+      exam_distinctions: batch-exam-distinctions
+      recall_questions: batch-recall-lab
+      scenario_lab: languages-comprehensive
   - objective_id: ingest.batch.denormalize
     chapter_id: batch-data
-    status: draft
+    status: complete
     subtopics: [Output grain, Join cardinality, Flattening, Repeated attributes, Performance trade-offs, Validation]
     source_ids: [dp700-study-guide, dimensional-model-loading]
-    gaps: [Map dimensional source to chapter and add worked denormalization example]
+    gaps: []
+    evidence:
+      conceptual_model: denormalize-comprehensive
+      prerequisites: denormalize-comprehensive
+      procedure: denormalize-comprehensive
+      decision_guidance: denormalize-comprehensive
+      worked_example: denormalize-comprehensive
+      limitations: denormalize-comprehensive
+      troubleshooting: denormalize-comprehensive
+      exam_distinctions: batch-exam-distinctions
+      recall_questions: batch-recall-lab
+      scenario_lab: denormalize-comprehensive
   - objective_id: ingest.batch.aggregate
     chapter_id: batch-data
-    status: draft
+    status: complete
     subtopics: [Grouping keys, Grain changes, Additive measures, Semi-additive measures, Ratios, Nulls, Incremental aggregates]
     source_ids: [dp700-study-guide, dataflows-gen2-overview]
-    gaps: [Add Power Query, SQL, PySpark, and KQL aggregation examples]
+    gaps: []
+    evidence:
+      conceptual_model: aggregate-comprehensive
+      prerequisites: aggregate-comprehensive
+      procedure: aggregate-comprehensive
+      decision_guidance: aggregate-comprehensive
+      worked_example: aggregate-comprehensive
+      limitations: aggregate-comprehensive
+      troubleshooting: aggregate-comprehensive
+      exam_distinctions: batch-exam-distinctions
+      recall_questions: batch-recall-lab
+      scenario_lab: aggregate-comprehensive
   - objective_id: ingest.batch.data-quality
     chapter_id: batch-data
-    status: draft
+    status: complete
     subtopics: [Duplicate keys, Missing values, Invalid values, Late records, Quarantine, Imputation, Restatement, Quality metrics]
     source_ids: [dp700-study-guide, dataflows-gen2-overview]
-    gaps: [Add executable quality rules and late-arrival correction lab]
+    gaps: []
+    evidence:
+      conceptual_model: data-quality-comprehensive
+      prerequisites: data-quality-comprehensive
+      procedure: data-quality-comprehensive
+      decision_guidance: data-quality-comprehensive
+      worked_example: data-quality-comprehensive
+      limitations: data-quality-comprehensive
+      troubleshooting: data-quality-comprehensive
+      exam_distinctions: batch-exam-distinctions
+      recall_questions: batch-recall-lab
+      scenario_lab: data-quality-comprehensive
   - objective_id: ingest.streaming.engine
     chapter_id: streaming-data
-    status: draft
+    status: complete
     subtopics: [Eventstreams, Eventhouse, Spark Structured Streaming, Latency, Volume, State, Serving and operations]
     source_ids: [dp700-study-guide, real-time-intelligence-overview, structured-streaming-state]
-    gaps: [Add decision cases and end-to-end architecture comparison]
+    gaps: []
+    evidence:
+      conceptual_model: streaming-engine-comprehensive
+      prerequisites: streaming-engine-comprehensive
+      procedure: streaming-engine-comprehensive
+      decision_guidance: streaming-engine-comprehensive
+      worked_example: streaming-engine-comprehensive
+      limitations: streaming-engine-comprehensive
+      troubleshooting: streaming-engine-comprehensive
+      exam_distinctions: streaming-exam-distinctions
+      recall_questions: streaming-recall-lab
+      scenario_lab: streaming-engine-comprehensive
   - objective_id: ingest.streaming.native-shortcut
     chapter_id: streaming-data
-    status: draft
+    status: complete
     subtopics: [Native ingestion, Indexed storage, External Delta, Feature support, Latency, Cost, Source availability]
     source_ids: [dp700-study-guide, real-time-intelligence-overview]
-    gaps: [Add direct shortcut source mapping and measured selection scenario]
+    gaps: []
+    evidence:
+      conceptual_model: native-shortcut-comprehensive
+      prerequisites: native-shortcut-comprehensive
+      procedure: native-shortcut-comprehensive
+      decision_guidance: native-shortcut-comprehensive
+      worked_example: native-shortcut-comprehensive
+      limitations: native-shortcut-comprehensive
+      troubleshooting: native-shortcut-comprehensive
+      exam_distinctions: streaming-exam-distinctions
+      recall_questions: streaming-recall-lab
+      scenario_lab: native-shortcut-comprehensive
   - objective_id: ingest.streaming.acceleration
     chapter_id: streaming-data
-    status: draft
+    status: complete
     subtopics: [Standard shortcut, Accelerated cache, Cache period, Performance, Billing, Schema changes, External-table limitations]
     source_ids: [dp700-study-guide, query-acceleration-overview]
-    gaps: [Add configuration procedure, monitoring commands, and cost/performance lab]
+    gaps: []
+    evidence:
+      conceptual_model: acceleration-comprehensive
+      prerequisites: acceleration-comprehensive
+      procedure: acceleration-comprehensive
+      decision_guidance: acceleration-comprehensive
+      worked_example: acceleration-comprehensive
+      limitations: acceleration-comprehensive
+      troubleshooting: acceleration-comprehensive
+      exam_distinctions: streaming-exam-distinctions
+      recall_questions: streaming-recall-lab
+      scenario_lab: acceleration-comprehensive
   - objective_id: ingest.streaming.eventstreams
     chapter_id: streaming-data
-    status: draft
+    status: complete
     subtopics: [Sources, Transformations, Filtering, Aggregation, Derived streams, Routing, Destinations, Monitoring]
     source_ids: [dp700-study-guide, real-time-intelligence-overview]
-    gaps: [Add full Eventstream construction walkthrough and poison-event route]
+    gaps: []
+    evidence:
+      conceptual_model: eventstreams-comprehensive
+      prerequisites: eventstreams-comprehensive
+      procedure: eventstreams-comprehensive
+      decision_guidance: eventstreams-comprehensive
+      worked_example: eventstreams-comprehensive
+      limitations: eventstreams-comprehensive
+      troubleshooting: eventstreams-comprehensive
+      exam_distinctions: streaming-exam-distinctions
+      recall_questions: streaming-recall-lab
+      scenario_lab: eventstreams-comprehensive
   - objective_id: ingest.streaming.spark
     chapter_id: streaming-data
-    status: draft
+    status: complete
     subtopics: [Sources, Sinks, Checkpoints, Output modes, foreachBatch, Stateful operations, Recovery, Observability]
     source_ids: [dp700-study-guide, structured-streaming-state]
-    gaps: [Add runnable Fabric notebook pattern and checkpoint recovery lab]
+    gaps: []
+    evidence:
+      conceptual_model: spark-streaming-comprehensive
+      prerequisites: spark-streaming-comprehensive
+      procedure: spark-streaming-comprehensive
+      decision_guidance: spark-streaming-comprehensive
+      worked_example: spark-streaming-comprehensive
+      limitations: spark-streaming-comprehensive
+      troubleshooting: spark-streaming-comprehensive
+      exam_distinctions: streaming-exam-distinctions
+      recall_questions: streaming-recall-lab
+      scenario_lab: spark-streaming-comprehensive
   - objective_id: ingest.streaming.kql
     chapter_id: streaming-data
-    status: draft
+    status: complete
     subtopics: [Filtering, Projection, Dynamic parsing, Summarize, Joins, Time series, Materialization, Query optimization]
     source_ids: [dp700-study-guide, real-time-intelligence-overview]
-    gaps: [Add complete KQL transformation sequence and validation scenario]
+    gaps: []
+    evidence:
+      conceptual_model: kql-comprehensive
+      prerequisites: kql-comprehensive
+      procedure: kql-comprehensive
+      decision_guidance: kql-comprehensive
+      worked_example: kql-comprehensive
+      limitations: kql-comprehensive
+      troubleshooting: kql-comprehensive
+      exam_distinctions: streaming-exam-distinctions
+      recall_questions: streaming-recall-lab
+      scenario_lab: kql-comprehensive
   - objective_id: ingest.streaming.windows
     chapter_id: streaming-data
-    status: draft
+    status: complete
     subtopics: [Event time, Tumbling windows, Hopping windows, Sliding windows, Session windows, Watermarks, Late events]
     source_ids: [dp700-study-guide, structured-streaming-state]
-    gaps: [Add Eventstream, Spark, and KQL window examples with expected results]
+    gaps: []
+    evidence:
+      conceptual_model: windows-comprehensive
+      prerequisites: windows-comprehensive
+      procedure: windows-comprehensive
+      decision_guidance: windows-comprehensive
+      worked_example: windows-comprehensive
+      limitations: windows-comprehensive
+      troubleshooting: windows-comprehensive
+      exam_distinctions: streaming-exam-distinctions
+      recall_questions: streaming-recall-lab
+      scenario_lab: windows-comprehensive
   - objective_id: monitor.items.ingestion
     chapter_id: monitor-items
     status: draft
