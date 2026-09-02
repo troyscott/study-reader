@@ -1,0 +1,327 @@
+book_id: dp700
+blueprint_effective_date: 2026-07-21
+objectives:
+  - objective_id: implement.workspace.spark
+    chapter_id: workspace-settings
+    status: draft
+    subtopics: [Workspace defaults, Environment overrides, Runtimes, Pools, Driver and executor sizing, Session configuration]
+    source_ids: [dp700-study-guide, spark-compute-settings]
+    gaps: [Add a hands-on configuration lab and objective-specific evidence blocks]
+  - objective_id: implement.workspace.domain
+    chapter_id: workspace-settings
+    status: draft
+    subtopics: [Domain hierarchy, Workspace assignment, Domain roles, Default domains, Delegated governance, Catalog discovery]
+    source_ids: [dp700-study-guide, fabric-domains]
+    gaps: [Add a domain-assignment lab and negative authorization test]
+  - objective_id: implement.workspace.onelake
+    chapter_id: workspace-settings
+    status: draft
+    subtopics: [Diagnostics, Immutability, Storage tiers, Lifecycle rules, REST API, Permissions and placement]
+    source_ids: [dp700-study-guide, onelake-overview, onelake-diagnostics, onelake-storage-tiers, onelake-lifecycle, onelake-settings-api]
+    gaps: [Add an end-to-end diagnostics and lifecycle scenario]
+  - objective_id: implement.workspace.airflow
+    chapter_id: workspace-settings
+    status: draft
+    subtopics: [Workspace runtime, Starter pools, Custom pools, Sizing, Autoscaling, Concurrency and limitations]
+    source_ids: [dp700-study-guide, airflow-workspace-settings]
+    gaps: [Add configuration procedure and pool-sizing lab]
+  - objective_id: implement.lifecycle.version-control
+    chapter_id: lifecycle-management
+    status: draft
+    subtopics: [Git providers, Workspace connection, Branches, Commit and update direction, Conflicts, Supported items, Secrets]
+    source_ids: [dp700-study-guide, fabric-cicd-overview]
+    gaps: [Add portal workflow, conflict exercise, and supported-item limitations]
+  - objective_id: implement.lifecycle.database-projects
+    chapter_id: lifecycle-management
+    status: draft
+    subtopics: [Declarative schema, Project structure, Build validation, DACPAC, Publish plan, State versus migration, Data-loss safeguards]
+    source_ids: [dp700-study-guide, fabric-cicd-overview]
+    gaps: [Add direct database-project sources and a build-deploy walkthrough]
+  - objective_id: implement.lifecycle.deployment-pipelines
+    chapter_id: lifecycle-management
+    status: draft
+    subtopics: [Stages, Workspace assignment, Item pairing, Comparison, Deployment rules, Dependency binding, Post-deployment checks]
+    source_ids: [dp700-study-guide, fabric-cicd-overview]
+    gaps: [Add current pipeline configuration procedure and failed-binding scenario]
+  - objective_id: implement.security.workspace-access
+    chapter_id: security-governance
+    status: draft
+    subtopics: [Admin, Member, Contributor, Viewer, Group assignment, Least privilege, Workspace scope]
+    source_ids: [dp700-study-guide, fabric-permission-model]
+    gaps: [Add complete capability matrix and representative access tests]
+  - objective_id: implement.security.item-access
+    chapter_id: security-governance
+    status: draft
+    subtopics: [Item sharing, Direct permissions, Read and reshare, Ownership, Group-based grants, Revocation]
+    source_ids: [dp700-study-guide, fabric-permission-model]
+    gaps: [Add item-type examples and portal/API procedure]
+  - objective_id: implement.security.data-access
+    chapter_id: security-governance
+    status: draft
+    subtopics: [Row-level security, Column-level security, Object-level security, Folder and file access, Engine enforcement paths, Bypass testing]
+    source_ids: [dp700-study-guide, fabric-permission-model, onelake-data-access-control]
+    gaps: [Add implementation examples for every control and cross-engine enforcement matrix]
+  - objective_id: implement.security.masking
+    chapter_id: security-governance
+    status: draft
+    subtopics: [Mask functions, UNMASK permission, Stored versus returned values, Inference risk, Combining DDM with RLS and CLS]
+    source_ids: [dp700-study-guide, warehouse-dynamic-masking]
+    gaps: [Add complete mask examples, grants, and negative tests]
+  - objective_id: implement.security.sensitivity
+    chapter_id: security-governance
+    status: draft
+    subtopics: [Purview labels, Tenant enablement, Label publishing, Defaults, Mandatory labels, Inheritance, Export behavior]
+    source_ids: [dp700-study-guide, fabric-information-protection]
+    gaps: [Add application procedure, supported-item matrix, and inheritance scenario]
+  - objective_id: implement.security.endorsement
+    chapter_id: security-governance
+    status: draft
+    subtopics: [Promoted, Certified, Master data, Authorized reviewers, Discovery, Trust versus authorization]
+    source_ids: [dp700-study-guide, fabric-endorsement]
+    gaps: [Add endorsement workflow and governance scenario]
+  - objective_id: implement.security.audit
+    chapter_id: security-governance
+    status: draft
+    subtopics: [Purview Audit, Search filters, Operations, Retention, Export, Investigation procedure, Audit versus diagnostic logs]
+    source_ids: [dp700-study-guide, fabric-audit-activities]
+    gaps: [Add investigation walkthrough and evidence-handling lab]
+  - objective_id: implement.security.onelake
+    chapter_id: security-governance
+    status: draft
+    subtopics: [OneLake roles, Tables and folders, Read and write grants, Role membership, Shortcut security, Cross-engine access paths]
+    source_ids: [dp700-study-guide, onelake-data-access-control]
+    gaps: [Add role-creation procedure, API example, and denied-access tests]
+  - objective_id: implement.orchestration.choose-tool
+    chapter_id: orchestration
+    status: draft
+    subtopics: [Dataflow Gen2, Pipeline, Notebook, Transformation versus orchestration, Personas, Scale and maintainability]
+    source_ids: [dp700-study-guide, pipeline-overview]
+    gaps: [Add representative tool-selection cases and cost/operability trade-offs]
+  - objective_id: implement.orchestration.triggers
+    chapter_id: orchestration
+    status: draft
+    subtopics: [Schedules, Time zones, Event triggers, File events, Filtering, Concurrency, Idempotency, Reconciliation]
+    source_ids: [dp700-study-guide, pipeline-overview]
+    gaps: [Add trigger configuration procedures and duplicate-event lab]
+  - objective_id: implement.orchestration.patterns
+    chapter_id: orchestration
+    status: draft
+    subtopics: [Parameters, Variables, Dynamic expressions, Parent-child pipelines, Metadata-driven loops, Dependencies, Retry and failure paths]
+    source_ids: [dp700-study-guide, pipeline-overview, pipeline-parameters]
+    gaps: [Add executable expression catalog and end-to-end pipeline/notebook example]
+  - objective_id: ingest.loading.full-incremental
+    chapter_id: loading-patterns
+    status: draft
+    subtopics: [Full refresh, Watermarks, CDC, Overlap windows, Upserts, Deletes, Idempotency, Reconciliation]
+    source_ids: [dp700-study-guide, data-movement-decision-guide]
+    gaps: [Add Fabric pipeline and notebook implementations with failure recovery]
+  - objective_id: ingest.loading.dimensional
+    chapter_id: loading-patterns
+    status: draft
+    subtopics: [Grain, Surrogate keys, Dimension-first loading, Facts, SCD Type 1, SCD Type 2, Inferred members, Referential checks]
+    source_ids: [dp700-study-guide, dimensional-model-loading]
+    gaps: [Add complete dimension/fact load example and late-member lab]
+  - objective_id: ingest.loading.streaming
+    chapter_id: loading-patterns
+    status: draft
+    subtopics: [Raw retention, Schema validation, Deduplication, Event time, Watermarks, Checkpoints, Idempotent sinks, Reconciliation]
+    source_ids: [dp700-study-guide, structured-streaming-state]
+    gaps: [Add Fabric architecture, checkpoint recovery, and replay scenario]
+  - objective_id: ingest.batch.store
+    chapter_id: batch-data
+    status: draft
+    subtopics: [Lakehouse, Warehouse, Eventhouse, Operational database, Open formats, Transactions, Concurrency, Serving patterns]
+    source_ids: [dp700-study-guide, data-movement-decision-guide]
+    gaps: [Add workload decision matrix and migration scenarios]
+  - objective_id: ingest.batch.transform-tool
+    chapter_id: batch-data
+    status: draft
+    subtopics: [Dataflow Gen2, Notebooks, T-SQL, KQL, Personas, Engine locality, Scale, Testing and maintainability]
+    source_ids: [dp700-study-guide, dataflows-gen2-overview]
+    gaps: [Add detailed tool-comparison cases and equivalent transformations]
+  - objective_id: ingest.batch.shortcuts
+    chapter_id: batch-data
+    status: draft
+    subtopics: [Internal shortcuts, External shortcuts, Tables versus Files, Connections, Caching, Schema synchronization, Security, Deletion behavior]
+    source_ids: [dp700-study-guide, onelake-shortcuts]
+    gaps: [Add creation and management procedures plus broken-target lab]
+  - objective_id: ingest.batch.mirroring
+    chapter_id: batch-data
+    status: draft
+    subtopics: [Database mirroring, Metadata mirroring, Open mirroring, Replication, Source support, Read-only targets, Monitoring]
+    source_ids: [dp700-study-guide, fabric-mirroring]
+    gaps: [Add implementation workflow, selection matrix, and failure recovery]
+  - objective_id: ingest.batch.pipelines
+    chapter_id: batch-data
+    status: draft
+    subtopics: [Copy Activity, Connectors, Mapping, Parameters, Parallelism, Staging, Retry, Metrics and rejects]
+    source_ids: [dp700-study-guide, data-movement-decision-guide]
+    gaps: [Add parameterized copy walkthrough and performance exercise]
+  - objective_id: ingest.batch.languages
+    chapter_id: batch-data
+    status: draft
+    subtopics: [PySpark DataFrames, Spark SQL, T-SQL, KQL pipelines, Types, Null behavior, Engine-specific optimization]
+    source_ids: [dp700-study-guide, dataflows-gen2-overview]
+    gaps: [Add multi-step equivalent transformations and validation outputs]
+  - objective_id: ingest.batch.denormalize
+    chapter_id: batch-data
+    status: draft
+    subtopics: [Output grain, Join cardinality, Flattening, Repeated attributes, Performance trade-offs, Validation]
+    source_ids: [dp700-study-guide, dimensional-model-loading]
+    gaps: [Map dimensional source to chapter and add worked denormalization example]
+  - objective_id: ingest.batch.aggregate
+    chapter_id: batch-data
+    status: draft
+    subtopics: [Grouping keys, Grain changes, Additive measures, Semi-additive measures, Ratios, Nulls, Incremental aggregates]
+    source_ids: [dp700-study-guide, dataflows-gen2-overview]
+    gaps: [Add Power Query, SQL, PySpark, and KQL aggregation examples]
+  - objective_id: ingest.batch.data-quality
+    chapter_id: batch-data
+    status: draft
+    subtopics: [Duplicate keys, Missing values, Invalid values, Late records, Quarantine, Imputation, Restatement, Quality metrics]
+    source_ids: [dp700-study-guide, dataflows-gen2-overview]
+    gaps: [Add executable quality rules and late-arrival correction lab]
+  - objective_id: ingest.streaming.engine
+    chapter_id: streaming-data
+    status: draft
+    subtopics: [Eventstreams, Eventhouse, Spark Structured Streaming, Latency, Volume, State, Serving and operations]
+    source_ids: [dp700-study-guide, real-time-intelligence-overview, structured-streaming-state]
+    gaps: [Add decision cases and end-to-end architecture comparison]
+  - objective_id: ingest.streaming.native-shortcut
+    chapter_id: streaming-data
+    status: draft
+    subtopics: [Native ingestion, Indexed storage, External Delta, Feature support, Latency, Cost, Source availability]
+    source_ids: [dp700-study-guide, real-time-intelligence-overview]
+    gaps: [Add direct shortcut source mapping and measured selection scenario]
+  - objective_id: ingest.streaming.acceleration
+    chapter_id: streaming-data
+    status: draft
+    subtopics: [Standard shortcut, Accelerated cache, Cache period, Performance, Billing, Schema changes, External-table limitations]
+    source_ids: [dp700-study-guide, query-acceleration-overview]
+    gaps: [Add configuration procedure, monitoring commands, and cost/performance lab]
+  - objective_id: ingest.streaming.eventstreams
+    chapter_id: streaming-data
+    status: draft
+    subtopics: [Sources, Transformations, Filtering, Aggregation, Derived streams, Routing, Destinations, Monitoring]
+    source_ids: [dp700-study-guide, real-time-intelligence-overview]
+    gaps: [Add full Eventstream construction walkthrough and poison-event route]
+  - objective_id: ingest.streaming.spark
+    chapter_id: streaming-data
+    status: draft
+    subtopics: [Sources, Sinks, Checkpoints, Output modes, foreachBatch, Stateful operations, Recovery, Observability]
+    source_ids: [dp700-study-guide, structured-streaming-state]
+    gaps: [Add runnable Fabric notebook pattern and checkpoint recovery lab]
+  - objective_id: ingest.streaming.kql
+    chapter_id: streaming-data
+    status: draft
+    subtopics: [Filtering, Projection, Dynamic parsing, Summarize, Joins, Time series, Materialization, Query optimization]
+    source_ids: [dp700-study-guide, real-time-intelligence-overview]
+    gaps: [Add complete KQL transformation sequence and validation scenario]
+  - objective_id: ingest.streaming.windows
+    chapter_id: streaming-data
+    status: draft
+    subtopics: [Event time, Tumbling windows, Hopping windows, Sliding windows, Session windows, Watermarks, Late events]
+    source_ids: [dp700-study-guide, structured-streaming-state]
+    gaps: [Add Eventstream, Spark, and KQL window examples with expected results]
+  - objective_id: monitor.items.ingestion
+    chapter_id: monitor-items
+    status: draft
+    subtopics: [Monitoring hub, Pipeline runs, Copy metrics, Streaming rate, Lag, Watermark, Rejected rows, Freshness]
+    source_ids: [dp700-study-guide, fabric-monitoring-hub]
+    gaps: [Add item-specific screens, thresholds, and incident scenario]
+  - objective_id: monitor.items.transformation
+    chapter_id: monitor-items
+    status: draft
+    subtopics: [Dataflow refresh, Notebook and Spark jobs, Pipeline activities, SQL and KQL queries, Quality assertions, Capacity evidence]
+    source_ids: [dp700-study-guide, fabric-monitoring-hub, dataflow-monitoring]
+    gaps: [Add per-engine diagnostic workflow and data-quality evidence model]
+  - objective_id: monitor.items.semantic-refresh
+    chapter_id: monitor-items
+    status: draft
+    subtopics: [Refresh history, Administrative summary, Types, Tables and partitions, Incremental refresh, Credentials, Gateway, Capacity]
+    source_ids: [dp700-study-guide, semantic-refresh-summaries]
+    gaps: [Add refresh investigation walkthrough and upstream freshness chain]
+  - objective_id: monitor.items.alerts
+    chapter_id: monitor-items
+    status: draft
+    subtopics: [Activator, Signals, Thresholds, Windows, Recipients, Actions, Suppression, Recovery, Runbooks]
+    source_ids: [dp700-study-guide, fabric-activator]
+    gaps: [Add alert configuration procedure and firing/recovery test]
+  - objective_id: monitor.errors.pipeline
+    chapter_id: resolve-errors
+    status: draft
+    subtopics: [Failed activity, Resolved inputs, Error codes, Connections, Expressions, Child runs, Retry classification, Idempotent reruns]
+    source_ids: [dp700-study-guide, pipeline-troubleshooting]
+    gaps: [Add representative failure cases and resolution lab]
+  - objective_id: monitor.errors.dataflow
+    chapter_id: resolve-errors
+    status: draft
+    subtopics: [Refresh detail, Power Query step, Credentials, Gateway, Type errors, Schema drift, Folding, Destination errors]
+    source_ids: [dp700-study-guide, dataflow-monitoring]
+    gaps: [Add bad-row diagnosis, schema failure, and destination repair examples]
+  - objective_id: monitor.errors.notebook
+    chapter_id: resolve-errors
+    status: draft
+    subtopics: [Driver errors, Executor failures, Spark UI, Runtime, Libraries, Lakehouse attachment, Memory, Skew and bad records]
+    source_ids: [dp700-study-guide]
+    gaps: [Add direct notebook troubleshooting sources and Spark failure labs]
+  - objective_id: monitor.errors.eventhouse
+    chapter_id: resolve-errors
+    status: draft
+    subtopics: [Ingestion failures, Mapping and format, Permissions, Table policies, KQL request IDs, Capacity, Empty results]
+    source_ids: [dp700-study-guide]
+    gaps: [Add direct Eventhouse troubleshooting sources and commands]
+  - objective_id: monitor.errors.eventstream
+    chapter_id: resolve-errors
+    status: draft
+    subtopics: [Connector state, Source rate, Transform schema, Event time, Destination health, Poison events, Backpressure]
+    source_ids: [dp700-study-guide]
+    gaps: [Add direct Eventstream troubleshooting sources and failure-routing lab]
+  - objective_id: monitor.errors.tsql
+    chapter_id: resolve-errors
+    status: draft
+    subtopics: [Error numbers, Context and names, Permissions, Conversions, Constraints, Transactions, Deadlocks, Timeouts and plans]
+    source_ids: [dp700-study-guide]
+    gaps: [Add Fabric-specific T-SQL troubleshooting sources and worked cases]
+  - objective_id: monitor.errors.shortcut
+    chapter_id: resolve-errors
+    status: draft
+    subtopics: [Target existence, Connections, Source permissions, Format, Tables path, Schema sync, Cache and acceleration]
+    source_ids: [dp700-study-guide, onelake-shortcuts]
+    gaps: [Add systematic shortcut diagnostic procedure and repair lab]
+  - objective_id: monitor.optimize.lakehouse
+    chapter_id: optimize-performance
+    status: draft
+    subtopics: [Small files, OPTIMIZE, V-Order, Partitioning, Statistics, VACUUM, Retention, Maintenance cadence]
+    source_ids: [dp700-study-guide, lakehouse-delta-tables, delta-v-order]
+    gaps: [Add measurement-based before/after lab and safety checks]
+  - objective_id: monitor.optimize.pipeline
+    chapter_id: optimize-performance
+    status: draft
+    subtopics: [Source selection, Copy parallelism, ForEach concurrency, Staging, Activity overhead, Retry backoff, Throughput metrics]
+    source_ids: [dp700-study-guide]
+    gaps: [Add direct performance sources and measured tuning scenario]
+  - objective_id: monitor.optimize.warehouse
+    chapter_id: optimize-performance
+    status: draft
+    subtopics: [Scans, Statistics, Data types, Star schema, Joins, Plans, Concurrency, V-Order and materialization]
+    source_ids: [dp700-study-guide, warehouse-performance]
+    gaps: [Add execution-plan walkthrough and before/after query lab]
+  - objective_id: monitor.optimize.realtime
+    chapter_id: optimize-performance
+    status: draft
+    subtopics: [Eventstream filtering, Routing, Ingestion batching, Retention, Caching, KQL shape, Materialized views, Shortcut acceleration]
+    source_ids: [dp700-study-guide, kql-query-best-practices]
+    gaps: [Add Eventhouse policy sources and measured streaming scenario]
+  - objective_id: monitor.optimize.spark
+    chapter_id: optimize-performance
+    status: draft
+    subtopics: [Spark UI, Partition pruning, Shuffle, Skew, Broadcast joins, Repartition, Coalesce, Cache, Compute sizing]
+    source_ids: [dp700-study-guide, lakehouse-delta-tables]
+    gaps: [Add Fabric Spark tuning sources and evidence-driven lab]
+  - objective_id: monitor.optimize.query
+    chapter_id: optimize-performance
+    status: draft
+    subtopics: [Projection, Predicate pushdown, Pruning, Join grain, Plans, Repeated computation, Preaggregation, Correctness and cost]
+    source_ids: [dp700-study-guide, warehouse-performance, kql-query-best-practices]
+    gaps: [Add cross-engine query examples with plans and measured results]

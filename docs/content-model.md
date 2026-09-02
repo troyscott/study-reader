@@ -75,11 +75,43 @@ grouping, shaping, schema handling, and query folding—along with destinations
 and tool-selection trade-offs. Merely listing “Dataflow Gen2” does not satisfy
 the objective.
 
+### Comprehensive coverage audit
+
+Each published book MUST include a `coverage.yaml` file with exactly one record
+for every measured objective in `book.yaml`. The record identifies the owning
+chapter, the objective's required subtopics, its authoritative sources, known
+gaps, and durable Markdown block IDs that provide evidence for the approved
+teaching rubric.
+
+An objective MAY move through `planned`, `draft`, and `complete` states. A
+non-complete objective MUST state its remaining gaps. An objective MUST NOT be
+marked `complete` unless it has no remaining gaps and identifies durable blocks
+for all of these evidence categories:
+
+- conceptual model and terminology;
+- prerequisites, responsibilities, and security boundaries;
+- procedure or operational workflow;
+- decision guidance and trade-offs;
+- a worked example;
+- limitations and failure modes;
+- troubleshooting or monitoring guidance;
+- exam distinctions;
+- at least two active-recall questions; and
+- a scenario or mini-lab.
+
+One strong block MAY support more than one category or objective when its
+content genuinely supplies that evidence. The evidence mapping exists to make
+editorial review inspectable; it MUST NOT be satisfied with empty headings,
+duplicated boilerplate, or identifiers that are absent from the chapter.
+
 ## Validation
 
 Pydantic rejects duplicate identifiers, duplicate slugs, non-Learn source
 hosts, malformed hashes, one-way source mappings, broken source references,
 invalid paths, and unknown manifest fields. Content tests confirm that every
-planned chapter file exists and maps at least one objective and one source.
+planned chapter file exists and maps at least one objective and one source. The
+coverage audit additionally rejects missing or extra objectives, incorrect
+chapter ownership, invalid source mappings, unsupported completion claims, and
+incomplete objectives that conceal their remaining gaps.
 Rendering tests verify sanitized HTML, stable anchors, external-link behavior,
 and a reviewed golden fixture.

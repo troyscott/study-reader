@@ -123,7 +123,7 @@ sources:
     url: https://learn.microsoft.com/en-us/fabric/data-warehouse/dimensional-modeling-load-tables
     retrieved_at: 2026-09-02T06:52:59Z
     content_sha256: e6148d2232549d19b1788f733b54b66c7fe7bb486d93a8525e7cab358bbb62f3
-    chapter_ids: [loading-patterns]
+    chapter_ids: [loading-patterns, batch-data]
   - id: dataflows-gen2-overview
     title: Dataflows Gen2 overview
     url: https://learn.microsoft.com/en-us/fabric/data-factory/dataflows-gen2-overview
@@ -284,7 +284,7 @@ domains:
         title: Ingest and transform batch data
         content_path: batch-data.md
         status: published
-        source_ids: [dp700-study-guide, data-movement-decision-guide, dataflows-gen2-overview, onelake-shortcuts, fabric-mirroring]
+        source_ids: [dp700-study-guide, data-movement-decision-guide, dimensional-model-loading, dataflows-gen2-overview, onelake-shortcuts, fabric-mirroring]
         objectives:
           - {id: ingest.batch.store, title: Choose an appropriate data store}
           - {id: ingest.batch.transform-tool, title: "Choose between Dataflows Gen2, notebooks, KQL, and T-SQL for data transformation"}

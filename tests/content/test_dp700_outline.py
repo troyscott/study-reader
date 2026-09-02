@@ -38,6 +38,21 @@ def test_every_dp700_chapter_maps_objectives_sources_and_content() -> None:
     assert sum(len(chapter.objectives) for chapter in book.chapters) == 54
 
 
+def test_dp700_coverage_audit_records_every_objective_and_known_gap() -> None:
+    catalog = BookCatalog(CONTENT_ROOT)
+    book = catalog.load_book("dp700")
+    audit = catalog.load_coverage_audit(book)
+
+    assert len(audit.objectives) == 54
+    assert {coverage.objective_id for coverage in audit.objectives} == {
+        objective.id for chapter in book.chapters for objective in chapter.objectives
+    }
+    assert all(len(coverage.subtopics) >= 2 for coverage in audit.objectives)
+    assert all(coverage.source_ids for coverage in audit.objectives)
+    assert all(coverage.gaps for coverage in audit.objectives)
+    assert all(coverage.status == "draft" for coverage in audit.objectives)
+
+
 def test_source_registry_records_current_learn_provenance() -> None:
     book = BookCatalog(CONTENT_ROOT).load_book("dp700")
 
